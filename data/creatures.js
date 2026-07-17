@@ -1,8 +1,4 @@
-const DIMENSIONS = [
-  'curiosity', 'boldness', 'sociability', 'patience', 'adaptability', 'strategy', 'speed',
-  'defense', 'independence', 'sizePreference', 'aquaticAffinity', 'terrestrialAffinity',
-  'aerialAffinity', 'coldAffinity'
-]
+const { DIMENSIONS, getQuizProfileById } = require('./quiz-profiles')
 
 const periodRanges = {
   archean: '约35亿—25亿年前', proterozoic: '约25亿—5.388亿年前', cambrian: '约5.388亿—4.854亿年前',
@@ -28,28 +24,6 @@ function hashUnit(text) {
   return (hash >>> 0) / 4294967295
 }
 
-function buildProfile(record) {
-  const profile = {}
-  DIMENSIONS.forEach((dimension) => {
-    profile[dimension] = Number((0.27 + hashUnit(`${record.id}:${dimension}`) * 0.46).toFixed(3))
-  })
-
-  const habitat = record.habitat
-  if (/海|水|湖|河|潮/.test(habitat)) profile.aquaticAffinity = 0.82
-  if (/陆|森林|草原|沙漠|地面/.test(habitat)) profile.terrestrialAffinity = 0.8
-  if (/空|飞|树冠/.test(habitat)) profile.aerialAffinity = 0.82
-  if (/寒|冰|高纬/.test(habitat)) profile.coldAffinity = 0.82
-  if (/巨|大型|超大型/.test(record.size)) profile.sizePreference = 0.82
-  if (/微|小型|不到|厘米/.test(record.size)) profile.sizePreference = 0.25
-  if (/装甲|壳|盾|棘|穴|防御/.test(`${record.strategy}${record.intro}`)) profile.defense = 0.82
-  if (/伏击|追击|主动|捕食/.test(record.strategy)) profile.boldness = Math.max(profile.boldness, 0.7)
-  if (/群|协作|群居/.test(record.strategy)) profile.sociability = 0.79
-  if (/等待|耐心|滤食|缓慢/.test(record.strategy)) profile.patience = 0.8
-  if (/快速|奔跑|游速|飞行/.test(record.strategy)) profile.speed = 0.8
-  if (/广食|适应|灾后|多种/.test(record.strategy)) profile.adaptability = 0.82
-  return profile
-}
-
 function c(id, nameCn, scientificName, periodIds, group, habitat, diet, size, region, strategy, intro, tags) {
   const base = {
     id,
@@ -69,6 +43,7 @@ function c(id, nameCn, scientificName, periodIds, group, habitat, diet, size, re
     survivalStrategy: strategy,
     funIntro: intro,
     modernAnalogy: intro,
+    mediaId: `creature-${id}`,
     image: '',
     thumbnail: '',
     gallery: [],
@@ -80,7 +55,15 @@ function c(id, nameCn, scientificName, periodIds, group, habitat, diet, size, re
     sourceNeeded: true,
     tags
   }
-  base.personalityProfile = buildProfile(Object.assign({}, base, { strategy, intro }))
+  const quizProfile = getQuizProfileById(id)
+  Object.assign(base, quizProfile || {
+    quizEligible: false,
+    personalityProfile: null,
+    matchReasons: [],
+    resultSummary: '',
+    resultStrengths: [],
+    resultCaution: ''
+  })
   return base
 }
 
@@ -216,6 +199,7 @@ function getCreatureSummaries(list) {
     diet: creature.diet,
     size: creature.size,
     funIntro: creature.funIntro,
+    mediaId: creature.mediaId,
     thumbnail: creature.thumbnail,
     imageAlt: creature.imageAlt,
     tags: creature.tags

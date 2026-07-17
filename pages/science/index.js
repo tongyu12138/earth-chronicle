@@ -1,57 +1,31 @@
-const { periods } = require('../../data/periods')
 const { eras } = require('../../data/eras')
-const { events } = require('../../data/events')
-const { creatures, getCreatureById } = require('../../data/creatures')
+const { periodSummaries } = require('../../data/period-summaries')
+const { creatureSummaries } = require('../../data/creature-summaries')
+const { indexMeta, categories, featuredEvents, massExtinctions } = require('../../data/index-meta')
 const { getRecent } = require('../../utils/storage')
+const { buildUrl, navigateToPage, switchTabPage } = require('../../utils/router')
 
-function compactPeriod(period) {
-  const representative = period.creatureIds.length ? getCreatureById(period.creatureIds[0]) : null
-  return {
-    id: period.id,
-    name: period.name,
-    englishName: period.englishName,
-    range: period.range,
-    tagline: period.tagline,
-    color: period.color,
-    accent: period.accent,
-    icon: period.icon,
-    thumbnail: period.thumbnail,
-    imageAlt: period.imageAlt,
-    representativeName: representative ? representative.nameCn : period.id === 'hadean' ? '尚无已确认生命' : period.eraId === 'human-history' ? '人类社会与技术' : '生态档案整理中',
-    eventCount: period.eventIds.length
-  }
+function periodsForEra(eraId) {
+  return periodSummaries.filter((period) => period.eraId === eraId)
 }
 
 Page({
   data: {
-    eventCount: events.length,
-    periodCount: periods.length,
-    creatureCount: creatures.length,
-    periodGroups: [],
+    meta: indexMeta,
+    eras,
+    categories,
+    featuredEvents,
+    massExtinctions,
+    selectedEraId: eras[0].id,
+    selectedEra: eras[0],
+    visiblePeriods: periodsForEra(eras[0].id),
     dailyCreature: null,
-    continueItem: null,
-    categories: [
-      { id: 'periods', icon: '◌', name: '地质年代', copy: '29个时期与历史阶段' },
-      { id: 'timeline', icon: '↧', name: '生命演化', copy: '保留61个事件的总览时间轴' },
-      { id: 'creatures', icon: '✦', name: '古生物图鉴', copy: '跨越微生物到冰河巨兽' },
-      { id: 'extinctions', icon: '⚠', name: '五次大灭绝', copy: '从环境危机理解生态重组' },
-      { id: 'human', icon: '⌁', name: '人类演化', copy: '分枝演化、工具与文化网络' },
-      { id: 'technology', icon: '⌘', name: '文明与科技', copy: '农业、工业、数字与人工智能' }
-    ]
+    continueItem: null
   },
 
   onLoad() {
-    const periodGroups = eras.map((era) => ({
-      id: era.id,
-      name: era.name,
-      englishName: era.englishName,
-      range: era.range,
-      color: era.color,
-      periods: periods.filter((period) => period.eraId === era.id).map(compactPeriod)
-    }))
-    const dayIndex = Math.floor(Date.now() / 86400000) % creatures.length
-    const dailyCreature = Object.assign({}, creatures[dayIndex], { initial: creatures[dayIndex].nameCn.charAt(0) })
-    this.setData({ periodGroups, dailyCreature })
+    const dayIndex = Math.floor(Date.now() / 86400000) % creatureSummaries.length
+    this.setData({ dailyCreature: creatureSummaries[dayIndex] })
   },
 
   onShow() {
@@ -60,52 +34,62 @@ Page({
   },
 
   startJourney() {
-    wx.pageScrollTo({ selector: '#period-explorer', duration: 500, offsetTop: 10 })
+    wx.pageScrollTo({ selector: '#era-explorer', duration: 500, offsetTop: 12 })
+  },
+
+  selectEra(event) {
+    const id = event.currentTarget.dataset.id
+    const selectedEra = eras.find((era) => era.id === id)
+    if (!selectedEra || id === this.data.selectedEraId) return
+    this.setData({ selectedEraId: id, selectedEra, visiblePeriods: periodsForEra(id) })
   },
 
   openPeriod(event) {
     const id = event.currentTarget.dataset.id
     if (!id) return wx.showToast({ title: '时期参数缺失', icon: 'none' })
-    wx.navigateTo({ url: `/pages/period/index?id=${id}`, fail: () => wx.showToast({ title: '页面打开失败', icon: 'none' }) })
+    navigateToPage(buildUrl('/pages/period/index', { id }), { toastTitle: '暂时无法打开时期' })
+  },
+
+  openEvent(event) {
+    const id = event.currentTarget.dataset.id
+    if (!id) return wx.showToast({ title: '事件参数缺失', icon: 'none' })
+    navigateToPage(buildUrl('/pages/detail/index', { id }), { toastTitle: '暂时无法打开事件' })
   },
 
   openCreature(event) {
     const id = event.currentTarget.dataset.id
     if (!id) return
-    wx.navigateTo({ url: `/pages/creature-detail/index?id=${id}` })
-  },
-
-  handleDailyImageError() {
-    const dailyCreature = Object.assign({}, this.data.dailyCreature, { image: '' })
-    this.setData({ dailyCreature })
-  },
-
-  handlePeriodImageError(event) {
-    const id = event.currentTarget.dataset.id
-    const periodGroups = this.data.periodGroups.map((group) => Object.assign({}, group, {
-      periods: group.periods.map((period) => period.id === id ? Object.assign({}, period, { thumbnail: '' }) : period)
-    }))
-    this.setData({ periodGroups })
+    navigateToPage(buildUrl('/pages/creature-detail/index', { id }), { toastTitle: '暂时无法打开古生物档案' })
   },
 
   openContinue() {
     const item = this.data.continueItem
     if (!item || !item.path) return
-    wx.navigateTo({ url: item.path, fail: () => wx.showToast({ title: '阅读记录已失效', icon: 'none' }) })
+    navigateToPage(item.path, { toastTitle: '这条阅读记录已失效' })
   },
 
   openSearch() {
-    wx.navigateTo({ url: '/pages/search/index' })
+    navigateToPage('/pages/search/index', { toastTitle: '暂时无法打开搜索' })
+  },
+
+  openTimeline() {
+    navigateToPage('/pages/timeline/index', { toastTitle: '暂时无法打开时间轴' })
+  },
+
+  openAtlas() {
+    navigateToPage('/pages/creatures/index', { toastTitle: '暂时无法打开图鉴' })
+  },
+
+  openQuiz() {
+    switchTabPage('/pages/quiz/index')
   },
 
   openCategory(event) {
     const id = event.currentTarget.dataset.id
-    if (id === 'creatures') return wx.navigateTo({ url: '/pages/creatures/index' })
-    if (id === 'timeline') return wx.navigateTo({ url: '/pages/timeline/index' })
-    if (id === 'periods') return this.startJourney()
-    if (id === 'human') return wx.navigateTo({ url: '/pages/period/index?id=early-homo' })
-    if (id === 'technology') return wx.navigateTo({ url: '/pages/period/index?id=industrial-revolution' })
-    if (id === 'extinctions') return wx.navigateTo({ url: '/pages/search/index?q=灭绝' })
+    if (id === 'timeline') return this.openTimeline()
+    if (id === 'creatures') return this.openAtlas()
+    if (id === 'human') return navigateToPage(buildUrl('/pages/period/index', { id: 'early-homo' }))
+    if (id === 'extinctions') wx.pageScrollTo({ selector: '#mass-extinctions', duration: 420, offsetTop: 14 })
   },
 
   onShareAppMessage() {

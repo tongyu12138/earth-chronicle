@@ -1,6 +1,6 @@
 .result-page { padding-bottom: 70rpx; }
 .result-hero { height: 940rpx; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.result-hero > image { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; }
+.result-main-media { position: absolute; z-index: 1; inset: 0; width: 100%; opacity: 0; animation: mediaReveal .8s .35s ease-out forwards; }
 .reveal-rays { position: absolute; width: 760rpx; height: 760rpx; border-radius: 50%; background: repeating-conic-gradient(from 0deg, rgba(101,212,193,.08) 0 8deg, transparent 8deg 19deg); animation: slowRotate 22s linear infinite; }
 .result-initial { position: relative; z-index: 1; color: rgba(255,255,255,.18); font-size: 280rpx; font-weight: 900; animation: revealScale 1s ease-out both; }
 .result-overlay { position: absolute; z-index: 2; inset: 0; background: linear-gradient(180deg, transparent 28%, rgba(7,19,25,.18) 48%, #071319 94%); }
@@ -20,6 +20,10 @@
 .why-card { margin-top: 30rpx; padding: 32rpx; border-radius: 28rpx; background: rgba(255,255,255,.045); border: 1rpx solid rgba(255,255,255,.08); display: flex; flex-direction: column; }
 .why-card text:first-child { color: #e0bb75; font-size: 21rpx; font-weight: 800; }
 .why-card text:last-child { margin-top: 17rpx; color: #afbfbe; font-size: 25rpx; line-height: 1.8; }
+.why-card text:nth-child(n+3) { margin-top: 10rpx; color: #8fa5a4; font-size: 22rpx; line-height: 1.6; }
+.result-guidance { margin-top: 18rpx; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14rpx; }
+.result-guidance>view { padding: 24rpx; border-radius: 22rpx; background: rgba(255,255,255,.035); display: flex; flex-direction: column; gap: 10rpx; color: #8fa5a4; font-size: 21rpx; line-height: 1.55; }
+.result-guidance>view>text:first-child { color: #d9e6e3; font-weight: 750; }
 .result-section { padding-top: 92rpx; }
 .result-copy { display: block; margin-top: 25rpx; color: #a7b8b8; font-size: 26rpx; line-height: 1.85; }
 .science-fact { margin-top: 25rpx; padding: 25rpx; border-left: 4rpx solid #68d1bf; background: rgba(255,255,255,.035); display: flex; flex-direction: column; gap: 11rpx; color: #85999b; font-size: 21rpx; line-height: 1.6; }
@@ -41,3 +45,4 @@
 .result-disclaimer { display: block; margin-top: 34rpx; color: #536a6e; font-size: 18rpx; line-height: 1.55; text-align: center; }
 @keyframes slowRotate { to { transform: rotate(360deg); } }
 @keyframes revealScale { from { opacity: 0; transform: scale(.75); filter: blur(20rpx); } to { opacity: 1; transform: scale(1); filter: blur(0); } }
+@keyframes mediaReveal { from { opacity: 0; filter: blur(18rpx); transform: scale(1.06); } to { opacity: 1; filter: blur(0); transform: scale(1); } }

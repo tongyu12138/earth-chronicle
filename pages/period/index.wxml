@@ -1,7 +1,7 @@
 <page-meta page-style="background:#071319" />
 <view wx:if="{{period}}" class="museum-page period-page safe-bottom">
   <view class="period-hero placeholder-visual" style="background:linear-gradient(155deg, {{period.color}}cc, #152d34 54%, #071319)">
-    <image wx:if="{{period.image && !imageFailed}}" class="hero-image" src="{{period.image}}" mode="aspectFill" binderror="handleImageError" />
+    <view class="hero-image"><media-image media-id="{{period.mediaId}}" ratio="16:9" alt="{{period.imageAlt}}" placeholder-theme="{{period.id === 'hadean' ? 'volcanic' : period.id === 'pleistocene' ? 'ice' : 'ocean'}}" lazy-load="false" /></view>
     <view class="hero-overlay"></view>
     <view class="hero-content">
       <view class="hero-topline"><text>{{period.parent}}</text><button class="favorite-button {{isFavorite ? 'favorite-active' : ''}}" bindtap="toggleFavorite">{{isFavorite ? '★ 已收藏' : '☆ 收藏'}}</button></view>
@@ -34,10 +34,10 @@
     <view class="content-section event-section">
       <view class="section-title-row"><view><text class="section-kicker-global">KEY EVENTS</text><text class="section-heading-global">关键事件</text></view><text class="count-badge">{{periodEvents.length}} 项</text></view>
       <view wx:if="{{periodEvents.length}}" class="event-list">
-        <view class="event-card" wx:for="{{periodEvents}}" wx:key="id" bindtap="openEvent" data-id="{{item.id}}">
+        <view class="event-card" wx:for="{{periodEvents}}" wx:key="id" hover-class="tap-card-active" bindtap="openEvent" data-id="{{item.id}}">
           <view class="event-thumb placeholder-visual" style="background:linear-gradient(145deg, {{period.color}}88, #10242d)">
-            <image wx:if="{{item.thumbnail}}" src="{{item.thumbnail}}" mode="aspectFill" lazy-load="true" binderror="handleEventImageError" data-id="{{item.id}}" />
-            <text>{{index + 1}}</text>
+            <media-image media-id="{{item.mediaId}}" ratio="4:3" alt="{{item.imageAlt}}" placeholder-theme="rock" />
+            <text class="event-index">{{index + 1}}</text>
           </view>
           <view class="event-info">
             <text class="event-time">{{item.displayTime}}</text>
@@ -54,8 +54,8 @@
     <view class="content-section creature-section">
       <view class="section-title-row"><view><text class="section-kicker-global">LIFE FORMS</text><text class="section-heading-global">代表生物</text></view><text class="count-badge">{{periodCreatures.length}} 种</text></view>
       <view wx:if="{{periodCreatures.length}}" class="creature-grid">
-        <view class="creature-card" wx:for="{{periodCreatures}}" wx:key="id" bindtap="openCreature" data-id="{{item.id}}">
-          <view class="creature-art placeholder-visual"><image wx:if="{{item.thumbnail}}" src="{{item.thumbnail}}" mode="aspectFill" lazy-load="true" binderror="handleCreatureImageError" data-id="{{item.id}}" /><text>{{item.nameCn}}</text></view>
+        <view class="creature-card" wx:for="{{periodCreatures}}" wx:key="id" hover-class="tap-card-active" bindtap="openCreature" data-id="{{item.id}}">
+          <view class="creature-art placeholder-visual"><media-image media-id="{{item.mediaId}}" ratio="4:3" alt="{{item.imageAlt}}" placeholder-theme="rock" /></view>
           <view class="creature-info">
             <text class="creature-name">{{item.nameCn}}</text>
             <text class="creature-latin">{{item.scientificName}}</text>
@@ -73,9 +73,9 @@
       <text class="gallery-note">当前没有确认授权的图片时，保留完整画幅与替代文本；接入图片后可点击预览。</text>
       <scroll-view class="gallery-scroll" scroll-x="true" enhanced="true" show-scrollbar="false">
         <view class="gallery-inner">
-          <view class="gallery-card placeholder-visual" wx:for="{{period.gallery}}" wx:key="id" bindtap="previewGallery" data-index="{{index}}" style="background:linear-gradient(145deg, {{period.color}}88, #102831)">
-            <image wx:if="{{item.src}}" src="{{item.src}}" mode="aspectFill" lazy-load="true" />
-            <view class="gallery-label"><text>{{item.kind}}</text><text>{{item.status === 'needed' ? '授权图待补' : '点击预览'}}</text></view>
+          <view class="gallery-card placeholder-visual" wx:for="{{period.gallery}}" wx:key="id" style="background:linear-gradient(145deg, {{period.color}}88, #102831)">
+            <media-image media-id="{{item.mediaId}}" ratio="4:3" alt="{{item.alt}}" placeholder-theme="rock" previewable="true" />
+            <view class="gallery-label"><text>{{item.kind}}</text><text>{{item.status === 'missing' ? '授权图待补' : '可查看大图'}}</text></view>
           </view>
         </view>
       </scroll-view>
@@ -110,8 +110,8 @@
   </view>
 
   <view class="period-navigation">
-    <button class="adjacent-button {{!previousPeriod ? 'nav-disabled' : ''}}" bindtap="openAdjacent" data-id="{{previousPeriod.id}}"><text>上一个时期</text><text>{{previousPeriod ? previousPeriod.name : '已经是第一章'}}</text></button>
-    <button class="all-periods-button" bindtap="backToAll">全部时期</button>
-    <button class="adjacent-button adjacent-next {{!nextPeriod ? 'nav-disabled' : ''}}" bindtap="openAdjacent" data-id="{{nextPeriod.id}}"><text>下一个时期</text><text>{{nextPeriod ? nextPeriod.name : '已经到达现在'}}</text></button>
+    <button class="adjacent-button {{!previousPeriod ? 'nav-disabled' : ''}}" hover-class="button-active" bindtap="openAdjacent" data-id="{{previousPeriod.id}}"><text>上一个时期</text><text>{{previousPeriod ? previousPeriod.name : '已经是第一章'}}</text></button>
+    <button class="all-periods-button" hover-class="button-active" bindtap="backToAll">全部时期</button>
+    <button class="adjacent-button adjacent-next {{!nextPeriod ? 'nav-disabled' : ''}}" hover-class="button-active" bindtap="openAdjacent" data-id="{{nextPeriod.id}}"><text>下一个时期</text><text>{{nextPeriod ? nextPeriod.name : '已经到达现在'}}</text></button>
   </view>
 </view>

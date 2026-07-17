@@ -1,0 +1,22 @@
+<view class="media-shell theme-{{placeholderTheme}} state-{{state}}" style="padding-top:{{ratioPadding}}">
+  <view wx:if="{{state === 'loading'}}" class="media-skeleton"></view>
+  <image
+    wx:if="{{activeSrc}}"
+    class="media-content {{state === 'ready' ? 'is-ready' : ''}}"
+    src="{{activeSrc}}"
+    mode="{{mode}}"
+    lazy-load="{{lazyLoad}}"
+    bindload="handleLoad"
+    binderror="handleError"
+  />
+  <view wx:if="{{state === 'missing' || state === 'error'}}" class="media-fallback">
+    <text class="fallback-orbit">◎</text>
+    <text class="fallback-label">{{state === 'error' ? '图片加载失败' : '图片资料待补充'}}</text>
+    <text class="fallback-alt">{{displayAlt}}</text>
+  </view>
+  <button wx:if="{{previewable && state === 'ready'}}" class="preview-button" catchtap="previewImage">查看大图</button>
+</view>
+<view wx:if="{{showMeta && (displayCredit || displayLicense)}}" class="media-meta">
+  <text wx:if="{{displayCredit}}">图像：{{displayCredit}}</text>
+  <text wx:if="{{displayLicense}}">授权：{{displayLicense}}</text>
+</view>

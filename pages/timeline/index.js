@@ -1,4 +1,5 @@
 const { events, eras } = require('../../data/events')
+const { buildUrl, navigateToPage, switchTabPage } = require('../../utils/router')
 
 Page({
   data: {
@@ -9,9 +10,8 @@ Page({
 
   openEvent(event) {
     const id = event.currentTarget.dataset.id
-    wx.navigateTo({
-      url: `/pages/detail/index?id=${id}`
-    })
+    if (!id) return wx.showToast({ title: '事件参数缺失', icon: 'none' })
+    navigateToPage(buildUrl('/pages/detail/index', { id }), { toastTitle: '暂时无法打开事件' })
   },
 
   jumpToEra(event) {
@@ -24,11 +24,11 @@ Page({
   },
 
   openPeriods() {
-    wx.switchTab({ url: '/pages/science/index' })
+    switchTabPage('/pages/science/index')
   },
 
   openQuiz() {
-    wx.switchTab({ url: '/pages/quiz/index' })
+    switchTabPage('/pages/quiz/index')
   },
 
   onShareAppMessage() {

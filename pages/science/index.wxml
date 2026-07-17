@@ -5,88 +5,86 @@
     <view class="star-field star-two"></view>
     <view class="earth-stage">
       <view class="earth-glow"></view>
-      <view class="earth-sphere">
-        <view class="earth-land land-a"></view>
-        <view class="earth-land land-b"></view>
-        <view class="earth-shade"></view>
-      </view>
       <view class="orbit-ring"></view>
+      <view class="earth-media"><media-image media-id="{{meta.heroMediaId}}" ratio="1:1" alt="NASA 蓝色弹珠地球影像" lazy-load="false" /></view>
     </view>
     <text class="hero-eyebrow">DEEP TIME · EARTH ARCHIVE</text>
     <text class="hero-number">45.4亿年</text>
     <text class="hero-title">一部仍在继续的地球史</text>
     <text class="hero-copy">从岩浆海与最早的水，穿过生命演化、文明扩展，抵达正在发生的人工智能时代。</text>
-    <button class="primary-button hero-button" bindtap="startJourney">开始穿越 <text>↓</text></button>
+    <button class="primary-button hero-button" hover-class="button-active" bindtap="startJourney">开始穿越 <text>↓</text></button>
     <view class="hero-stats">
-      <view><text class="stat-number">{{periodCount}}</text><text class="stat-label">时期与阶段</text></view>
-      <view><text class="stat-number">{{eventCount}}</text><text class="stat-label">关键事件</text></view>
-      <view><text class="stat-number">{{creatureCount}}</text><text class="stat-label">古生物档案</text></view>
+      <view><text class="stat-number">{{meta.periodCount}}</text><text class="stat-label">时期与阶段</text></view>
+      <view><text class="stat-number">{{meta.eventCount}}</text><text class="stat-label">关键事件</text></view>
+      <view><text class="stat-number">{{meta.creatureCount}}</text><text class="stat-label">古生物档案</text></view>
     </view>
+    <text class="hero-credit">地球影像：NASA Earth Observatory · Public Domain</text>
   </view>
 
   <view class="top-tools">
-    <view class="search-entry" bindtap="openSearch"><text>⌕</text><text>搜索时期、事件、学名或标签</text><text>›</text></view>
-    <view wx:if="{{continueItem}}" class="continue-card" bindtap="openContinue">
-      <view><text class="continue-kicker">CONTINUE EXPLORING</text><text class="continue-title">继续探索：{{continueItem.title}}</text></view>
-      <view class="continue-arrow">→</view>
+    <view class="search-entry" hover-class="tap-card-active" bindtap="openSearch"><text>⌕</text><text>搜索时期、事件、学名或标签</text><text>›</text></view>
+    <view wx:if="{{continueItem}}" class="continue-card" hover-class="tap-card-active" bindtap="openContinue">
+      <view><text class="continue-kicker">CONTINUE EXPLORING</text><text class="continue-title">继续探索：{{continueItem.title}}</text></view><text class="continue-arrow">→</text>
     </view>
   </view>
 
-  <view class="section-block categories-section">
-    <text class="section-kicker-global">CHOOSE A LENS</text>
-    <text class="section-heading-global">用不同尺度观察地球</text>
-    <view class="category-grid">
-      <view class="category-card" wx:for="{{categories}}" wx:key="id" bindtap="openCategory" data-id="{{item.id}}">
-        <view class="category-icon">{{item.icon}}</view>
-        <text class="category-name">{{item.name}}</text>
-        <text class="category-copy">{{item.copy}}</text>
+  <view wx:if="{{dailyCreature}}" class="section-block daily-section">
+    <text class="section-kicker-global">TODAY'S SPECIMEN</text>
+    <text class="section-heading-global">今日古生物</text>
+    <view class="daily-card" hover-class="tap-card-active" bindtap="openCreature" data-id="{{dailyCreature.id}}">
+      <view class="daily-visual"><media-image media-id="{{dailyCreature.mediaId}}" ratio="4:3" alt="{{dailyCreature.nameCn}}科学复原图待补" placeholder-theme="rock" /></view>
+      <view class="daily-content"><text class="daily-time">{{dailyCreature.livedWhen}}</text><text class="daily-name">{{dailyCreature.nameCn}}</text><text class="daily-latin">{{dailyCreature.scientificName}}</text><text class="daily-copy">{{dailyCreature.funIntro}}</text><text class="inline-link">查看完整档案 →</text></view>
+    </view>
+  </view>
+
+  <view id="era-explorer" class="section-block era-section">
+    <text class="section-kicker-global">FIVE GRAND CHAPTERS</text>
+    <text class="section-heading-global">先选时代，再进入时期</text>
+    <text class="section-copy">不再一次堆叠29张长卡片。横向切换五个顶层章节，再查看其中的时期。</text>
+    <scroll-view class="era-tabs" scroll-x="true" enhanced="true" show-scrollbar="false">
+      <view class="era-tabs-inner">
+        <view wx:for="{{eras}}" wx:key="id" class="era-tab {{selectedEraId === item.id ? 'is-active' : ''}}" hover-class="tap-card-active" bindtap="selectEra" data-id="{{item.id}}" style="border-color:{{selectedEraId === item.id ? item.color : 'rgba(255,255,255,.08)'}}"><text class="era-icon" style="color:{{item.color}}">{{item.icon}}</text><text class="era-tab-name">{{item.name}}</text><text class="era-tab-range">{{item.range}}</text></view>
       </view>
-    </view>
-  </view>
-
-  <view wx:if="{{dailyCreature}}" class="daily-wrap">
-    <view class="daily-visual placeholder-visual">
-      <image wx:if="{{dailyCreature.image}}" class="daily-image" src="{{dailyCreature.image}}" mode="aspectFill" lazy-load="true" binderror="handleDailyImageError" />
-      <view class="daily-silhouette">{{dailyCreature.initial}}</view>
-      <view class="daily-badge">今日古生物</view>
-    </view>
-    <view class="daily-content">
-      <text class="daily-time">{{dailyCreature.livedWhen}}</text>
-      <text class="daily-name">{{dailyCreature.nameCn}}</text>
-      <text class="daily-latin">{{dailyCreature.scientificName}}</text>
-      <text class="daily-copy">{{dailyCreature.funIntro}}</text>
-      <button class="text-button" bindtap="openCreature" data-id="{{dailyCreature.id}}">查看完整档案 →</button>
-    </view>
-  </view>
-
-  <view id="period-explorer" class="section-block period-explorer">
-    <text class="section-kicker-global">29 CHAPTERS</text>
-    <text class="section-heading-global">从地球诞生，逐章阅读</text>
-    <text class="period-intro">地质边界采用国际地层委员会时间表。人类历史阶段是便于阅读的信息架构，不等同于正式地质年代。</text>
-    <view class="era-group" wx:for="{{periodGroups}}" wx:key="id">
-      <view class="era-heading">
-        <view class="era-line" style="background:{{item.color}}"></view>
-        <view><text class="era-name">{{item.name}}</text><text class="era-meta">{{item.englishName}} · {{item.range}}</text></view>
-      </view>
-      <view class="period-card" wx:for="{{item.periods}}" wx:for-item="period" wx:key="id" bindtap="openPeriod" data-id="{{period.id}}" style="border-color:{{period.color}}55">
-        <view class="period-art placeholder-visual" style="background:linear-gradient(145deg, {{period.color}}99, #102630 58%, #081319)">
-          <image wx:if="{{period.thumbnail}}" class="period-image" src="{{period.thumbnail}}" mode="aspectFill" lazy-load="true" binderror="handlePeriodImageError" data-id="{{period.id}}" />
-          <text class="period-icon">{{period.icon}}</text>
-          <text class="period-representative">代表：{{period.representativeName}}</text>
-        </view>
-        <view class="period-info">
-          <view class="period-top"><text class="period-name">{{period.name}}</text><text class="period-arrow">↗</text></view>
-          <text class="period-english">{{period.englishName}}</text>
-          <text class="period-range">{{period.range}}</text>
-          <text class="period-tagline">{{period.tagline}}</text>
-          <view class="period-footer"><text>{{period.eventCount}} 个关联事件</text><text>进入时期</text></view>
+    </scroll-view>
+    <view class="selected-era-heading"><view class="selected-era-line" style="background:{{selectedEra.color}}"></view><view><text>{{selectedEra.name}}</text><text>{{selectedEra.englishName}} · {{selectedEra.range}}</text></view></view>
+    <scroll-view class="period-strip" scroll-x="true" enhanced="true" show-scrollbar="false">
+      <view class="period-strip-inner">
+        <view class="period-mini-card" wx:for="{{visiblePeriods}}" wx:key="id" hover-class="tap-card-active" bindtap="openPeriod" data-id="{{item.id}}" style="border-color:{{item.color}}66">
+          <view class="period-mini-art"><media-image media-id="{{item.mediaId}}" ratio="16:9" alt="{{item.name}}环境图待补" placeholder-theme="{{item.id === 'hadean' ? 'volcanic' : item.id === 'pleistocene' ? 'ice' : 'ocean'}}" /><text class="period-mini-icon">{{item.icon}}</text></view>
+          <view class="period-mini-body"><text class="period-mini-name">{{item.name}}</text><text class="period-mini-en">{{item.englishName}}</text><text class="period-mini-range">{{item.range}}</text><text class="period-mini-copy">{{item.tagline}}</text><view class="period-mini-footer"><text>代表：{{item.representativeName}}</text><text>↗</text></view></view>
         </view>
       </view>
-    </view>
+    </scroll-view>
   </view>
 
-  <view class="science-note">
-    <text>科学说明</text>
-    <text>年代边界会随定年与地层研究修订；艺术复原与现代人格类比均与直接科学证据分开标注。</text>
+  <view class="section-block featured-section">
+    <view class="section-title-row"><view><text class="section-kicker-global">FEATURED EVENTS</text><text class="section-heading-global">改变地球的时刻</text></view><text class="section-more" bindtap="openTimeline">完整时间轴 →</text></view>
+    <scroll-view class="event-strip" scroll-x="true" enhanced="true" show-scrollbar="false">
+      <view class="event-strip-inner">
+        <view class="event-feature-card" wx:for="{{featuredEvents}}" wx:key="id" hover-class="tap-card-active" bindtap="openEvent" data-id="{{item.id}}" style="border-top-color:{{item.color}}">
+          <media-image media-id="{{item.mediaId}}" ratio="16:9" alt="{{item.title}}科学图待补" placeholder-theme="rock" />
+          <view class="event-feature-body"><text class="event-feature-meta">{{item.displayTime}} · {{item.category}}</text><text class="event-feature-title">{{item.title}}</text><text class="event-feature-copy">{{item.summary}}</text><text class="inline-link">阅读事件说明 →</text></view>
+        </view>
+      </view>
+    </scroll-view>
   </view>
+
+  <view id="mass-extinctions" class="section-block extinction-section">
+    <text class="section-kicker-global warning-kicker">FIVE MASS EXTINCTIONS</text>
+    <text class="section-heading-global">危机不是一瞬间的按钮</text>
+    <text class="section-copy">每次大灭绝都包含多重环境压力，并在之后开启漫长的生态恢复与重组。</text>
+    <scroll-view class="extinction-strip" scroll-x="true" enhanced="true" show-scrollbar="false"><view class="extinction-strip-inner"><view class="extinction-card" wx:for="{{massExtinctions}}" wx:key="id" hover-class="tap-card-active" bindtap="openPeriod" data-id="{{item.id}}"><text class="extinction-number">0{{index + 1}}</text><text class="extinction-title">{{item.title}}</text><text class="extinction-time">{{item.time}}</text><text class="extinction-copy">{{item.copy}}</text><text class="inline-link">进入相关时期 →</text></view></view></scroll-view>
+  </view>
+
+  <view class="section-block lens-section">
+    <text class="section-kicker-global">CHOOSE A LENS</text><text class="section-heading-global">换一种尺度观察</text>
+    <view class="lens-grid"><view class="lens-card" wx:for="{{categories}}" wx:key="id" hover-class="tap-card-active" bindtap="openCategory" data-id="{{item.id}}"><text class="lens-icon">{{item.icon}}</text><text class="lens-name">{{item.name}}</text><text class="lens-copy">{{item.copy}}</text><text class="lens-arrow">→</text></view></view>
+  </view>
+
+  <view class="section-block final-ctas">
+    <view class="atlas-cta" hover-class="tap-card-active" bindtap="openAtlas"><text class="cta-kicker">110 SPECIMENS</text><text class="cta-title">进入古生物图鉴</text><text class="cta-copy">按时期、环境、食性、体型和类群筛选。</text><text class="cta-arrow">浏览全部 →</text></view>
+    <view class="quiz-cta" hover-class="tap-card-active" bindtap="openQuiz"><text class="cta-kicker">15 QUESTIONS</text><text class="cta-title">测测你的远古身份</text><text class="cta-copy">以人工校准的生态画像进行科普娱乐匹配。</text><text class="cta-arrow">开始测试 →</text></view>
+  </view>
+
+  <view class="science-note"><text>科学说明</text><text>年代边界会随定年与地层研究修订；艺术复原与现代人格类比均与直接科学证据分开标注。</text></view>
 </view>

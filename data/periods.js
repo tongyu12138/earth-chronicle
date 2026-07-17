@@ -12,14 +12,15 @@ const HUMAN_SOURCE = {
 
 function galleryFor(id, name) {
   return [
-    { id: `${id}-environment`, src: '', kind: '环境复原', alt: `${name}环境艺术复原图占位`, status: 'needed' },
-    { id: `${id}-fossil`, src: '', kind: '化石与地层', alt: `${name}代表化石或地层照片占位`, status: 'needed' },
-    { id: `${id}-map`, src: '', kind: '古地理', alt: `${name}海陆分布或地图示意图占位`, status: 'needed' }
+    { id: `${id}-environment`, mediaId: `gallery-${id}-environment`, src: '', kind: '环境复原', alt: `${name}环境艺术复原图占位`, status: 'missing' },
+    { id: `${id}-fossil`, mediaId: `gallery-${id}-fossil`, src: '', kind: '化石与地层', alt: `${name}代表化石或地层照片占位`, status: 'missing' },
+    { id: `${id}-map`, mediaId: `gallery-${id}-map`, src: '', kind: '古地理', alt: `${name}海陆分布或地图示意图占位`, status: 'missing' }
   ]
 }
 
 function makePeriod(data) {
   return Object.assign({
+    mediaId: `period-${data.id}`,
     image: '',
     thumbnail: '',
     imageAlt: `${data.name}环境艺术复原图占位`,

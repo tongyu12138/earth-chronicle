@@ -23,6 +23,9 @@ button::after {
   border: 0;
 }
 
+.tap-card-active { opacity: .82; transform: scale(.985); }
+.button-active { opacity: .86; transform: scale(.98); }
+
 .safe-bottom {
   padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
 }

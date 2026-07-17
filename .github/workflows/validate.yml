@@ -1,0 +1,27 @@
+name: Validate mini program
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Validate scientific data
+        run: node scripts/validate-data.js
+      - name: Validate quiz profiles and distribution
+        run: node scripts/validate-quiz.js
+      - name: Audit routes and page handlers
+        run: node scripts/audit-routes.js
+      - name: Validate media rights metadata
+        run: node scripts/validate-media.js

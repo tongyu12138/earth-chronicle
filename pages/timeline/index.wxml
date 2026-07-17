@@ -42,6 +42,7 @@
       <view class="era-nav-inner">
         <view
           class="era-chip"
+          hover-class="tap-card-active"
           wx:for="{{eras}}"
           wx:key="name"
           bindtap="jumpToEra"

@@ -1,6 +1,7 @@
 const { periods } = require('../../data/periods')
 const { events } = require('../../data/events')
 const { creatures } = require('../../data/creatures')
+const { buildUrl, navigateToPage } = require('../../utils/router')
 
 function includes(text, query) {
   return String(text || '').toLowerCase().includes(query)
@@ -48,7 +49,7 @@ Page({
     const id = event.currentTarget.dataset.id
     if (!id) return
     const routes = { period: '/pages/period/index', event: '/pages/detail/index', creature: '/pages/creature-detail/index' }
-    if (routes[type]) wx.navigateTo({ url: `${routes[type]}?id=${id}` })
+    if (routes[type]) navigateToPage(buildUrl(routes[type], { id }), { toastTitle: '暂时无法打开搜索结果' })
   },
 
   onUnload() { clearTimeout(this._timer) }

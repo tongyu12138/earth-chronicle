@@ -1,5 +1,6 @@
 const { getEventById } = require('../../data/events')
 const { recordView, isFavorite, toggleFavorite } = require('../../utils/storage')
+const { buildUrl, navigateToPage, switchTabPage } = require('../../utils/router')
 
 Page({
   data: {
@@ -15,13 +16,13 @@ Page({
         title: '没有找到这个事件',
         icon: 'none'
       })
-      setTimeout(() => wx.navigateBack(), 800)
+      setTimeout(() => wx.navigateBack({ fail: () => switchTabPage('/pages/science/index', { throttle: false }) }), 800)
       return
     }
 
     this.setData({ event, isFavorite: isFavorite('event', event.id) })
     wx.setNavigationBarTitle({ title: event.title })
-    recordView('event', event.id, event.title, `/pages/detail/index?id=${event.id}`)
+    recordView('event', event.id, event.title, buildUrl('/pages/detail/index', { id: event.id }))
   },
 
   toggleFavorite() {
@@ -35,7 +36,7 @@ Page({
   openPeriod() {
     const event = this.data.event
     if (!event || !event.periodId) return
-    wx.navigateTo({ url: `/pages/period/index?id=${event.periodId}` })
+    navigateToPage(buildUrl('/pages/period/index', { id: event.periodId }), { toastTitle: '暂时无法打开所属时期' })
   },
 
   copySource(event) {
@@ -56,7 +57,7 @@ Page({
     const event = this.data.event
     return {
       title: event ? `${event.title}｜地球编年史` : '地球编年史',
-      path: event ? `/pages/detail/index?id=${event.id}` : '/pages/science/index'
+      path: event ? buildUrl('/pages/detail/index', { id: event.id }) : '/pages/science/index'
     }
   }
 })

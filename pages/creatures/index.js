@@ -1,6 +1,7 @@
 const { creatures, getCreatureSummaries } = require('../../data/creatures')
 const { periods } = require('../../data/periods')
 const { getFavorites } = require('../../utils/storage')
+const { buildUrl, navigateToPage } = require('../../utils/router')
 
 const PAGE_SIZE = 18
 
@@ -132,7 +133,7 @@ Page({
   openCreature(event) {
     const id = event.currentTarget.dataset.id
     if (!id) return
-    wx.navigateTo({ url: `/pages/creature-detail/index?id=${id}` })
+    navigateToPage(buildUrl('/pages/creature-detail/index', { id }), { toastTitle: '暂时无法打开古生物档案' })
   },
 
   handleThumbnailError(event) {

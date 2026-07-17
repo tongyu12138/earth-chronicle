@@ -33,7 +33,15 @@ function recordView(type, id, title, path) {
 }
 
 function getRecent() {
-  return safeGet(KEYS.recent, {})
+  const recent = safeGet(KEYS.recent, {})
+  const legacyEventRoute = ['/pages', 'event', 'index'].join('/')
+  Object.keys(recent || {}).forEach((key) => {
+    const item = recent[key]
+    if (item && typeof item.path === 'string' && item.path.indexOf(legacyEventRoute) === 0) {
+      item.path = item.path.replace(legacyEventRoute, '/pages/detail/index')
+    }
+  })
+  return recent
 }
 
 function getFavorites() {

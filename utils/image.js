@@ -1,5 +1,5 @@
 function imageState(item) {
-  return Boolean(item && item.image) ? 'ready' : 'placeholder'
+  return Boolean(item && item.image) ? 'ready' : 'missing'
 }
 
 function previewImages(items, current) {
@@ -8,7 +8,19 @@ function previewImages(items, current) {
     wx.showToast({ title: '该图片仍是授权占位', icon: 'none' })
     return
   }
-  wx.previewImage({ current: current || urls[0], urls })
+  try {
+    wx.previewImage({
+      current: current || urls[0],
+      urls,
+      fail(error) {
+        console.error('[ImagePreview]', { current, urls, error })
+        wx.showToast({ title: '暂时无法预览图片', icon: 'none' })
+      }
+    })
+  } catch (error) {
+    console.error('[ImagePreview]', { current, urls, error })
+    wx.showToast({ title: '暂时无法预览图片', icon: 'none' })
+  }
 }
 
 function compactImageMeta(item) {

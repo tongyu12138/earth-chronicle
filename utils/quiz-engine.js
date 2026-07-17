@@ -1,4 +1,4 @@
-const { DIMENSIONS } = require('../data/creatures')
+const { DIMENSIONS } = require('../data/quiz-profiles')
 const { questions, dimensionLabels } = require('../data/quiz')
 
 const weights = {
@@ -88,7 +88,9 @@ function similarity(userProfile, creatureProfile) {
 function rankCreatures(answers, creatures) {
   if (!validateAnswers(answers)) throw new Error('Quiz answers are incomplete or invalid')
   const scored = scoreAnswers(answers)
-  const ranked = creatures.map((creature) => ({
+  const eligible = creatures.filter((creature) => creature.quizEligible && creature.personalityProfile)
+  if (!eligible.length) throw new Error('No quiz-eligible profiles are available')
+  const ranked = eligible.map((creature) => ({
     creature,
     similarity: similarity(scored.normalized, creature.personalityProfile)
   })).sort((left, right) => {
@@ -128,7 +130,7 @@ function validateQuizData(creatures) {
   questions.forEach((question, index) => {
     if (question.options.length !== 4) problems.push(`Question ${index + 1} does not have 4 options`)
   })
-  creatures.forEach((creature) => {
+  creatures.filter((creature) => creature.quizEligible).forEach((creature) => {
     DIMENSIONS.forEach((dimension) => {
       if (typeof creature.personalityProfile[dimension] !== 'number') problems.push(`${creature.id} missing ${dimension}`)
     })

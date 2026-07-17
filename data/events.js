@@ -1820,6 +1820,7 @@ const events = rawEvents.map((event, index) => {
   ].join('')
 
   return Object.assign({
+    mediaId: `event-${event.id}`,
     image: '',
     thumbnail: '',
     gallery: [],

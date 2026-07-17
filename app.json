@@ -3,7 +3,6 @@
     "pages/science/index",
     "pages/quiz/index",
     "pages/period/index",
-    "pages/event/index",
     "pages/creatures/index",
     "pages/creature-detail/index",
     "pages/search/index",
@@ -27,6 +26,9 @@
       { "pagePath": "pages/science/index", "text": "地球史" },
       { "pagePath": "pages/quiz/index", "text": "测测你是谁" }
     ]
+  },
+  "usingComponents": {
+    "media-image": "/components/media-image/index"
   },
   "sitemapLocation": "sitemap.json",
   "style": "v2"

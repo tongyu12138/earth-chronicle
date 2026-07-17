@@ -1,11 +1,13 @@
-const { creatures, getCreatureById, DIMENSIONS } = require('../../data/creatures')
+const { creatures, getCreatureById } = require('../../data/creatures')
+const { DIMENSIONS } = require('../../data/quiz-profiles')
 const { getPeriodById } = require('../../data/periods')
 const { dimensionLabels } = require('../../data/quiz')
 const { similarity } = require('../../utils/quiz-engine')
 const { getQuizResult } = require('../../utils/storage')
+const { buildUrl, navigateToPage, reLaunchPage } = require('../../utils/router')
 
 function nearestCreatures(creature) {
-  return creatures.filter((item) => item.id !== creature.id).map((item) => ({ item, score: similarity(creature.personalityProfile, item.personalityProfile) })).sort((left, right) => right.score - left.score).slice(0, 2).map((entry) => entry.item)
+  return creatures.filter((item) => item.quizEligible && item.personalityProfile && item.id !== creature.id).map((item) => ({ item, score: similarity(creature.personalityProfile, item.personalityProfile) })).sort((left, right) => right.score - left.score).slice(0, 2).map((entry) => entry.item)
 }
 
 function profileTraits(creature) {
@@ -21,7 +23,7 @@ Page({
     const primary = sharedCreature || (saved && getCreatureById(saved.primaryId))
     if (!primary) {
       wx.showToast({ title: '请先完成测试', icon: 'none' })
-      setTimeout(() => wx.reLaunch({ url: '/pages/quiz/index' }), 700)
+      setTimeout(() => reLaunchPage('/pages/quiz/index', { throttle: false }), 700)
       return
     }
     const sharedMode = Boolean(sharedCreature)
@@ -34,14 +36,14 @@ Page({
 
   openCreature(event) {
     const id = event.currentTarget.dataset.id
-    if (id) wx.navigateTo({ url: `/pages/creature-detail/index?id=${id}` })
+    if (id) navigateToPage(buildUrl('/pages/creature-detail/index', { id }), { toastTitle: '暂时无法打开古生物档案' })
   },
 
-  openAtlas() { wx.navigateTo({ url: '/pages/creatures/index' }) },
+  openAtlas() { navigateToPage('/pages/creatures/index', { toastTitle: '暂时无法打开图鉴' }) },
   handleImageError() { this.setData({ imageFailed: true }) },
-  retake() { wx.reLaunch({ url: '/pages/quiz/index' }) },
+  retake() { reLaunchPage('/pages/quiz/index') },
   onShareAppMessage() {
     const primary = this.data.primary
-    return { title: primary ? `我的远古身份是${primary.nameCn}｜你是哪一种？` : '测测你的远古身份', path: primary ? `/pages/quiz-result/index?id=${primary.id}&match=${this.data.match}` : '/pages/quiz/index' }
+    return { title: primary ? `我的远古身份是${primary.nameCn}｜你是哪一种？` : '测测你的远古身份', path: primary ? buildUrl('/pages/quiz-result/index', { id: primary.id, match: this.data.match }) : '/pages/quiz/index' }
   }
 })

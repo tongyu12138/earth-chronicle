@@ -38,9 +38,11 @@ function validateData(data) {
     if (!Array.isArray(period.gallery) || period.gallery.length < 3) problems.push(`period ${period.id} needs gallery slots`)
   })
   creatures.forEach((creature) => {
-    ;['nameCn', 'scientificName', 'periodId', 'livedWhen', 'group', 'habitat', 'diet', 'size', 'region', 'survivalStrategy', 'funIntro', 'personalityProfile'].forEach((field) => {
+    ;['nameCn', 'scientificName', 'periodId', 'livedWhen', 'group', 'habitat', 'diet', 'size', 'region', 'survivalStrategy', 'funIntro'].forEach((field) => {
       if (!creature[field]) problems.push(`creature ${creature.id} missing ${field}`)
     })
+    if (creature.quizEligible && !creature.personalityProfile) problems.push(`quiz-eligible creature ${creature.id} missing personalityProfile`)
+    if (!creature.quizEligible && creature.personalityProfile) problems.push(`quiz-ineligible creature ${creature.id} should not have personalityProfile`)
     if (!creature.sourceNeeded && !creature.sourceUrls.length) problems.push(`creature ${creature.id} has neither source nor sourceNeeded`)
   })
   if (questions.length !== 15) problems.push(`quiz question count: ${questions.length}`)

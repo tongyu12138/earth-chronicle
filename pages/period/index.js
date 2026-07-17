@@ -3,6 +3,7 @@ const { events } = require('../../data/events')
 const { getCreaturesByPeriod, getCreatureSummaries } = require('../../data/creatures')
 const { recordView, isFavorite, toggleFavorite } = require('../../utils/storage')
 const { previewImages } = require('../../utils/image')
+const { buildUrl, navigateToPage, redirectToPage, switchTabPage } = require('../../utils/router')
 
 const environmentLabels = {
   continents: '大陆与海陆', climate: '气候', oxygen: '氧气趋势', ocean: '海洋环境',
@@ -12,7 +13,7 @@ const environmentLabels = {
 function compactEvent(item) {
   return {
     id: item.id, title: item.title, displayTime: item.displayTime, category: item.category,
-    summary: item.summary, significance: item.significance, thumbnail: item.thumbnail, imageAlt: item.imageAlt,
+    summary: item.summary, significance: item.significance, mediaId: item.mediaId, thumbnail: item.thumbnail, imageAlt: item.imageAlt,
     color: item.color
   }
 }
@@ -33,7 +34,7 @@ Page({
     const period = getPeriodById(options.id)
     if (!period) {
       wx.showToast({ title: '没有找到这个时期', icon: 'none' })
-      setTimeout(() => wx.navigateBack({ fail: () => wx.switchTab({ url: '/pages/science/index' }) }), 700)
+      setTimeout(() => wx.navigateBack({ fail: () => switchTabPage('/pages/science/index', { throttle: false }) }), 700)
       return
     }
     const index = periods.findIndex((item) => item.id === period.id)
@@ -52,7 +53,7 @@ Page({
       lifeEmptyCopy: period.id === 'hadean' ? '冥古宙没有可靠生命化石。保持空白比为了凑数量制造物种更科学。' : period.eraId === 'human-history' ? '人类历史阶段与地质时期并列用于导航；古生物图鉴不在每个文明阶段重复展示智人。' : '当前没有足够可靠的代表条目，后续应在专业复核后补充。'
     })
     wx.setNavigationBarTitle({ title: period.name })
-    recordView('period', period.id, period.name, `/pages/period/index?id=${period.id}`)
+    recordView('period', period.id, period.name, buildUrl('/pages/period/index', { id: period.id }))
   },
 
   handleImageError() {
@@ -72,13 +73,13 @@ Page({
   openEvent(event) {
     const id = event.currentTarget.dataset.id
     if (!id) return wx.showToast({ title: '事件参数缺失', icon: 'none' })
-    wx.navigateTo({ url: `/pages/event/index?id=${id}`, fail: () => wx.showToast({ title: '事件页面打开失败', icon: 'none' }) })
+    navigateToPage(buildUrl('/pages/detail/index', { id }), { toastTitle: '暂时无法打开事件' })
   },
 
   openCreature(event) {
     const id = event.currentTarget.dataset.id
     if (!id) return
-    wx.navigateTo({ url: `/pages/creature-detail/index?id=${id}` })
+    navigateToPage(buildUrl('/pages/creature-detail/index', { id }), { toastTitle: '暂时无法打开古生物档案' })
   },
 
   previewGallery(event) {
@@ -98,11 +99,11 @@ Page({
   openAdjacent(event) {
     const id = event.currentTarget.dataset.id
     if (!id) return
-    wx.redirectTo({ url: `/pages/period/index?id=${id}` })
+    redirectToPage(buildUrl('/pages/period/index', { id }), { toastTitle: '暂时无法切换时期' })
   },
 
   backToAll() {
-    wx.switchTab({ url: '/pages/science/index' })
+    switchTabPage('/pages/science/index')
   },
 
   copySource(event) {
@@ -115,7 +116,7 @@ Page({
     const period = this.data.period
     return {
       title: period ? `${period.name}｜地球编年史` : '地球编年史',
-      path: period ? `/pages/period/index?id=${period.id}` : '/pages/science/index'
+      path: period ? buildUrl('/pages/period/index', { id: period.id }) : '/pages/science/index'
     }
   }
 })
