@@ -1,0 +1,117 @@
+<page-meta page-style="background:#071319" />
+<view wx:if="{{period}}" class="museum-page period-page safe-bottom">
+  <view class="period-hero placeholder-visual" style="background:linear-gradient(155deg, {{period.color}}cc, #152d34 54%, #071319)">
+    <image wx:if="{{period.image && !imageFailed}}" class="hero-image" src="{{period.image}}" mode="aspectFill" binderror="handleImageError" />
+    <view class="hero-overlay"></view>
+    <view class="hero-content">
+      <view class="hero-topline"><text>{{period.parent}}</text><button class="favorite-button {{isFavorite ? 'favorite-active' : ''}}" bindtap="toggleFavorite">{{isFavorite ? '★ 已收藏' : '☆ 收藏'}}</button></view>
+      <text class="period-english-name">{{period.englishName}}</text>
+      <text class="period-cn-name">{{period.name}}</text>
+      <text class="period-time-range">{{period.range}}</text>
+      <text class="period-core">{{period.tagline}}</text>
+      <view class="scroll-tip"><view></view><text>向下进入这个世界</text></view>
+    </view>
+  </view>
+
+  <view class="period-content">
+    <view class="period-overview">
+      <text class="section-kicker-global">CHAPTER OVERVIEW</text>
+      <text class="section-heading-global">这一章发生了什么</text>
+      <text class="body-copy">{{period.overview}}</text>
+    </view>
+
+    <view class="content-section earth-section">
+      <text class="section-kicker-global">PLANETARY CONDITIONS</text>
+      <text class="section-heading-global">当时的地球</text>
+      <view class="environment-grid">
+        <view class="environment-card" wx:for="{{environmentRows}}" wx:key="key">
+          <text class="environment-label">{{item.label}}</text>
+          <text class="environment-value">{{item.value}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="content-section event-section">
+      <view class="section-title-row"><view><text class="section-kicker-global">KEY EVENTS</text><text class="section-heading-global">关键事件</text></view><text class="count-badge">{{periodEvents.length}} 项</text></view>
+      <view wx:if="{{periodEvents.length}}" class="event-list">
+        <view class="event-card" wx:for="{{periodEvents}}" wx:key="id" bindtap="openEvent" data-id="{{item.id}}">
+          <view class="event-thumb placeholder-visual" style="background:linear-gradient(145deg, {{period.color}}88, #10242d)">
+            <image wx:if="{{item.thumbnail}}" src="{{item.thumbnail}}" mode="aspectFill" lazy-load="true" binderror="handleEventImageError" data-id="{{item.id}}" />
+            <text>{{index + 1}}</text>
+          </view>
+          <view class="event-info">
+            <text class="event-time">{{item.displayTime}}</text>
+            <text class="event-title">{{item.title}}</text>
+            <text class="event-summary">{{item.summary}}</text>
+            <text class="event-importance">为什么重要：{{item.significance}}</text>
+            <text class="open-link">查看证据与来源 →</text>
+          </view>
+        </view>
+      </view>
+      <view wx:else class="empty-state"><text>这一时期暂无单独事件卡片</text><text>时期环境与生物档案仍可独立阅读。</text></view>
+    </view>
+
+    <view class="content-section creature-section">
+      <view class="section-title-row"><view><text class="section-kicker-global">LIFE FORMS</text><text class="section-heading-global">代表生物</text></view><text class="count-badge">{{periodCreatures.length}} 种</text></view>
+      <view wx:if="{{periodCreatures.length}}" class="creature-grid">
+        <view class="creature-card" wx:for="{{periodCreatures}}" wx:key="id" bindtap="openCreature" data-id="{{item.id}}">
+          <view class="creature-art placeholder-visual"><image wx:if="{{item.thumbnail}}" src="{{item.thumbnail}}" mode="aspectFill" lazy-load="true" binderror="handleCreatureImageError" data-id="{{item.id}}" /><text>{{item.nameCn}}</text></view>
+          <view class="creature-info">
+            <text class="creature-name">{{item.nameCn}}</text>
+            <text class="creature-latin">{{item.scientificName}}</text>
+            <view class="creature-facts"><text>{{item.size}}</text><text>{{item.diet}}</text><text>{{item.habitat}}</text></view>
+            <text class="creature-fun">{{item.funIntro}}</text>
+          </view>
+        </view>
+      </view>
+      <view wx:else class="empty-state life-empty"><text>{{lifeEmptyTitle}}</text><text>{{lifeEmptyCopy}}</text></view>
+    </view>
+
+    <view class="content-section gallery-section">
+      <text class="section-kicker-global">VISUAL ARCHIVE</text>
+      <text class="section-heading-global">图片画廊</text>
+      <text class="gallery-note">当前没有确认授权的图片时，保留完整画幅与替代文本；接入图片后可点击预览。</text>
+      <scroll-view class="gallery-scroll" scroll-x="true" enhanced="true" show-scrollbar="false">
+        <view class="gallery-inner">
+          <view class="gallery-card placeholder-visual" wx:for="{{period.gallery}}" wx:key="id" bindtap="previewGallery" data-index="{{index}}" style="background:linear-gradient(145deg, {{period.color}}88, #102831)">
+            <image wx:if="{{item.src}}" src="{{item.src}}" mode="aspectFill" lazy-load="true" />
+            <view class="gallery-label"><text>{{item.kind}}</text><text>{{item.status === 'needed' ? '授权图待补' : '点击预览'}}</text></view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <view class="immersion-card" style="border-color:{{period.color}}88">
+      <text class="immersion-kicker">IF YOU LIVED HERE</text>
+      <text class="immersion-title">如果你生活在这里</text>
+      <text class="immersion-copy">{{period.livingHere}}</text>
+    </view>
+
+    <view class="content-section misconception-section">
+      <text class="section-kicker-global">MYTH CHECK</text>
+      <text class="section-heading-global">常见误解</text>
+      <view class="myth-card" wx:for="{{period.misconceptions}}" wx:key="*this"><text>!</text><text>{{item}}</text></view>
+    </view>
+
+    <view class="content-section evidence-section">
+      <text class="section-kicker-global">HOW WE KNOW</text>
+      <text class="section-heading-global">科学证据</text>
+      <text class="body-copy">对深时间的认识来自多类独立证据互相约束。单件化石很少能独自讲完故事，年代、环境和亲缘关系需要地层与实验方法共同检验。</text>
+      <view class="evidence-list"><view wx:for="{{period.evidenceMethods}}" wx:key="*this"><text>{{index + 1}}</text><text>{{item}}</text></view></view>
+    </view>
+
+    <view class="sources-block">
+      <text class="section-kicker-global">SOURCES</text>
+      <text class="section-heading-global">时期来源</text>
+      <view class="source-card" wx:for="{{period.sources}}" wx:key="url" bindtap="copySource" data-url="{{item.url}}">
+        <view><text>{{item.name}}</text><text>{{item.publisher}}</text><text>{{item.url}}</text></view><text>复制</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="period-navigation">
+    <button class="adjacent-button {{!previousPeriod ? 'nav-disabled' : ''}}" bindtap="openAdjacent" data-id="{{previousPeriod.id}}"><text>上一个时期</text><text>{{previousPeriod ? previousPeriod.name : '已经是第一章'}}</text></button>
+    <button class="all-periods-button" bindtap="backToAll">全部时期</button>
+    <button class="adjacent-button adjacent-next {{!nextPeriod ? 'nav-disabled' : ''}}" bindtap="openAdjacent" data-id="{{nextPeriod.id}}"><text>下一个时期</text><text>{{nextPeriod ? nextPeriod.name : '已经到达现在'}}</text></button>
+  </view>
+</view>

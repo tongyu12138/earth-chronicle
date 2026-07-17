@@ -1,0 +1,144 @@
+<page-meta page-style="background:#071319" />
+
+<view wx:if="{{event}}" class="detail-page safe-bottom">
+  <view class="detail-hero" style="background: linear-gradient(155deg, {{event.glow}}, rgba(7, 19, 25, 0.2) 58%), #0b1c23">
+    <view class="hero-orb" style="border-color: {{event.color}}"></view>
+    <view class="detail-era" style="color: {{event.color}}">{{event.era}} · {{event.category}}</view>
+    <view class="detail-time">{{event.displayTime}}</view>
+    <view class="detail-title">{{event.title}}</view>
+    <view class="detail-summary">{{event.summary}}</view>
+    <view class="detail-actions">
+      <button bindtap="openPeriod">进入{{event.periodName}}时期</button>
+      <button class="{{isFavorite ? 'action-active' : ''}}" bindtap="toggleFavorite">{{isFavorite ? '★ 已收藏' : '☆ 收藏事件'}}</button>
+    </view>
+  </view>
+
+  <view class="detail-body">
+    <view class="fact-strip">
+      <view class="fact-item">
+        <text class="fact-label">所处阶段</text>
+        <text class="fact-value">{{event.era}}</text>
+      </view>
+      <view class="fact-divider"></view>
+      <view class="fact-item">
+        <text class="fact-label">主题</text>
+        <text class="fact-value">{{event.category}}</text>
+      </view>
+      <view class="fact-divider"></view>
+      <view class="fact-item">
+        <text class="fact-label">预计阅读</text>
+        <text class="fact-value">{{event.readingMinutes}} 分钟</text>
+      </view>
+    </view>
+
+    <view class="takeaways">
+      <view class="takeaways-label">先记住这三点</view>
+      <view class="takeaway" wx:for="{{event.keyPoints}}" wx:key="*this">
+        <view class="takeaway-dot" style="background: {{event.color}}"></view>
+        <text>{{item}}</text>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-index" style="color: {{event.color}}">01</view>
+      <view class="section-content">
+        <view class="section-title">发生了什么</view>
+        <view class="section-text">{{event.detail}}</view>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-index" style="color: {{event.color}}">02</view>
+      <view class="section-content">
+        <view class="section-title">为什么重要</view>
+        <view class="section-text">{{event.significance}}</view>
+      </view>
+    </view>
+
+    <view class="section" wx:if="{{event.mechanism}}">
+      <view class="section-index" style="color: {{event.color}}">03</view>
+      <view class="section-content">
+        <view class="section-title">过程与机制</view>
+        <view class="section-text">{{event.mechanism}}</view>
+      </view>
+    </view>
+
+    <view class="section" wx:if="{{event.evidence}}">
+      <view class="section-index" style="color: {{event.color}}">04</view>
+      <view class="section-content">
+        <view class="section-title">我们如何知道</view>
+        <view class="section-text">{{event.evidence}}</view>
+      </view>
+    </view>
+
+    <view class="section" wx:if="{{event.openQuestions}}">
+      <view class="section-index" style="color: {{event.color}}">05</view>
+      <view class="section-content">
+        <view class="section-title">仍在研究的问题</view>
+        <view class="section-text">{{event.openQuestions}}</view>
+      </view>
+    </view>
+
+    <view class="consensus-card">
+      <view class="consensus-topline">
+        <text class="consensus-label">科学状态</text>
+        <text class="consensus-level" style="color: {{event.color}}">{{event.confidence}}</text>
+      </view>
+      <view class="consensus-text">科学知识会随新证据修正。“主流共识”不等于永远不变，而是目前最能解释多类证据的模型。</view>
+    </view>
+
+    <view class="misconception-card" wx:if="{{event.misconception}}">
+      <view class="misconception-icon">!</view>
+      <view class="misconception-content">
+        <view class="misconception-title">常见误解</view>
+        <view class="misconception-text">{{event.misconception}}</view>
+      </view>
+    </view>
+
+    <view class="glossary" wx:if="{{event.glossary.length}}">
+      <view class="glossary-kicker">GLOSSARY</view>
+      <view class="glossary-title">本页术语</view>
+      <view class="glossary-item" wx:for="{{event.glossary}}" wx:key="term">
+        <view class="glossary-term">{{item.term}}</view>
+        <view class="glossary-definition">{{item.definition}}</view>
+      </view>
+    </view>
+
+    <view class="section note-section">
+      <view class="section-index" style="color: {{event.color}}">i</view>
+      <view class="section-content">
+        <view class="section-title">年代说明</view>
+        <view class="section-text note-text">{{event.dateNote}}</view>
+      </view>
+    </view>
+
+    <view class="sources-section">
+      <view class="sources-heading">
+        <view>
+          <view class="sources-kicker">SOURCES</view>
+          <view class="sources-title">资料来源</view>
+        </view>
+        <view class="source-count">{{event.sources.length}} 项</view>
+      </view>
+
+      <view
+        class="source-card"
+        wx:for="{{event.sources}}"
+        wx:key="url"
+        hover-class="source-card-active"
+        bindtap="copySource"
+        data-url="{{item.url}}"
+      >
+        <view class="source-number">0{{index + 1}}</view>
+        <view class="source-content">
+          <view class="source-name">{{item.name}}</view>
+          <view class="source-publisher">{{item.publisher}}</view>
+          <view class="source-url">{{item.url}}</view>
+        </view>
+        <view class="copy-icon">复制</view>
+      </view>
+
+      <view class="source-tip">点击来源卡片复制链接。来源优先采用科研机构、博物馆、国际组织和原始论文；正式发布前仍建议安排对应学科的专业复核。</view>
+    </view>
+  </view>
+</view>

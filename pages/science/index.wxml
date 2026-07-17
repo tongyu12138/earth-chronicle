@@ -1,0 +1,92 @@
+<page-meta page-style="background:#071319" />
+<view class="museum-page science-page safe-bottom">
+  <view class="science-hero">
+    <view class="star-field star-one"></view>
+    <view class="star-field star-two"></view>
+    <view class="earth-stage">
+      <view class="earth-glow"></view>
+      <view class="earth-sphere">
+        <view class="earth-land land-a"></view>
+        <view class="earth-land land-b"></view>
+        <view class="earth-shade"></view>
+      </view>
+      <view class="orbit-ring"></view>
+    </view>
+    <text class="hero-eyebrow">DEEP TIME · EARTH ARCHIVE</text>
+    <text class="hero-number">45.4亿年</text>
+    <text class="hero-title">一部仍在继续的地球史</text>
+    <text class="hero-copy">从岩浆海与最早的水，穿过生命演化、文明扩展，抵达正在发生的人工智能时代。</text>
+    <button class="primary-button hero-button" bindtap="startJourney">开始穿越 <text>↓</text></button>
+    <view class="hero-stats">
+      <view><text class="stat-number">{{periodCount}}</text><text class="stat-label">时期与阶段</text></view>
+      <view><text class="stat-number">{{eventCount}}</text><text class="stat-label">关键事件</text></view>
+      <view><text class="stat-number">{{creatureCount}}</text><text class="stat-label">古生物档案</text></view>
+    </view>
+  </view>
+
+  <view class="top-tools">
+    <view class="search-entry" bindtap="openSearch"><text>⌕</text><text>搜索时期、事件、学名或标签</text><text>›</text></view>
+    <view wx:if="{{continueItem}}" class="continue-card" bindtap="openContinue">
+      <view><text class="continue-kicker">CONTINUE EXPLORING</text><text class="continue-title">继续探索：{{continueItem.title}}</text></view>
+      <view class="continue-arrow">→</view>
+    </view>
+  </view>
+
+  <view class="section-block categories-section">
+    <text class="section-kicker-global">CHOOSE A LENS</text>
+    <text class="section-heading-global">用不同尺度观察地球</text>
+    <view class="category-grid">
+      <view class="category-card" wx:for="{{categories}}" wx:key="id" bindtap="openCategory" data-id="{{item.id}}">
+        <view class="category-icon">{{item.icon}}</view>
+        <text class="category-name">{{item.name}}</text>
+        <text class="category-copy">{{item.copy}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{dailyCreature}}" class="daily-wrap">
+    <view class="daily-visual placeholder-visual">
+      <image wx:if="{{dailyCreature.image}}" class="daily-image" src="{{dailyCreature.image}}" mode="aspectFill" lazy-load="true" binderror="handleDailyImageError" />
+      <view class="daily-silhouette">{{dailyCreature.initial}}</view>
+      <view class="daily-badge">今日古生物</view>
+    </view>
+    <view class="daily-content">
+      <text class="daily-time">{{dailyCreature.livedWhen}}</text>
+      <text class="daily-name">{{dailyCreature.nameCn}}</text>
+      <text class="daily-latin">{{dailyCreature.scientificName}}</text>
+      <text class="daily-copy">{{dailyCreature.funIntro}}</text>
+      <button class="text-button" bindtap="openCreature" data-id="{{dailyCreature.id}}">查看完整档案 →</button>
+    </view>
+  </view>
+
+  <view id="period-explorer" class="section-block period-explorer">
+    <text class="section-kicker-global">29 CHAPTERS</text>
+    <text class="section-heading-global">从地球诞生，逐章阅读</text>
+    <text class="period-intro">地质边界采用国际地层委员会时间表。人类历史阶段是便于阅读的信息架构，不等同于正式地质年代。</text>
+    <view class="era-group" wx:for="{{periodGroups}}" wx:key="id">
+      <view class="era-heading">
+        <view class="era-line" style="background:{{item.color}}"></view>
+        <view><text class="era-name">{{item.name}}</text><text class="era-meta">{{item.englishName}} · {{item.range}}</text></view>
+      </view>
+      <view class="period-card" wx:for="{{item.periods}}" wx:for-item="period" wx:key="id" bindtap="openPeriod" data-id="{{period.id}}" style="border-color:{{period.color}}55">
+        <view class="period-art placeholder-visual" style="background:linear-gradient(145deg, {{period.color}}99, #102630 58%, #081319)">
+          <image wx:if="{{period.thumbnail}}" class="period-image" src="{{period.thumbnail}}" mode="aspectFill" lazy-load="true" binderror="handlePeriodImageError" data-id="{{period.id}}" />
+          <text class="period-icon">{{period.icon}}</text>
+          <text class="period-representative">代表：{{period.representativeName}}</text>
+        </view>
+        <view class="period-info">
+          <view class="period-top"><text class="period-name">{{period.name}}</text><text class="period-arrow">↗</text></view>
+          <text class="period-english">{{period.englishName}}</text>
+          <text class="period-range">{{period.range}}</text>
+          <text class="period-tagline">{{period.tagline}}</text>
+          <view class="period-footer"><text>{{period.eventCount}} 个关联事件</text><text>进入时期</text></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="science-note">
+    <text>科学说明</text>
+    <text>年代边界会随定年与地层研究修订；艺术复原与现代人格类比均与直接科学证据分开标注。</text>
+  </view>
+</view>

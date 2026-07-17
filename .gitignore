@@ -1,0 +1,21 @@
+# WeChat DevTools private settings
+project.private.config.json
+
+# Local image without confirmed public redistribution license
+封面图.jpg
+
+# macOS
+.DS_Store
+
+# Dependencies and generated packages
+node_modules/
+miniprogram_npm/
+
+# Logs and temporary output
+*.log
+*.tmp
+.tmp/
+
+# Editor settings
+.idea/
+.vscode/

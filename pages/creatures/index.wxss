@@ -1,0 +1,37 @@
+.atlas-page { padding-bottom: 70rpx; }
+.atlas-hero { padding: 80rpx 32rpx 42rpx; background: radial-gradient(circle at 85% 10%, rgba(83,177,159,.2), transparent 32%); }
+.atlas-title { display: block; margin-top: 12rpx; font-size: 66rpx; font-weight: 900; }
+.atlas-copy { display: block; margin-top: 22rpx; color: #8ea3a6; font-size: 24rpx; line-height: 1.7; }
+.atlas-search { height: 94rpx; margin-top: 34rpx; padding: 0 20rpx 0 26rpx; border-radius: 24rpx; background: rgba(255,255,255,.06); border: 1rpx solid rgba(255,255,255,.09); display: flex; align-items: center; gap: 16rpx; color: #738b8f; }
+.atlas-search input { flex: 1; height: 100%; color: #dbe8e5; font-size: 24rpx; }
+.input-placeholder { color: #61777b; }
+.favorite-filter { width: 58rpx; height: 58rpx; border-radius: 18rpx; background: rgba(255,255,255,.05); display: flex; align-items: center; justify-content: center; }
+.filters-panel { padding: 20rpx 0 32rpx; border-top: 1rpx solid rgba(255,255,255,.06); border-bottom: 1rpx solid rgba(255,255,255,.06); }
+.filter-row { margin-top: 22rpx; }
+.filter-label { display: block; padding: 0 32rpx; margin-bottom: 12rpx; color: #6e8589; font-size: 19rpx; font-weight: 700; }
+.filter-scroll { width: 100%; }
+.filter-inner { padding: 0 32rpx; display: flex; gap: 12rpx; }
+.filter-chip { flex: 0 0 auto; min-height: 58rpx; padding: 0 20rpx; border-radius: 999rpx; background: rgba(255,255,255,.045); border: 1rpx solid rgba(255,255,255,.07); color: #8fa3a6; font-size: 20rpx; display: flex; align-items: center; justify-content: center; }
+.filter-active { background: rgba(101,212,193,.16) !important; border-color: rgba(101,212,193,.4) !important; color: #75dbc8 !important; }
+.atlas-results { padding: 34rpx 24rpx 0; }
+.result-heading { padding: 0 8rpx 22rpx; display: flex; align-items: center; color: #809598; font-size: 21rpx; }
+.result-heading text { flex: 1; }
+.result-heading button { color: #5dbfaf; font-size: 20rpx; }
+.atlas-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16rpx; }
+.atlas-card { overflow: hidden; border-radius: 25rpx; background: rgba(255,255,255,.045); border: 1rpx solid rgba(255,255,255,.07); }
+.atlas-art { height: 210rpx; display: flex; align-items: center; justify-content: center; }
+.atlas-art image { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; }
+.atlas-art > text { position: relative; z-index: 2; color: rgba(255,255,255,.22); font-size: 96rpx; font-weight: 900; }
+.atlas-art > view { position: absolute; z-index: 3; left: 13rpx; bottom: 12rpx; padding: 7rpx 10rpx; border-radius: 10rpx; background: rgba(4,16,21,.72); color: #9fc4be; font-size: 16rpx; }
+.atlas-info { padding: 20rpx; display: flex; flex-direction: column; }
+.atlas-name { font-size: 29rpx; font-weight: 820; }
+.atlas-latin { margin-top: 5rpx; color: #70868a; font-size: 17rpx; font-style: italic; word-break: break-all; }
+.atlas-time { margin-top: 13rpx; color: #d5b77e; font-size: 17rpx; }
+.atlas-tags { margin-top: 11rpx; display: flex; gap: 6rpx; }
+.atlas-tags text { padding: 5rpx 9rpx; border-radius: 8rpx; background: rgba(101,212,193,.09); color: #81a9a3; font-size: 16rpx; }
+.atlas-intro { margin-top: 13rpx; color: #889da0; font-size: 19rpx; line-height: 1.55; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
+.atlas-empty { padding: 90rpx 30rpx; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 15rpx; color: #73888c; font-size: 22rpx; }
+.atlas-empty text:first-child { color: #c0cfcd; font-size: 29rpx; font-weight: 750; }
+.atlas-empty button { margin-top: 18rpx; padding: 18rpx 28rpx; border-radius: 999rpx; background: rgba(101,212,193,.14); color: #69cfbd; font-size: 21rpx; }
+.load-more { width: 320rpx; height: 82rpx; margin: 38rpx auto 0; border-radius: 999rpx; border: 1rpx solid rgba(101,212,193,.3); color: #67cbbb; font-size: 22rpx; display: flex; align-items: center; justify-content: center; }
+.list-end { display: block; padding: 45rpx 0 15rpx; text-align: center; color: #536a6e; font-size: 19rpx; }

@@ -1,0 +1,3 @@
+.redirect-page { min-height: 100vh; background: #071319; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28rpx; color: #86a09f; font-size: 24rpx; }
+.redirect-orbit { width: 72rpx; height: 72rpx; border: 3rpx solid rgba(101,212,193,.2); border-top-color: #65d4c1; border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }

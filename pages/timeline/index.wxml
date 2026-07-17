@@ -1,0 +1,118 @@
+<page-meta page-style="background:#071319" />
+
+<view class="page safe-bottom">
+  <view class="hero">
+    <view class="orbit orbit-one"></view>
+    <view class="orbit orbit-two"></view>
+    <view class="planet">
+      <view class="planet-glow"></view>
+      <view class="continent continent-one"></view>
+      <view class="continent continent-two"></view>
+    </view>
+
+    <view class="eyebrow">EARTH · 4.54 BILLION YEARS</view>
+    <view class="hero-title">地球编年史</view>
+    <view class="hero-subtitle">从一颗炽热的新生行星，滑向正在学习与创造的人工智能时代。</view>
+
+    <view class="hero-stats">
+      <view class="stat">
+        <text class="stat-value">45.4亿</text>
+        <text class="stat-label">年时间跨度</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat">
+        <text class="stat-value">{{eventCount}}</text>
+        <text class="stat-label">个关键节点</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat">
+        <text class="stat-value">9</text>
+        <text class="stat-label">个历史阶段</text>
+      </view>
+    </view>
+
+    <view class="scroll-cue">
+      <view class="scroll-line"></view>
+      <text>向下滑动，时间开始流动</text>
+    </view>
+  </view>
+
+  <view class="era-nav-wrap">
+    <scroll-view class="era-nav" scroll-x="true" enhanced="true" show-scrollbar="false">
+      <view class="era-nav-inner">
+        <view
+          class="era-chip"
+          wx:for="{{eras}}"
+          wx:key="name"
+          bindtap="jumpToEra"
+          data-target="{{item.firstEventId}}"
+        >
+          <view class="era-dot" style="background: {{item.color}}"></view>
+          <text>{{item.name}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="timeline-intro">
+    <text class="section-kicker">THE LONG VIEW</text>
+    <text class="section-title">一条不断加速的时间河流</text>
+    <text class="section-copy">地质年代以亿年计算，而人类文明只有短短一瞬。这里采用分段时间轴，因此卡片之间的距离不代表真实比例。</text>
+  </view>
+
+  <view class="timeline">
+    <view class="timeline-spine"></view>
+
+    <block wx:for="{{events}}" wx:key="id">
+      <view wx:if="{{item.isEraStart}}" class="era-marker">
+        <view class="era-marker-line"></view>
+        <view class="era-marker-pill" style="border-color: {{item.color}}; color: {{item.color}}">
+          {{item.era}}
+        </view>
+        <text class="era-marker-range">{{item.eraRange}}</text>
+      </view>
+
+      <view id="event-{{item.id}}" class="event-row">
+        <view class="event-node" style="border-color: {{item.color}}; box-shadow: 0 0 0 8rpx {{item.glow}}">
+          <view class="event-node-core" style="background: {{item.color}}"></view>
+        </view>
+
+        <view
+          class="event-card"
+          hover-class="event-card-active"
+          hover-stay-time="100"
+          bindtap="openEvent"
+          data-id="{{item.id}}"
+        >
+          <view class="card-topline">
+            <view class="category" style="color: {{item.color}}">{{item.category}}</view>
+            <view class="card-arrow">↗</view>
+          </view>
+          <view class="event-time">{{item.displayTime}}</view>
+          <view class="event-title">{{item.title}}</view>
+          <view class="event-summary">{{item.summary}}</view>
+          <view class="card-footer">
+            <text>查看说明与来源</text>
+            <view class="footer-line" style="background: {{item.color}}"></view>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <view class="now-node">
+      <view class="now-pulse"></view>
+      <view class="now-core"></view>
+      <text>你在这里 · 2026</text>
+    </view>
+  </view>
+
+  <view class="closing">
+    <text class="closing-kicker">TO BE CONTINUED</text>
+    <text class="closing-title">历史没有终点</text>
+    <text class="closing-copy">每一代人都站在漫长过去的最前沿。下一张卡片，会由我们共同写下。</text>
+    <view class="closing-actions">
+      <button bindtap="openPeriods">浏览29个时期</button>
+      <button bindtap="openQuiz">测测你的远古身份</button>
+    </view>
+  </view>
+</view>

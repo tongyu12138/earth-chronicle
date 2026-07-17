@@ -1,0 +1,31 @@
+<page-meta page-style="background:#071319" />
+<view class="museum-page atlas-page safe-bottom">
+  <view class="atlas-hero">
+    <text class="section-kicker-global">PALEOLIFE ATLAS</text>
+    <text class="atlas-title">古生物图鉴</text>
+    <text class="atlas-copy">不是只有恐龙。这里收录 {{resultCount}} / 110 种跨越微生物、海洋无脊椎动物、鱼类、合弓动物、翼龙与冰河巨兽的生命策略。</text>
+    <view class="atlas-search"><text>⌕</text><input value="{{query}}" placeholder="搜索中文名、学名或标签" placeholder-class="input-placeholder" bindinput="onQueryInput" /><button class="favorite-filter {{favoritesOnly ? 'filter-active' : ''}}" bindtap="toggleFavorites">{{favoritesOnly ? '★' : '☆'}}</button></view>
+  </view>
+
+  <view class="filters-panel">
+    <text class="filter-label">时期</text>
+    <scroll-view class="filter-scroll" scroll-x="true" show-scrollbar="false"><view class="filter-inner"><button wx:for="{{periodOptions}}" wx:key="id" class="filter-chip {{filter.period === item.id ? 'filter-active' : ''}}" bindtap="selectFilter" data-kind="period" data-value="{{item.id}}">{{item.name}}</button></view></scroll-view>
+    <view class="filter-row" wx:for="{{filterRows}}" wx:key="key">
+      <text class="filter-label">{{item.label}}</text>
+      <scroll-view class="filter-scroll" scroll-x="true" show-scrollbar="false"><view class="filter-inner"><button wx:for="{{item.options}}" wx:for-item="option" wx:key="*this" class="filter-chip {{filter[item.key] === option ? 'filter-active' : ''}}" bindtap="selectFilter" data-kind="{{item.key}}" data-value="{{option}}">{{option === 'all' ? '全部' : option}}</button></view></scroll-view>
+    </view>
+  </view>
+
+  <view class="atlas-results">
+    <view class="result-heading"><text>{{resultCount}} 条档案</text><button bindtap="resetFilters">重置筛选</button></view>
+    <view wx:if="{{visibleCreatures.length}}" class="atlas-grid">
+      <view class="atlas-card" wx:for="{{visibleCreatures}}" wx:key="id" bindtap="openCreature" data-id="{{item.id}}">
+        <view class="atlas-art placeholder-visual"><image wx:if="{{item.thumbnail}}" src="{{item.thumbnail}}" mode="aspectFill" lazy-load="true" binderror="handleThumbnailError" data-id="{{item.id}}" /><text>{{item.initial}}</text><view>{{item.groupCategory}}</view></view>
+        <view class="atlas-info"><text class="atlas-name">{{item.nameCn}}</text><text class="atlas-latin">{{item.scientificName}}</text><text class="atlas-time">{{item.livedWhen}}</text><view class="atlas-tags"><text>{{item.diet}}</text><text>{{item.sizeCategory}}</text></view><text class="atlas-intro">{{item.funIntro}}</text></view>
+      </view>
+    </view>
+    <view wx:else class="atlas-empty"><text>没有找到符合条件的古生物</text><text>试试清空搜索词或减少筛选条件。</text><button bindtap="resetFilters">查看全部</button></view>
+    <button wx:if="{{hasMore}}" class="load-more" bindtap="loadMore">继续加载</button>
+    <text wx:elif="{{visibleCreatures.length}}" class="list-end">已到达本次筛选的地层底部</text>
+  </view>
+</view>

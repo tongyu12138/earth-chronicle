@@ -1,0 +1,33 @@
+{
+  "pages": [
+    "pages/science/index",
+    "pages/quiz/index",
+    "pages/period/index",
+    "pages/event/index",
+    "pages/creatures/index",
+    "pages/creature-detail/index",
+    "pages/search/index",
+    "pages/quiz-result/index",
+    "pages/timeline/index",
+    "pages/detail/index"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#071319",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "地球编年史",
+    "backgroundColor": "#071319",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#768b91",
+    "selectedColor": "#65d4c1",
+    "backgroundColor": "#08151b",
+    "borderStyle": "black",
+    "list": [
+      { "pagePath": "pages/science/index", "text": "地球史" },
+      { "pagePath": "pages/quiz/index", "text": "测测你是谁" }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

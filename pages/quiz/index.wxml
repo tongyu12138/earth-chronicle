@@ -1,0 +1,40 @@
+<page-meta page-style="background:#071319" />
+<view class="quiz-page">
+  <view wx:if="{{state === 'welcome'}}" class="welcome-screen">
+    <view class="quiz-orbit orbit-a"></view><view class="quiz-orbit orbit-b"></view>
+    <view class="fossil-mark">✦</view>
+    <text class="quiz-kicker">PALEO PERSONALITY LAB</text>
+    <text class="quiz-title">{{meta.title}}</text>
+    <text class="quiz-subtitle">{{meta.subtitle}}</text>
+    <view class="quiz-facts"><view><text>15</text><text>现代场景题</text></view><view><text>14</text><text>匹配维度</text></view><view><text>110</text><text>可能身份</text></view></view>
+    <text class="quiz-intro">{{meta.intro}}</text>
+    <button class="primary-button start-button" bindtap="startNew">开始测试</button>
+    <button wx:if="{{canResume}}" class="resume-button" bindtap="resumeQuiz">{{resumeText}} →</button>
+    <text class="quiz-duration">{{meta.duration}}</text>
+    <text class="quiz-disclaimer">{{meta.disclaimer}}</text>
+  </view>
+
+  <view wx:elif="{{state === 'question'}}" class="question-screen">
+    <view class="question-header">
+      <button bindtap="previousQuestion" class="back-button {{currentIndex === 0 ? 'disabled' : ''}}">←</button>
+      <view class="progress-area"><view class="progress-meta"><text>{{questionNumber}} / {{total}}</text><text>{{progressPercent}}%</text></view><view class="progress-track"><view style="width:{{progressPercent}}%"></view></view></view>
+      <button class="exit-button" bindtap="backHome">×</button>
+    </view>
+    <view class="question-content">
+      <text class="scene-label">SCENE {{questionNumber}}</text>
+      <text class="question-scene">{{currentQuestion.scene}}</text>
+      <text class="question-title">{{currentQuestion.question}}</text>
+      <view class="option-list">
+        <button class="option-card {{selectedIndex === index ? 'selected' : ''}}" wx:for="{{currentQuestion.options}}" wx:key="text" bindtap="chooseOption" data-index="{{index}}"><text class="option-letter">{{index === 0 ? 'A' : index === 1 ? 'B' : index === 2 ? 'C' : 'D'}}</text><text class="option-text">{{item.text}}</text><text class="option-check">{{selectedIndex === index ? '✓' : '›'}}</text></button>
+      </view>
+    </view>
+    <text class="question-tip">没有标准答案，选择最接近你真实反应的一项。</text>
+  </view>
+
+  <view wx:else class="analyzing-screen">
+    <view class="scan-shell"><view class="scan-ring ring-one"></view><view class="scan-ring ring-two"></view><view class="scan-core">✦</view><view class="scan-line"></view></view>
+    <text class="analyzing-title">正在扫描深时间档案</text>
+    <text class="analyzing-step">归一化14维画像 · 比对110种生命策略</text>
+    <view class="analysis-progress"><view></view></view>
+  </view>
+</view>

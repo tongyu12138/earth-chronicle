@@ -1,0 +1,40 @@
+<page-meta page-style="background:#071319" />
+<view wx:if="{{creature}}" class="museum-page creature-page safe-bottom">
+  <view class="creature-hero placeholder-visual">
+    <image wx:if="{{creature.image && !imageFailed}}" src="{{creature.image}}" mode="aspectFill" binderror="handleImageError" />
+    <text class="hero-initial">{{creature.initial}}</text>
+    <view class="hero-gradient"></view>
+    <view class="creature-hero-content">
+      <view class="hero-actions"><text>{{creature.livedWhen}}</text><button class="{{isFavorite ? 'active' : ''}}" bindtap="toggleFavorite">{{isFavorite ? '★ 已收藏' : '☆ 收藏'}}</button></view>
+      <text class="creature-name">{{creature.nameCn}}</text>
+      <text class="creature-latin">{{creature.scientificName}}</text>
+      <text class="creature-nickname">{{creature.nickname}}</text>
+    </view>
+  </view>
+
+  <view class="creature-body">
+    <view class="fact-grid">
+      <view><text>类群</text><text>{{creature.group}}</text></view><view><text>食性</text><text>{{creature.diet}}</text></view>
+      <view><text>体型</text><text>{{creature.size}}</text></view><view><text>环境</text><text>{{creature.habitat}}</text></view>
+      <view><text>分布</text><text>{{creature.region}}</text></view><view><text>重量</text><text>{{creature.weight}}</text></view>
+    </view>
+
+    <view class="fun-card"><text>用现代人的话说</text><text>{{creature.funIntro}}</text></view>
+
+    <view class="detail-section"><text class="section-kicker-global">REAL PALEOBIOLOGY</text><text class="section-heading-global">真实的生存方式</text><text class="detail-copy">{{creature.survivalStrategy}}</text></view>
+    <view class="detail-section"><text class="section-kicker-global">DISCOVERY</text><text class="section-heading-global">我们如何认识它</text><text class="detail-copy">{{creature.discovery}}</text></view>
+
+    <view class="detail-section">
+      <text class="section-kicker-global">PERSONALITY VECTOR</text><text class="section-heading-global">测试匹配画像</text>
+      <text class="vector-note">这些数值服务于科普娱乐匹配，不代表科学家测量了已灭绝生物的“性格”。</text>
+      <view class="profile-bars"><view wx:for="{{profileBars}}" wx:key="key"><view class="bar-label"><text>{{item.label}}</text><text>{{item.value}}</text></view><view class="bar-track"><view style="width:{{item.value}}%"></view></view></view></view>
+    </view>
+
+    <view class="detail-section"><text class="section-kicker-global">VISUAL ARCHIVE</text><text class="section-heading-global">图像与化石</text><view class="creature-gallery"><view class="gallery-item placeholder-visual" wx:for="{{gallery}}" wx:key="id" bindtap="previewGallery" data-index="{{index}}"><image wx:if="{{item.src}}" src="{{item.src}}" mode="aspectFill" lazy-load="true" /><text>{{item.kind}}</text><text>{{item.status === 'needed' ? '授权图待补' : '点击预览'}}</text></view></view></view>
+
+    <view class="source-status" wx:if="{{creature.sourceNeeded}}"><text>来源待核</text><text>本条已明确标记 sourceNeeded，没有生成看似真实但未经确认的链接。发布前应由古生物专业人员核对分类、年代与尺寸，并补入真实来源。</text></view>
+    <view class="source-card" wx:for="{{creature.sourceUrls}}" wx:key="*this" bindtap="copySource" data-url="{{item}}"><text>{{item}}</text><text>复制</text></view>
+
+    <button wx:if="{{period}}" class="period-link" bindtap="openPeriod">返回{{period.name}}时期 →</button>
+  </view>
+</view>
