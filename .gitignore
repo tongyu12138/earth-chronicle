@@ -4,6 +4,27 @@ project.private.config.json
 # Local image without confirmed public redistribution license
 封面图.jpg
 
+# Legacy reference images are kept locally but never enter the AI-only release.
+media/public/**/*-image.*
+media/public/**/*-thumbnail.*
+!media/public/**/*-ai-image.*
+!media/public/**/*-ai-thumbnail.*
+
+# Superseded AI exports whose identifiers are ambiguous; reviewed replacements
+# with explicit environment / fossil / map or doubled event suffixes are active.
+media/public/event/modern-ai/modern-ai-image.jpg
+media/public/event/modern-ai/modern-ai-thumbnail.jpg
+media/public/period/digital-ai/digital-ai-image.jpg
+media/public/period/digital-ai/digital-ai-thumbnail.jpg
+media/public/period-gallery/archean/archean-ai-image.jpg
+media/public/period-gallery/archean/archean-ai-thumbnail.jpg
+media/public/period-gallery/cambrian/cambrian-ai-image.jpg
+media/public/period-gallery/cambrian/cambrian-ai-thumbnail.jpg
+media/public/period-gallery/hadean/hadean-ai-image.jpg
+media/public/period-gallery/hadean/hadean-ai-thumbnail.jpg
+media/public/period-gallery/proterozoic/proterozoic-ai-image.jpg
+media/public/period-gallery/proterozoic/proterozoic-ai-thumbnail.jpg
+
 # macOS
 .DS_Store
 

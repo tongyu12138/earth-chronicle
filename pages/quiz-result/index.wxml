@@ -2,23 +2,23 @@
 <view wx:if="{{primary}}" class="museum-page result-page safe-bottom">
   <view class="result-hero placeholder-visual">
     <view class="reveal-rays"></view>
-    <image wx:if="{{primary.image && !imageFailed}}" src="{{primary.image}}" mode="aspectFill" binderror="handleImageError" />
-    <text class="result-initial">{{primary.initial}}</text>
+    <view class="result-main-media"><media-image media-id="{{primary.mediaId}}" variant="hero" ratio="4:3" alt="{{primary.imageAlt}}" placeholder-theme="rock" lazy-load="false" /></view>
     <view class="result-overlay"></view>
-    <view class="result-hero-content"><text class="result-kicker">YOUR PALEO IDENTITY</text><text class="identity-label">你的远古身份</text><text class="identity-name">{{primary.nameCn}}</text><text class="identity-latin">{{primary.scientificName}}</text><text class="identity-title">{{primary.nickname}}</text><view class="match-ring"><text>{{match}}%</text><text>匹配度</text></view></view>
+    <view class="result-hero-content"><text class="result-kicker">YOUR PALEO IDENTITY</text><text class="identity-label">你的远古身份</text><text class="identity-name">{{primary.nameCn}}</text><text class="identity-latin">{{primary.scientificName}}</text><text class="identity-title">{{primary.nickname}}</text><view wx:if="{{showMatch}}" class="match-ring"><text>{{match}}%</text><text>娱乐匹配分</text></view><view wx:else class="shared-score-note">好友分享结果 · 分数不随链接传播</view></view>
   </view>
 
   <view class="result-body">
     <view wx:if="{{sharedMode}}" class="shared-note">这是好友分享的结果。完成15题后，你会获得自己的14维匹配分析。</view>
     <view class="trait-chips"><text wx:for="{{traits}}" wx:key="key">{{item.label}}</text></view>
-    <view class="why-card"><text>为什么是它</text><text>你的高匹配特征集中在“{{traits[0].label}}”“{{traits[1].label}}”与“{{traits[2].label}}”。这与{{primary.nameCn}}在测试模型中的生存策略画像最接近。</text></view>
+    <view class="why-card"><text>为什么是它</text><text>{{primary.resultSummary}}</text><text wx:for="{{primary.matchReasons}}" wx:key="*this">· {{item}}</text></view>
+    <view class="result-guidance"><view><text>你的优势</text><text wx:for="{{primary.resultStrengths}}" wx:key="*this">{{item}}</text></view><view><text>留意这一点</text><text>{{primary.resultCaution}}</text></view></view>
 
     <view class="result-section"><text class="section-kicker-global">MODERN ANALOGY</text><text class="section-heading-global">如果它生活在今天</text><text class="result-copy">{{primary.modernAnalogy}}</text></view>
     <view class="result-section"><text class="section-kicker-global">REAL SURVIVAL</text><text class="section-heading-global">它真实的生存方式</text><text class="result-copy">{{primary.survivalStrategy}}</text><view class="science-fact"><text>科学冷知识</text><text>{{primary.discovery}}</text></view></view>
 
     <view class="result-section"><text class="section-kicker-global">YOUR VECTOR</text><text class="section-heading-global">14维匹配画像</text><view class="result-bars"><view wx:for="{{profileBars}}" wx:key="key"><view><text>{{item.label}}</text><text>{{item.value}}</text></view><view class="result-track"><view style="width:{{item.value}}%"></view></view></view></view></view>
 
-    <view class="result-section"><text class="section-kicker-global">NEARBY MATCHES</text><text class="section-heading-global">两个相近结果</text><view class="similar-grid"><view wx:for="{{similar}}" wx:key="id" bindtap="openCreature" data-id="{{item.id}}"><view class="similar-art placeholder-visual"><text>{{item.nameCn}}</text></view><text>{{item.nameCn}}</text><text>{{item.scientificName}}</text></view></view></view>
+    <view class="result-section"><text class="section-kicker-global">NEARBY MATCHES</text><text class="section-heading-global">两个相近结果</text><view class="similar-grid"><view wx:for="{{similar}}" wx:key="id" hover-class="tap-card-active" bindtap="openCreature" data-id="{{item.id}}"><view class="similar-art placeholder-visual"><media-image media-id="{{item.mediaId}}" variant="thumbnail" ratio="4:3" alt="{{item.nameCn}}科学图片" placeholder-theme="rock" /></view><text>{{item.nameCn}}</text><text>{{item.scientificName}}</text></view></view></view>
 
     <view class="result-actions"><button class="primary-button" bindtap="openCreature" data-id="{{primary.id}}">查看{{primary.nameCn}}完整图鉴</button><button class="secondary-button" bindtap="openAtlas">浏览全部古生物</button><button class="secondary-button" bindtap="retake">重新测试</button><button class="share-button" open-type="share">分享结果</button></view>
     <text class="result-disclaimer">性格匹配是科普娱乐模型，不代表对已灭绝生物心理的科学测量；古生物事实与现代类比分区展示。</text>

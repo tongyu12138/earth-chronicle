@@ -63,6 +63,10 @@
   background: #071319;
 }
 
+.event-media-block { margin: 0 0 18rpx; padding-top: 30rpx; }
+.event-media-block media-image { border-radius: 26rpx; overflow: hidden; }
+.event-media-caption { display: block; margin-top: 14rpx; color: #60777b; font-size: 19rpx; line-height: 1.55; }
+
 .fact-strip {
   display: flex;
   align-items: center;

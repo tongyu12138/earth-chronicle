@@ -1,0 +1,28 @@
+<view class="media-shell theme-{{placeholderTheme}} state-{{state}}" style="padding-top:{{ratioPadding}}">
+  <view wx:if="{{state === 'loading'}}" class="media-skeleton"></view>
+  <image
+    wx:if="{{activeSrc}}"
+    class="media-content {{state === 'ready' ? 'is-ready' : ''}}"
+    src="{{activeSrc}}"
+    mode="{{mode}}"
+    style="object-position:{{displayFocalPoint}}"
+    lazy-load="{{lazyLoad}}"
+    aria-label="{{displayAlt}}"
+    bindload="handleLoad"
+    binderror="handleError"
+  />
+  <view wx:if="{{state === 'missing' || state === 'error'}}" class="media-fallback">
+    <text class="fallback-orbit">◎</text>
+    <text class="fallback-label">{{state === 'error' ? '图片加载失败' : '图片资料待补充'}}</text>
+    <text class="fallback-alt">{{displayAlt}}</text>
+    <button wx:if="{{state === 'error' && retryable}}" class="retry-button" catchtap="retry" aria-label="重新加载图片">重新加载</button>
+  </view>
+  <view wx:if="{{state === 'ready' && mediaTypeLabel && (showReconstructionBadge || !isReconstruction)}}" class="media-type-badge">{{mediaTypeLabel}}</view>
+  <button wx:if="{{previewable && state === 'ready'}}" class="preview-button" catchtap="previewImage" aria-label="查看图片大图">查看大图</button>
+</view>
+<view wx:if="{{displayCaption || (showMeta && (displayCredit || displayAuthor || displayLicense)) || (showSource && sourceUrl)}}" class="media-meta">
+  <text wx:if="{{displayCaption}}" class="media-caption">{{displayCaption}}</text>
+  <text wx:if="{{showMeta && (displayAuthor || displayCredit)}}">图像：{{displayAuthor || displayCredit}}</text>
+  <text wx:if="{{showMeta && displayLicense}}">授权：{{displayLicense}}</text>
+  <button wx:if="{{showSource && sourceUrl}}" class="source-button" catchtap="copySource" aria-label="复制图片原始来源链接">复制原始来源</button>
+</view>

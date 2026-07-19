@@ -2,7 +2,8 @@ const KEYS = {
   recent: 'earthChronicle.recent',
   favorites: 'earthChronicle.favorites',
   quizProgress: 'earthChronicle.quizProgress',
-  quizResult: 'earthChronicle.quizResult'
+  quizResult: 'earthChronicle.quizResult',
+  quizReset: 'earthChronicle.quizReset'
 }
 
 function safeGet(key, fallback) {
@@ -33,7 +34,15 @@ function recordView(type, id, title, path) {
 }
 
 function getRecent() {
-  return safeGet(KEYS.recent, {})
+  const recent = safeGet(KEYS.recent, {})
+  const legacyEventRoute = ['/pages', 'event', 'index'].join('/')
+  Object.keys(recent || {}).forEach((key) => {
+    const item = recent[key]
+    if (item && typeof item.path === 'string' && item.path.indexOf(legacyEventRoute) === 0) {
+      item.path = item.path.replace(legacyEventRoute, '/pages/detail/index')
+    }
+  })
+  return recent
 }
 
 function getFavorites() {
@@ -75,7 +84,24 @@ function getQuizResult() {
   return safeGet(KEYS.quizResult, null)
 }
 
+function requestQuizReset() {
+  try {
+    wx.removeStorageSync(KEYS.quizProgress)
+    wx.removeStorageSync(KEYS.quizResult)
+  } catch (error) {}
+  return safeSet(KEYS.quizReset, true)
+}
+
+function consumeQuizReset() {
+  const requested = Boolean(safeGet(KEYS.quizReset, false))
+  if (requested) {
+    try { wx.removeStorageSync(KEYS.quizReset) } catch (error) {}
+  }
+  return requested
+}
+
 module.exports = {
   KEYS, safeGet, safeSet, recordView, getRecent, getFavorites, isFavorite, toggleFavorite,
-  getQuizProgress, saveQuizProgress, clearQuizProgress, saveQuizResult, getQuizResult
+  getQuizProgress, saveQuizProgress, clearQuizProgress, saveQuizResult, getQuizResult,
+  requestQuizReset, consumeQuizReset
 }

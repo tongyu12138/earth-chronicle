@@ -1,7 +1,8 @@
 const { quizMeta, questions } = require('../../data/quiz')
-const { creatures } = require('../../data/creatures')
+const { quizProfiles } = require('../../data/quiz-profiles')
 const { buildResult } = require('../../utils/quiz-engine')
-const { getQuizProgress, saveQuizProgress, clearQuizProgress, saveQuizResult } = require('../../utils/storage')
+const { getQuizProgress, saveQuizProgress, clearQuizProgress, saveQuizResult, consumeQuizReset } = require('../../utils/storage')
+const { redirectToPage, switchTabPage } = require('../../utils/router')
 
 function validPartial(progress) {
   return progress && Array.isArray(progress.answers) && Number.isInteger(progress.currentIndex) &&
@@ -29,6 +30,12 @@ Page({
   },
 
   onShow() {
+    if (consumeQuizReset()) {
+      clearQuizProgress()
+      this._savedProgress = null
+      this.setData({ state: 'welcome', canResume: false, resumeText: '', currentIndex: 0, currentQuestion: null, questionNumber: 1, progressPercent: 0, answers: [], selectedIndex: -1 })
+      return
+    }
     if (this.data.state === 'welcome') this.refreshResume()
   },
 
@@ -56,7 +63,7 @@ Page({
       currentIndex: index,
       currentQuestion: questions[index],
       questionNumber: index + 1,
-      progressPercent: Math.round(index / questions.length * 100),
+      progressPercent: Math.round((index + 1) / questions.length * 100),
       answers,
       selectedIndex: answers[index] === undefined ? -1 : answers[index]
     })
@@ -89,13 +96,13 @@ Page({
 
   finishQuiz(answers) {
     try {
-      const result = buildResult(answers, creatures)
+      const result = buildResult(answers, quizProfiles)
       saveQuizResult(result)
       clearQuizProgress()
       this.setData({ state: 'analyzing', progressPercent: 100 })
       this._timer = setTimeout(() => {
         this._timer = null
-        wx.redirectTo({ url: '/pages/quiz-result/index' })
+        redirectToPage('/pages/quiz-result/index', { toastTitle: '暂时无法打开测试结果' })
       }, 1450)
     } catch (error) {
       wx.showToast({ title: '答案不完整，请重试', icon: 'none' })
@@ -104,7 +111,7 @@ Page({
   },
 
   backHome() {
-    wx.switchTab({ url: '/pages/science/index' })
+    switchTabPage('/pages/science/index')
   },
 
   onUnload() {
