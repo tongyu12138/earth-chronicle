@@ -1,40 +1,115 @@
 <page-meta page-style="background:#071319" />
 <view wx:if="{{creature}}" class="museum-page creature-page safe-bottom">
   <view class="creature-hero placeholder-visual">
-    <view class="creature-hero-media"><media-image media-id="{{creature.mediaId}}" variant="hero" ratio="4:3" alt="{{creature.imageAlt}}" placeholder-theme="rock" lazy-load="false" previewable="true" bindready="handleHeroReady" /></view>
+    <view class="creature-hero-media"><media-image media-id="{{creature.mediaId}}" variant="hero" ratio="4:3" alt="{{creature.nameCn}}艺术复原" placeholder-theme="rock" lazy-load="false" previewable="true" bindready="handleHeroReady" /></view>
     <text wx:if="{{!heroMediaReady}}" class="hero-initial">{{creature.initial}}</text>
     <view class="hero-gradient"></view>
     <view class="creature-hero-content">
       <view class="hero-actions"><text>{{creature.livedWhen}}</text><button class="{{isFavorite ? 'active' : ''}}" bindtap="toggleFavorite">{{isFavorite ? '★ 已收藏' : '☆ 收藏'}}</button></view>
       <text class="creature-name">{{creature.nameCn}}</text>
       <text class="creature-latin">{{creature.scientificName}}</text>
-      <text class="creature-nickname">{{creature.nickname}}</text>
+      <text class="creature-nickname">{{knowledge ? knowledge.hook : creature.nickname}}</text>
     </view>
   </view>
 
+  <view wx:if="{{knowledge}}" class="chapter-nav">
+    <button data-target="section-overview" bindtap="jumpToSection">速览</button><button data-target="section-life" bindtap="jumpToSection">生存</button><button data-target="section-evidence" bindtap="jumpToSection">证据</button><button data-target="section-debate" bindtap="jumpToSection">争议</button><button data-target="section-quiz" bindtap="jumpToSection">小测</button>
+  </view>
+
   <view class="creature-body">
-    <view class="fact-grid">
-      <view><text>类群</text><text>{{creature.group}}</text></view><view><text>食性</text><text>{{creature.diet}}</text></view>
-      <view><text>体型</text><text>{{creature.size}}</text></view><view><text>环境</text><text>{{creature.habitat}}</text></view>
-      <view><text>分布</text><text>{{creature.region}}</text></view><view><text>重量</text><text>{{creature.weight}}</text></view>
-    </view>
+    <block wx:if="{{knowledge}}">
+      <view id="section-overview" class="detail-section first-section">
+        <text class="section-kicker-global">30-SECOND GUIDE</text><text class="section-heading-global">30秒认识它</text>
+        <text class="lead-copy">{{knowledge.quickSummary}}</text>
+        <view class="status-pill"><text>资料状态：已核验</text><text>本页由 {{knowledge.sources.length}} 项研究或专业机构资料交叉检查</text></view>
+      </view>
 
-    <view class="fun-card"><text>用现代人的话说</text><text>{{creature.funIntro}}</text></view>
+      <view class="quick-grid">
+        <view><text>它是什么</text><text>{{knowledge.entryType === 'functional-group' ? '功能性生态群' : creature.group}}</text></view>
+        <view><text>生活时间</text><text>{{knowledge.time.displayRange}}</text></view>
+        <view><text>主要环境</text><text>{{creature.habitat}}</text></view>
+        <view><text>生态角色</text><text>{{knowledge.ecosystemRole}}</text></view>
+      </view>
 
-    <view class="detail-section"><text class="section-kicker-global">REAL PALEOBIOLOGY</text><text class="section-heading-global">真实的生存方式</text><text class="detail-copy">{{creature.survivalStrategy}}</text></view>
-    <view class="detail-section"><text class="section-kicker-global">DISCOVERY</text><text class="section-heading-global">我们如何认识它</text><text class="detail-copy">{{creature.discovery}}</text></view>
+      <view class="detail-section">
+        <text class="section-kicker-global">WHY IT MATTERS</text><text class="section-heading-global">为什么值得认识</text>
+        <text class="detail-copy">{{knowledge.whyItMatters}}</text>
+      </view>
 
-    <view wx:if="{{creature.quizEligible}}" class="detail-section">
-      <text class="section-kicker-global">PERSONALITY VECTOR</text><text class="section-heading-global">测试匹配画像</text>
-      <text class="vector-note">这些数值服务于科普娱乐匹配，不代表科学家测量了已灭绝生物的“性格”。</text>
-      <view class="profile-bars"><view wx:for="{{profileBars}}" wx:key="key"><view class="bar-label"><text>{{item.label}}</text><text>{{item.value}}</text></view><view class="bar-track"><view style="width:{{item.value}}%"></view></view></view></view>
-    </view>
-    <view wx:else class="source-status"><text>图鉴条目，不参与测试</text><text>为避免给所有物种强行套用性格，本条保留在图鉴中，但没有正式测试画像。</text></view>
+      <view class="detail-section">
+        <text class="section-kicker-global">AT A GLANCE</text><text class="section-heading-global">一眼看懂</text>
+        <view class="data-stack">
+          <view><text>分类路径</text><text>{{knowledge.taxonomyPath}}</text><text class="confidence-tag">{{knowledge.taxonomyConfidenceLabel}}</text></view>
+          <view><text>分类说明</text><text>{{knowledge.taxonomy.classificationNote}}</text></view>
+          <view><text>分布与地层</text><text>{{knowledge.distributionRegions}}</text><text>{{knowledge.distribution.mapNote}}</text></view>
+          <view wx:if="{{knowledge.scale}}"><text>体型尺度</text><text>{{knowledge.scale.length}}；{{knowledge.scale.comparison}}</text><text>{{knowledge.scale.uncertainty}}</text></view>
+          <view><text>古环境</text><text>{{knowledge.paleoenvironment}}</text></view>
+        </view>
+      </view>
 
-    <view wx:if="{{gallery.length}}" class="detail-section"><text class="section-kicker-global">VISUAL ARCHIVE</text><text class="section-heading-global">图像与化石</text><view class="creature-gallery"><view class="gallery-item placeholder-visual" wx:for="{{gallery}}" wx:key="id"><media-image media-id="{{item.mediaId}}" src="{{item.src}}" variant="full" ratio="4:3" alt="{{item.kind}}" placeholder-theme="rock" previewable="true" show-source="true" /><text>{{item.kind}}</text><text>可查看大图</text></view></view></view>
+      <view id="section-life" class="detail-section expandable-section">
+        <view class="section-title-row" data-key="showLife" bindtap="toggleSection"><view><text class="section-kicker-global">SURVIVAL</text><text class="section-heading-global">怎么吃、怎么动、怎么活</text></view><text>{{showLife ? '收起 −' : '展开 +'}}</text></view>
+        <block wx:if="{{showLife}}">
+          <view class="life-function-grid"><view wx:for="{{knowledge.lifeFunctionList}}" wx:key="key"><text>{{item.label}}</text><text>{{item.text}}</text></view></view>
+          <text class="subsection-title">如果跟着它生活一天</text>
+          <view class="day-timeline"><view wx:for="{{knowledge.dayInTheLife}}" wx:key="title"><view><text>{{index + 1}}</text></view><view><text>{{item.title}}</text><text>{{item.text}}</text><text class="certainty {{item.certainty}}">{{item.certaintyLabel}}</text></view></view></view>
+          <text class="subsection-title">身体装备</text>
+          <view class="anatomy-grid"><view wx:for="{{knowledge.anatomyHighlights}}" wx:key="title"><text>{{item.title}}</text><text>{{item.explanation}}</text><text class="evidence-level {{item.evidenceLevel}}">{{item.evidenceLabel}}</text></view></view>
+          <text class="subsection-title">生态关系</text>
+          <view class="relation-list"><view wx:if="{{knowledge.relationResources}}"><text>资源</text><text>{{knowledge.relationResources}}</text></view><view wx:if="{{knowledge.relationPredators}}"><text>威胁</text><text>{{knowledge.relationPredators}}</text></view><view wx:if="{{knowledge.relationCompetitors}}"><text>竞争</text><text>{{knowledge.relationCompetitors}}</text></view><view wx:if="{{knowledge.relationPartners}}"><text>协作</text><text>{{knowledge.relationPartners}}</text></view></view>
+        </block>
+      </view>
 
-    <view class="source-status" wx:if="{{creature.sourceNeeded}}"><text>来源待核</text><text>本条已明确标记 sourceNeeded，没有生成看似真实但未经确认的链接。发布前应由古生物专业人员核对分类、年代与尺寸，并补入真实来源。</text></view>
-    <view class="source-card" wx:for="{{creature.sourceUrls}}" wx:key="*this" bindtap="copySource" data-url="{{item}}"><text>{{item}}</text><text>复制</text></view>
+      <view id="section-evidence" class="detail-section expandable-section">
+        <view class="section-title-row" data-key="showEvidence" bindtap="toggleSection"><view><text class="section-kicker-global">FOSSIL DETECTIVE</text><text class="section-heading-global">化石侦探室</text></view><text>{{showEvidence ? '收起 −' : '展开 +'}}</text></view>
+        <block wx:if="{{showEvidence}}">
+          <text class="evidence-intro">艺术复原帮助想象外观，但下面的证据卡只讨论真实标本、地层、化学分析或可检验模型。</text>
+          <view class="evidence-list"><view wx:for="{{knowledge.fossilEvidence}}" wx:key="evidenceType"><view class="evidence-head"><text>{{item.evidenceType}}</text><text>{{item.strength}}</text></view><text class="evidence-material">材料：{{item.material}}</text><view><text>能说明</text><text>{{item.whatItShows}}</text></view><view><text>不能说明</text><text>{{item.limitation}}</text></view></view></view>
+          <text class="subsection-title">发现与认识历程</text>
+          <view class="history-list"><view wx:for="{{knowledge.discoveryHistory}}" wx:key="year"><text>{{item.year}}</text><view><text>{{item.place}}</text><text>{{item.event}}</text></view></view></view>
+        </block>
+      </view>
+
+      <view id="section-debate" class="detail-section expandable-section">
+        <view class="section-title-row" data-key="showDebates" bindtap="toggleSection"><view><text class="section-kicker-global">OPEN QUESTIONS</text><text class="section-heading-global">科学争议与常见误解</text></view><text>{{showDebates ? '收起 −' : '展开 +'}}</text></view>
+        <block wx:if="{{showDebates}}">
+          <view class="debate-card" wx:for="{{knowledge.debates}}" wx:key="question"><text>{{item.question}}</text><view><text>目前证据支持</text><text>{{item.currentView}}</text></view><view><text>其他解释</text><text>{{item.alternatives}}</text></view><text class="debate-confidence">把握程度：{{item.confidence}}</text></view>
+          <text class="subsection-title">别再这样误会它</text>
+          <view class="myth-list"><view wx:for="{{knowledge.misconceptions}}" wx:key="myth"><text>误解</text><text>{{item.myth}}</text><text>更准确的说法</text><text>{{item.correction}}</text></view></view>
+        </block>
+      </view>
+
+      <view class="detail-section expandable-section">
+        <view class="section-title-row" data-key="showExtras" bindtap="toggleSection"><view><text class="section-kicker-global">MORE TO EXPLORE</text><text class="section-heading-global">趣味知识与术语</text></view><text>{{showExtras ? '收起 −' : '展开 +'}}</text></view>
+        <block wx:if="{{showExtras}}">
+          <view class="fun-facts"><view wx:for="{{knowledge.funFacts}}" wx:key="*this"><text>{{index + 1}}</text><text>{{item}}</text></view></view>
+          <text class="subsection-title">术语卡</text>
+          <view class="glossary-list"><view wx:for="{{knowledge.glossary}}" wx:key="term"><text>{{item.term}}</text><text>{{item.definition}}</text></view></view>
+        </block>
+      </view>
+
+      <view id="section-quiz" class="detail-section">
+        <text class="section-kicker-global">KNOWLEDGE CHECK</text><text class="section-heading-global">3题知识挑战</text>
+        <text class="quiz-progress">已完成 {{quizAnswered}} / {{knowledge.knowledgeCheck.length}} · 答对 {{quizCorrect}} 题</text>
+        <view class="knowledge-question" wx:for="{{knowledge.knowledgeCheck}}" wx:key="question"><text>{{index + 1}}. {{item.question}}</text><button wx:for="{{item.options}}" wx:for-item="option" wx:key="optionIndex" class="{{option.stateClass}}" data-question="{{item.questionIndex}}" data-option="{{option.optionIndex}}" bindtap="answerKnowledgeCheck">{{option.text}}</button><view wx:if="{{item.answered}}"><text>解释</text><text>{{item.explanation}}</text></view></view>
+      </view>
+
+      <view class="detail-section source-section">
+        <text class="section-kicker-global">SOURCES</text><text class="section-heading-global">资料来源</text>
+        <text class="source-note">点击卡片可复制原始链接。来源用于支持科学内容；页面主图为明确标注的 AI 艺术复原，不作为化石证据。</text>
+        <view class="source-card rich-source" wx:for="{{knowledge.sources}}" wx:key="id" bindtap="copySource" data-url="{{item.url}}"><view><text>{{item.title}}</text><text>{{item.organization}} · {{item.year}} · {{item.type}}</text><text wx:if="{{item.doi}}">DOI {{item.doi}}</text></view><text>复制</text></view>
+      </view>
+    </block>
+
+    <block wx:else>
+      <view class="quick-grid fallback-grid"><view><text>类群</text><text>{{creature.group}}</text></view><view><text>食性</text><text>{{creature.diet}}</text></view><view><text>体型</text><text>{{creature.size}}</text></view><view><text>环境</text><text>{{creature.habitat}}</text></view></view>
+      <view class="fun-card"><text>30秒认识它</text><text>{{creature.funIntro}}</text></view>
+      <view class="detail-section"><text class="section-kicker-global">SURVIVAL</text><text class="section-heading-global">真实的生存方式</text><text class="detail-copy">{{creature.survivalStrategy}}</text></view>
+      <view class="detail-section"><text class="section-kicker-global">DISCOVERY</text><text class="section-heading-global">我们如何认识它</text><text class="detail-copy">{{creature.discovery}}</text></view>
+      <view class="source-status"><text>资料状态：基础档案</text><text>本条的分类、年代或体型仍有部分内容需要专业复核。页面已明确标注不确定部分，没有把推测写成确定事实。</text></view>
+    </block>
+
+    <view wx:if="{{gallery.length}}" class="detail-section"><text class="section-kicker-global">ART RECONSTRUCTIONS</text><text class="section-heading-global">艺术复原图库</text><view class="creature-gallery"><view class="gallery-item placeholder-visual" wx:for="{{gallery}}" wx:key="id"><media-image media-id="{{item.mediaId}}" src="{{item.src}}" variant="full" ratio="4:3" alt="{{item.kind}}艺术复原" placeholder-theme="rock" previewable="true" /><text>{{item.kind}} · 艺术复原</text><text>可查看大图</text></view></view></view>
 
     <button wx:if="{{period}}" class="period-link" bindtap="openPeriod">返回{{period.name}}时期 →</button>
   </view>

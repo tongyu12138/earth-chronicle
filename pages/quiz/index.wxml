@@ -1,5 +1,5 @@
 <page-meta page-style="background:#071319" />
-<view class="quiz-page">
+<view class="quiz-page {{reduceMotion ? 'reduce-motion' : ''}}">
   <view wx:if="{{state === 'welcome'}}" class="welcome-screen">
     <view class="quiz-orbit orbit-a"></view><view class="quiz-orbit orbit-b"></view>
     <view class="quiz-media-collage" aria-label="寒武纪、晚侏罗世和更新世彼此分隔的AI艺术复原图">
@@ -9,12 +9,21 @@
     <text class="quiz-kicker">PALEO PERSONALITY LAB</text>
     <text class="quiz-title">{{meta.title}}</text>
     <text class="quiz-subtitle">{{meta.subtitle}}</text>
-    <view class="quiz-facts"><view><text>15</text><text>现代场景题</text></view><view><text>14</text><text>匹配维度</text></view><view><text>60</text><text>正式结果</text></view></view>
+    <view class="quiz-facts"><view><text>15</text><text>远古场景题</text></view><view><text>3</text><text>旅程章节</text></view><view><text>60</text><text>正式结果</text></view></view>
     <text class="quiz-intro">{{meta.intro}}</text>
+    <view class="journey-card"><text>本次穿越路线</text><text>{{meta.journey}}</text></view>
+    <button class="motion-toggle" bindtap="toggleMotion">{{reduceMotion ? '✓ 已开启减少动画' : '减少动画模式'}}</button>
     <button class="primary-button start-button" bindtap="startNew">开始测试</button>
     <button wx:if="{{canResume}}" class="resume-button" bindtap="resumeQuiz">{{resumeText}} →</button>
+    <button class="knowledge-entry" bindtap="openKnowledgeChallenge"><view><text>远古知识挑战</text><text>每次随机5题 · 有解释与来源</text></view><text>→</text></button>
     <text class="quiz-duration">{{meta.duration}}</text>
     <text class="quiz-disclaimer">{{meta.disclaimer}}</text>
+  </view>
+
+  <view wx:elif="{{state === 'chapter'}}" class="chapter-screen">
+    <view class="chapter-media"><media-image media-id="{{chapterMediaId}}" variant="hero" ratio="4:3" alt="{{chapterPeriod.name}}环境艺术复原" lazy-load="false" /></view>
+    <view class="chapter-shade"></view>
+    <view class="chapter-copy"><text>你已穿越到</text><text>{{chapterPeriod.name}}</text><text>{{chapterPeriod.range}}</text><view></view><text>{{chapterTitle}}</text><text>接下来的五个选择没有标准答案，请按最接近你的反应作答。</text></view>
   </view>
 
   <view wx:elif="{{state === 'question'}}" class="question-screen">
@@ -24,12 +33,18 @@
       <button class="exit-button" bindtap="backHome">×</button>
     </view>
     <view class="question-content">
-      <text class="scene-label">SCENE {{questionNumber}}</text>
+      <view class="question-scene-media"><media-image media-id="{{currentQuestion.sceneMediaId}}" variant="card" ratio="16:9" alt="{{currentQuestion.chapter}}场景艺术复原" /></view>
+      <text class="scene-label">{{currentQuestion.chapter}} · SCENE {{questionNumber}}</text>
+      <text class="period-label">{{currentPeriod.name}} · {{currentPeriod.range}}</text>
       <text class="question-scene">{{currentQuestion.scene}}</text>
+      <view class="plain-science"><text>先知道这件事</text><text>{{currentQuestion.plainScience}}</text></view>
+      <button class="science-detail-toggle" bindtap="toggleScienceDetail">{{showScienceDetail ? '收起专业说明' : '想知道科学家怎样判断？'}}</button>
+      <text wx:if="{{showScienceDetail}}" class="science-context">研究说明：{{currentQuestion.scienceContext}}</text>
       <text class="question-title">{{currentQuestion.question}}</text>
       <view class="option-list">
         <button class="option-card {{selectedIndex === index ? 'selected' : ''}}" wx:for="{{currentQuestion.options}}" wx:key="text" bindtap="chooseOption" data-index="{{index}}"><text class="option-letter">{{index === 0 ? 'A' : index === 1 ? 'B' : index === 2 ? 'C' : 'D'}}</text><text class="option-text">{{item.text}}</text><text class="option-check">{{selectedIndex === index ? '✓' : '›'}}</text></button>
       </view>
+      <view wx:if="{{showFact}}" class="deep-time-fact"><text class="fact-choice">你的选择说明：{{answerInsight}}</text><text class="fact-science">再知道一件事：{{afterAnswerFact}}</text><button bindtap="continueAfterAnswer">{{currentIndex + 1 === total ? '看看我匹配到谁' : '我明白了，继续穿越'}}</button></view>
     </view>
     <text class="question-tip">没有标准答案，选择最接近你真实反应的一项。</text>
   </view>
@@ -37,7 +52,7 @@
   <view wx:else class="analyzing-screen">
     <view class="scan-shell"><view class="scan-ring ring-one"></view><view class="scan-ring ring-two"></view><view class="scan-core">✦</view><view class="scan-line"></view></view>
     <text class="analyzing-title">正在扫描深时间档案</text>
-    <text class="analyzing-step">归一化14维画像 · 比对110种生命策略</text>
+    <text class="analyzing-step">正在比较60种经过校准的远古生存策略</text>
     <view class="analysis-progress"><view></view></view>
   </view>
 </view>

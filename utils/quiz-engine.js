@@ -109,10 +109,45 @@ function topTraits(profile, creatureProfile) {
   })).sort((left, right) => right.closeness - left.closeness).slice(0, 3)
 }
 
+function answerNarrative(answers) {
+  const selectedInsights = []
+  const dimensionContributions = []
+  answers.forEach((answerIndex, questionIndex) => {
+    const question = questions[questionIndex]
+    const selected = question && question.options[answerIndex]
+    if (!selected) return
+    const contributions = Object.keys(selected.scores).filter((key) => DIMENSIONS.includes(key)).map((key) => ({
+      key,
+      label: dimensionLabels[key],
+      value: selected.scores[key]
+    }))
+    const magnitude = contributions.reduce((sum, item) => sum + Math.abs(item.value) * (weights[item.key] || 1), 0)
+    selectedInsights.push({
+      questionId: question.id,
+      questionNumber: questionIndex + 1,
+      chapter: question.chapter,
+      scene: question.scene,
+      question: question.question,
+      selectedOptionText: selected.text,
+      insight: selected.insight
+    })
+    dimensionContributions.push({ questionId: question.id, questionNumber: questionIndex + 1, magnitude, contributions })
+  })
+  const topContributingQuestions = dimensionContributions.slice().sort((left, right) => {
+    if (right.magnitude !== left.magnitude) return right.magnitude - left.magnitude
+    return left.questionNumber - right.questionNumber
+  }).slice(0, 3).map((item) => {
+    const insight = selectedInsights.find((candidate) => candidate.questionId === item.questionId)
+    return Object.assign({}, insight, { dimensionLabels: item.contributions.slice().sort((left, right) => Math.abs(right.value) - Math.abs(left.value)).slice(0, 2).map((part) => part.label) })
+  })
+  return { selectedInsights, dimensionContributions, topContributingQuestions }
+}
+
 function buildResult(answers, creatures) {
   const result = rankCreatures(answers, creatures)
   const top = result.ranked.slice(0, 3)
   const primary = top[0]
+  const narrative = answerNarrative(answers)
   return {
     answers: answers.slice(),
     profile: result.profile,
@@ -120,6 +155,9 @@ function buildResult(answers, creatures) {
     similarIds: top.slice(1).map((item) => item.creature.id),
     match: Math.min(98, Math.round(55 + primary.similarity * 43)),
     traits: topTraits(result.profile, primary.creature.personalityProfile),
+    selectedInsights: narrative.selectedInsights,
+    topContributingQuestions: narrative.topContributingQuestions,
+    dimensionContributions: narrative.dimensionContributions,
     createdAt: Date.now()
   }
 }
@@ -138,4 +176,4 @@ function validateQuizData(creatures) {
   return problems
 }
 
-module.exports = { weights, bounds, moments, validateAnswers, scoreAnswers, similarity, rankCreatures, buildResult, validateQuizData }
+module.exports = { weights, bounds, moments, validateAnswers, scoreAnswers, similarity, rankCreatures, buildResult, answerNarrative, validateQuizData }

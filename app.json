@@ -7,6 +7,7 @@
     "pages/creature-detail/index",
     "pages/search/index",
     "pages/quiz-result/index",
+    "pages/knowledge-quiz/index",
     "pages/timeline/index",
     "pages/detail/index"
   ],

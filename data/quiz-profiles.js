@@ -4,19 +4,49 @@ const DIMENSIONS = [
   'aerialAffinity', 'coldAffinity'
 ]
 
+const dimensionLabels = {
+  curiosity: '愿意去看看', boldness: '敢先行动', sociability: '愿意找同伴', patience: '愿意等一等',
+  adaptability: '会临时换办法', strategy: '会提前想路线', speed: '反应很快', defense: '先保护自己',
+  independence: '喜欢自己判断', sizePreference: '愿意处理大任务', aquaticAffinity: '喜欢流动环境',
+  terrestrialAffinity: '偏爱脚下稳当', aerialAffinity: '喜欢先看全局', coldAffinity: '能承受寒冷'
+}
+
+const modernRoles = {
+  community: '把大家组织起来的人', adaptive: '遇到变化会换办法的人', sentinel: '能稳稳守住长期任务的人', explorer: '愿意先去探路的人',
+  ambusher: '很会等待好时机的人', sprinter: '遇事能快速启动的人', armored: '会保护边界和重要资源的人', aerial: '习惯先看全局再行动的人',
+  giant: '愿意慢慢完成大工程的人', aquatic: '能在变化中及时转向的人', coldSocial: '困难时会照顾同伴的人', transition: '能把旧经验带到新环境的人'
+}
+
+const lowNeedTips = {
+  curiosity: '你可能太快接受第一个答案，少看了一条新路。下次可以多问一句：“还有别的办法吗？”',
+  boldness: '你可能看清机会后还是不敢开始。下次可以把第一步缩小一点，先试一下。',
+  sociability: '你可能把所有压力都自己扛。下次可以早点告诉一个可信的人，让对方一起想办法。',
+  patience: '你可能太急着得到结果，来不及看清信号。下次先停十秒，再决定要不要冲。',
+  adaptability: '你可能明知环境变了，仍坚持原来的办法。下次先允许自己只改一个小步骤。',
+  strategy: '你可能马上行动，却忘了确认退路。下次出发前先想清楚“如果失败，我往哪里退”。',
+  speed: '你可能想得很完整，却迟迟没有开始。下次给自己一个能在五分钟内完成的小动作。',
+  defense: '你可能为了机会把安全边界放得太后。下次先确认体力、时间和退路还剩多少。',
+  independence: '你可能太依赖别人的方向，忽略了自己的观察。下次先写下自己的判断，再去听大家怎么说。',
+  sizePreference: '你可能只盯着眼前的小问题，忘了它会不会越变越大。下次顺手看看更长时间后的影响。',
+  aquaticAffinity: '变化太快时，你可能找不到稳定参照。下次先固定一个不会轻易改变的目标。',
+  terrestrialAffinity: '你可能总想待在熟悉的地方。下次可以保留退路，再往陌生区域多走一步。',
+  aerialAffinity: '你可能只顾眼前细节，忘了整条路线。下次先退一步看看事情之间的关系。',
+  coldAffinity: '压力持续太久时，你可能忘记休息。能扛住不等于不需要恢复。'
+}
+
 const archetypes = {
-  community: { title: '群体网络的稳定节点', reasons: ['更看重协作与持续投入', '倾向在关系网络中完成长期目标'], strengths: ['协调资源', '维持团队节奏'], caution: '不要为了照顾所有人而忽略自己的边界。' },
-  adaptive: { title: '环境变化中的适应者', reasons: ['面对变化时愿意调整方法', '不依赖单一环境或固定路线'], strengths: ['恢复能力', '灵活换挡'], caution: '频繁调整之前，也要确认真正需要改变的是什么。' },
-  sentinel: { title: '耐心而稳定的守望者', reasons: ['重视耐心、防线与可持续节奏', '行动前倾向观察环境与风险'], strengths: ['长期执行', '风险控制'], caution: '稳定不等于停滞，机会明确时也可以主动一步。' },
-  explorer: { title: '边界上的探索者', reasons: ['好奇心与环境扫描能力突出', '愿意在信息不完整时尝试新路线'], strengths: ['发现新路径', '快速学习'], caution: '探索前保留一条可撤回路线，会让大胆更可靠。' },
-  ambusher: { title: '把握窗口的策略者', reasons: ['更擅长等待合适时机', '倾向用判断与位置优势降低无效消耗'], strengths: ['时机判断', '集中行动'], caution: '等待完美时机太久，可能错过足够好的窗口。' },
-  sprinter: { title: '速度与反应兼备的行动派', reasons: ['在短反馈环境中反应迅速', '倾向通过行动获得信息'], strengths: ['快速启动', '临场应变'], caution: '高速推进时，为检查细节预留一个短暂停顿。' },
-  armored: { title: '自带边界的防御专家', reasons: ['更重视安全边界和稳定积累', '不轻易把资源投入无谓冲突'], strengths: ['保护核心资源', '抗压稳定'], caution: '防线太厚也可能隔绝帮助，值得为可信伙伴留入口。' },
-  aerial: { title: '从高处建立全局地图的人', reasons: ['偏好先看整体关系与远方路径', '速度、视野与独立判断较突出'], strengths: ['全局观察', '路线规划'], caution: '俯瞰全局之后，仍要回到地面核对具体限制。' },
-  giant: { title: '重视规模与长期投入的建设者', reasons: ['愿意处理体量较大的长期任务', '行动强调资源、影响与稳定推进'], strengths: ['承接复杂项目', '稳步扩张'], caution: '规模越大，越要为转向和维护预留资源。' },
-  aquatic: { title: '流动环境中的判断者', reasons: ['偏好流动、开放且持续变化的环境', '会根据细微信号调整方向'], strengths: ['读取环境', '保持机动'], caution: '持续移动时，也需要设置可复盘的固定参照点。' },
-  coldSocial: { title: '逆境中的群体守护者', reasons: ['在压力环境中仍重视协作与稳定', '愿意为团队承担长期成本'], strengths: ['逆境协作', '持续支持'], caution: '照顾群体时，也别忘记补充自己的能量储备。' },
-  transition: { title: '跨越边界的适应型探索者', reasons: ['擅长在两套规则之间寻找新位置', '好奇心与适应力共同驱动选择'], strengths: ['跨域迁移', '整合不同经验'], caution: '同时适应多种环境时，要保留一个清晰的核心方向。' }
+  community: { title: '抱团把事做完', userPattern: '遇到麻烦时，你更常选择叫上同伴、交换信息，再一起行动', sharedPoint: '都不是只靠单打独斗，而是把多个个体的力量连起来', strengths: ['愿意听不同人的信息', '能让大家保持同一节奏', '遇到困难时不会轻易丢下同伴'], caution: '照顾大家很重要，但别把自己的体力和边界忘在最后。' },
+  adaptive: { title: '换个办法继续走', userPattern: '发现环境变了，你通常会调整办法，不会一直和旧路线死磕', sharedPoint: '都能在环境变化后换一种活法，把损失控制住', strengths: ['发现变化比较快', '旧办法失效时愿意换招', '受挫后比较容易重新开始'], caution: '办法换得太频繁，也可能一直到不了终点。先确认环境真的变了。' },
+  sentinel: { title: '先稳住再行动', userPattern: '面对陌生风险时，你更常先观察、先保住安全，再慢慢行动', sharedPoint: '都愿意少冒一点险，用稳定和耐心换更长久的机会', strengths: ['不容易被第一反应带跑', '能守住重要的东西', '适合完成需要耐心的任务'], caution: '安全感准备得太久，也会错过已经足够好的机会。' },
+  explorer: { title: '见到新路就想看看', userPattern: '看到陌生线索时，你更愿意靠近、试一试，再用新信息决定下一步', sharedPoint: '都把未知当成可以调查的线索，而不是只能躲开的麻烦', strengths: ['敢接近陌生事物', '能从新线索里学得很快', '容易发现别人没走过的路'], caution: '好奇之前先看一眼退路，会让探索更安全。' },
+  ambusher: { title: '等到时机再出手', userPattern: '你不喜欢白费力气，更愿意先看清局面，等机会合适时集中行动', sharedPoint: '都靠时机和位置减少消耗，不是一看到目标就乱冲', strengths: ['能忍住无效冲动', '很会挑行动时机', '真正出手时比较专注'], caution: '别一直等“完美时机”；很多机会只是足够好，不会完美。' },
+  sprinter: { title: '先动起来再调整', userPattern: '情况一变，你往往先做一个动作，再根据结果马上调整', sharedPoint: '都用快速行动换取新信息，并在移动中修正方向', strengths: ['启动速度快', '突发情况里反应灵活', '不容易卡在反复犹豫里'], caution: '跑得快时也留一次检查，不然小错误会跟着你一起加速。' },
+  armored: { title: '先把自己保护好', userPattern: '遇到风险时，你更常先守住自己、体力和退路，再考虑要不要继续', sharedPoint: '都先保护柔软和重要的部分，再把力量用在真正必要的地方', strengths: ['知道什么不能轻易失去', '压力下还能守住边界', '不爱把体力浪费在无谓冲突里'], caution: '保护层太厚，也可能挡住帮助。可以给可信的人留一个入口。' },
+  aerial: { title: '先看全局再落地', userPattern: '你更喜欢先站高一点看清路线之间的关系，再决定从哪里开始', sharedPoint: '都先扩大视野，再选择具体落点，不会只盯着眼前一步', strengths: ['容易看到事情之间的关系', '会提前规划路线', '复杂环境里不容易迷失方向'], caution: '看完整体后还要回到地面；真正的障碍常藏在小细节里。' },
+  giant: { title: '把大任务慢慢做完', userPattern: '面对复杂或长期任务，你愿意持续投入，不会只挑立刻有回报的小事', sharedPoint: '都靠体量和持续投入处理大范围资源，但也要付出更高维护成本', strengths: ['能承接复杂任务', '愿意为长期结果坚持', '不容易被任务规模吓退'], caution: '事情越大，越要提前留出转向、休息和维护的空间。' },
+  aquatic: { title: '边走边看随时转向', userPattern: '面对不断变化的环境，你更愿意先移动起来，再跟着新信号调整方向', sharedPoint: '都不会死守一条固定路线，而是边行动边读取周围变化', strengths: ['变化来时转向很快', '会从细小信号判断方向', '不容易被一条旧路线困住'], caution: '一直移动也会失去参照。偶尔停下来确认自己到底走到了哪里。' },
+  coldSocial: { title: '越困难越要抱团', userPattern: '压力越大，你越会照顾同伴、保护较弱的人，让大家一起撑过去', sharedPoint: '都不是只靠一个强者，而是用群体保护和长期配合度过困难', strengths: ['困难时愿意支持别人', '能让团队保持稳定', '愿意承担长期责任'], caution: '帮别人扛住寒风时，也要记得给自己补充体力。' },
+  transition: { title: '换个环境也能找办法', userPattern: '一条路不通时，你会把旧经验带到新环境里，再试出新的走法', sharedPoint: '都能在两种环境或两套规则之间找到可以继续前进的位置', strengths: ['换环境后适应得快', '会把不同经验连起来', '旧办法失效时仍能找出新路'], caution: '同时尝试太多方向会分散体力，最好保留一个最重要的目标。' }
 }
 
 // 60 个正式结果的数值来自人工选择的生态原型，再用固定题库样本簇校准分布。
@@ -91,18 +121,78 @@ function toProfile(values) {
   }, {})
 }
 
-const quizProfiles = rows.map(([id, nameCn, archetype, values, scienceBasis]) => {
+const summaryOpeners = [
+  (pattern) => `15道题里，你多次选择这样的做法：${pattern}。`,
+  (pattern) => `回看你的答案，一个反复出现的习惯是：${pattern}。`,
+  (pattern) => `系统不是看你喜欢哪种动物，而是看到：${pattern}。`,
+  (pattern) => `最影响结果的不是某一道题，而是同一种选择出现了好几次：${pattern}。`,
+  (pattern) => `当场景变得陌生时，你的答案常常指向同一件事：${pattern}。`,
+  (pattern) => `你的答案并非每次都一样，但最常出现的路线是：${pattern}。`,
+  (pattern) => `把15次选择放在一起看，你的做法可以概括成：${pattern}。`,
+  (pattern) => `这张卡读的是做法，不是性格标签。你最常用的做法是：${pattern}。`,
+  (pattern) => `你可能没有刻意这样想，但多道题都显示：${pattern}。`,
+  (pattern) => `这次匹配先从你的真实选择出发：${pattern}。`
+]
+
+const scienceBridges = [
+  (science) => `物种这边的化石与研究告诉我们：${science}`,
+  (science) => `再看这个物种的真实生活：${science}`,
+  (science) => `为什么会找到它？关键的科学依据是：${science}`,
+  (science) => `和你的答案放在一起比较的事实是：${science}`,
+  (science) => `它并不是凭名字入选。研究线索显示：${science}`,
+  (science) => `这次类比使用的生物事实很具体：${science}`
+]
+
+const summaryClosers = [
+  (name, shared) => `所以你和${name}像的不是外形，而是${shared}。这只是有科学依据的趣味类比，不是在判断动物的性格。`,
+  (name, shared) => `把两边连起来，最像的地方就是：${shared}。${name}没有接受“性格测试”，这里比较的是生存办法。`,
+  (name, shared) => `因此匹配点很简单：${shared}。名字只是结果的外壳，真正被比较的是你的选择和它的生存方式。`,
+  (name, shared) => `两者共同出现的动作是：${shared}。这不代表你真的像${name}，也不代表化石保存了它的心理。`,
+  (name, shared) => `一句话收尾：${shared}。这个结论只用于科普娱乐，科学事实仍以化石和研究资料为准。`,
+  (name, shared) => `这就是${name}成为结果的原因：${shared}。如果你的选择改变，下次匹配也可能不同。`,
+  (name, shared) => `共同点落在做法上：${shared}。我们没有把人类情绪硬套给${name}，只借用了可观察的生态习性。`,
+  (name, shared) => `你们被放在一起，是因为${shared}。它是一面有化石依据的“远古镜子”，不是人格诊断。`,
+  (name, shared) => `所以答案不是“你长得像${name}”，而是${shared}。物种事实与娱乐类比在这里分开阅读。`,
+  (name, shared) => `最后的连接只有这一条：${shared}。它足以支持趣味匹配，却不能证明${name}拥有人的想法。`
+]
+
+const quizProfiles = rows.map(([id, nameCn, archetype, values, scienceBasis], rowIndex) => {
   const copy = archetypes[archetype]
+  const rankedDimensions = DIMENSIONS.map((key, index) => ({ key, value: values[index] })).sort((left, right) => right.value - left.value)
+  const primaryDimension = rankedDimensions[0].key
+  const secondaryDimension = rankedDimensions[1].key
+  const lowDimension = rankedDimensions[rankedDimensions.length - 1].key
+  const strengthOne = dimensionLabels[primaryDimension]
+  const strengthTwo = dimensionLabels[secondaryDimension]
+  const resultTitle = `${nameCn}式·${copy.title}`
+  const punchline = `${copy.userPattern}；${nameCn}的真实生存方式也有相似之处。`
+  const resultSummary = [
+    summaryOpeners[rowIndex % summaryOpeners.length](copy.userPattern),
+    scienceBridges[Math.floor(rowIndex / summaryOpeners.length) % scienceBridges.length](scienceBasis),
+    summaryClosers[(rowIndex * 7 + Math.floor(rowIndex / 10)) % summaryClosers.length](nameCn, copy.sharedPoint)
+  ].join('')
   return {
     id,
     nameCn,
     archetype,
     quizEligible: true,
     personalityProfile: toProfile(values),
-    matchReasons: [scienceBasis].concat(copy.reasons),
-    resultSummary: `你与${nameCn}的匹配重点是“${copy.title}”。这是一种依据生态特征设计的现代类比，不是对已灭绝生物心理的测量。`,
-    resultStrengths: copy.strengths,
-    resultCaution: copy.caution
+    resultTitle,
+    punchline,
+    resultSummary,
+    matchReasons: [
+      `你这边：${copy.userPattern}。`,
+      `它那边：${scienceBasis}`,
+      `相似点：${copy.sharedPoint}。`
+    ],
+    modernRole: `如果生活在今天，你可能是${modernRoles[archetype]}。你不一定最抢眼，但往往能把事情真正往前推。`,
+    hiddenStrength: `你的隐藏优点是：${copy.strengths[2]}。这不是超能力，而是你在多道题里反复选择出来的做事习惯。`,
+    stressResponse: lowNeedTips[lowDimension],
+    resultCaution: copy.caution,
+    survivalLesson: `${nameCn}提醒我们：一种办法能成功，是因为身体、食物和环境刚好配合。环境一变，原来的好办法也可能失效。`,
+    ecosystemJob: `用一句话概括它的真实生存方式：${scienceBasis}`,
+    comparisonNotes: { shared: `你和它都比较像“${copy.title}”这一路线。`, difference: `另一个结果会在“${strengthTwo}”上表现得更明显。` },
+    resultStrengths: copy.strengths.slice()
   }
 })
 

@@ -31,6 +31,7 @@ Component({
     placeholderTheme: { type: String, value: 'ocean' },
     lazyLoad: { type: Boolean, value: true },
     previewable: { type: Boolean, value: false },
+    showCaption: { type: Boolean, value: false },
     showMeta: { type: Boolean, value: false },
     showSource: { type: Boolean, value: false },
     showReconstructionBadge: { type: Boolean, value: true },

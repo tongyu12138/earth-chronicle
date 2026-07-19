@@ -39,10 +39,10 @@ function c(id, nameCn, scientificName, periodIds, group, habitat, diet, size, re
     size,
     weight: '尚无法准确确定，复原值会随样本与模型变化',
     region,
-    discovery: '目前认识来自化石、地层比较与系统发育研究；具体分类和复原会随新材料修订。',
+    discovery: `${nameCn}的基础认识来自${region}的代表材料、${periodRanges[periodIds[0]] || '相关时代'}地层对比与系统发育研究；缺失软组织和行为细节仍会随新材料修订。`,
     survivalStrategy: strategy,
     funIntro: intro,
-    modernAnalogy: intro,
+    modernAnalogy: `如果把${nameCn}的生态策略借到现代，它更像一位懂得“${strategy}”的行动者；这只是科普类比，不是对古生物性格的测量。`,
     mediaId: `creature-${id}`,
     image: '',
     gallery: [],
@@ -216,7 +216,7 @@ const sourcedCreatureOverrides = {
     discovery: '米瓜沙的丰富标本展示了 Eusthenopteron foordi 的头骨、成对肉质鳍和捕食性齿列，也说明它是古河口中的完全水生鱼类。',
     sourceNeeded: false,
     sourceUrls: [
-      'https://www.miguasha.ca/mig-en/of_predators_and_prey.php',
+      'https://whc.unesco.org/en/list/686',
       'https://digimorph.geo.utexas.edu/specimens/Eusthenopteron_foordi/'
     ]
   },
@@ -225,7 +225,7 @@ const sourcedCreatureOverrides = {
     sourceNeeded: false,
     sourceUrls: [
       'https://doi.org/10.1017/S0263593300006106',
-      'https://geoguide.scottishgeologytrust.org/page/2996.pdf'
+      'https://www.nms.ac.uk/collections/search/object?entry=283821&page=1&scientific-name=Pulmonoscorpius+kirktonensis&view=cards'
     ]
   },
   eogyrinus: {
@@ -281,7 +281,7 @@ const sourcedCreatureOverrides = {
     sourceNeeded: false,
     sourceUrls: [
       'https://www.miketaylor.org.uk/dino/pubs/taylor2009/Taylor2009-brachiosaurus-and-giraffatitan.pdf',
-      'https://www.nps.gov/dino/learn/nature/brachiosaurus.htm'
+      'https://www.nhm.ac.uk/discover/dino-directory/brachiosaurus.html'
     ]
   }
 }

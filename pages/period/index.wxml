@@ -71,12 +71,12 @@
     <view class="content-section gallery-section">
       <text class="section-kicker-global">VISUAL ARCHIVE</text>
       <text class="section-heading-global">图片画廊</text>
-      <text class="gallery-note">当前没有确认授权的图片时，保留完整画幅与替代文本；接入图片后可点击预览。</text>
+      <text class="gallery-note">画廊使用项目自有 AI 艺术复原呈现环境、证据模型与古地理，用于辅助理解，不替代历史照片、化石标本或直接观测。</text>
       <scroll-view class="gallery-scroll" scroll-x="true" enhanced="true" show-scrollbar="false">
         <view class="gallery-inner">
           <view class="gallery-card placeholder-visual" wx:for="{{period.gallery}}" wx:key="id" style="background:linear-gradient(145deg, {{period.color}}88, #102831)">
-            <media-image media-id="{{item.mediaId}}" variant="full" ratio="4:3" alt="{{item.alt}}" placeholder-theme="rock" previewable="true" show-source="true" />
-            <view class="gallery-label"><text>{{item.kind}}</text><text>{{item.status === 'missing' ? '授权图待补' : '可查看大图'}}</text></view>
+            <media-image media-id="{{item.mediaId}}" variant="full" ratio="4:3" alt="{{item.alt}}" placeholder-theme="rock" previewable="true" show-source="{{true}}" />
+            <view class="gallery-label"><text>{{item.kind}}</text><text>AI 艺术复原 · 可查看大图</text></view>
           </view>
         </view>
       </scroll-view>

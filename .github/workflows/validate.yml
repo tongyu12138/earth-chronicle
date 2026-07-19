@@ -29,7 +29,11 @@ jobs:
       - name: Check generated lightweight summaries
         run: node scripts/generate-summaries.js --check
       - name: Validate quiz profiles and distribution
-        run: node scripts/validate-quiz.js
+        run: node scripts/validate-quiz.js --large
+      - name: Validate deep creature knowledge
+        run: node scripts/validate-creature-content.js
+      - name: Validate identity and knowledge quiz content
+        run: node scripts/validate-quiz-content.js
       - name: Audit routes and page handlers
         run: node scripts/audit-routes.js
       - name: Check mini program package estimate
@@ -39,3 +43,6 @@ jobs:
       - name: Validate release media gate
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.release }}
         run: node scripts/validate-media.js --release
+      - name: Verify deployed release media URLs
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.release }}
+        run: node scripts/verify-deployed-media.js

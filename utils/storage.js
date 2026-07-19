@@ -3,7 +3,8 @@ const KEYS = {
   favorites: 'earthChronicle.favorites',
   quizProgress: 'earthChronicle.quizProgress',
   quizResult: 'earthChronicle.quizResult',
-  quizReset: 'earthChronicle.quizReset'
+  quizReset: 'earthChronicle.quizReset',
+  knowledgeBest: 'earthChronicle.knowledgeBest'
 }
 
 function safeGet(key, fallback) {
@@ -100,8 +101,18 @@ function consumeQuizReset() {
   return requested
 }
 
+function getKnowledgeBest() {
+  return Number(safeGet(KEYS.knowledgeBest, 0)) || 0
+}
+
+function saveKnowledgeBest(score) {
+  const next = Math.max(getKnowledgeBest(), Number(score) || 0)
+  safeSet(KEYS.knowledgeBest, next)
+  return next
+}
+
 module.exports = {
   KEYS, safeGet, safeSet, recordView, getRecent, getFavorites, isFavorite, toggleFavorite,
   getQuizProgress, saveQuizProgress, clearQuizProgress, saveQuizResult, getQuizResult,
-  requestQuizReset, consumeQuizReset
+  requestQuizReset, consumeQuizReset, getKnowledgeBest, saveKnowledgeBest
 }

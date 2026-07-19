@@ -1,0 +1,28 @@
+<page-meta page-style="background:#071319" />
+<view class="knowledge-page safe-bottom">
+  <view wx:if="{{state === 'welcome'}}" class="knowledge-welcome">
+    <view class="knowledge-icon">?</view>
+    <text class="section-kicker-global">DEEP TIME CHALLENGE</text><text class="knowledge-title">远古知识挑战</text>
+    <text class="knowledge-intro">每次从 60 道题中随机抽取 5 题，覆盖前寒武纪、古生代、中生代、新生代和人类演化。遇到专业词可以打开“名词小抄”，答完立即看到解释与来源，不需要登录。</text>
+    <view class="knowledge-stats"><view><text>60</text><text>来源题库</text></view><view><text>5</text><text>每轮题数</text></view><view><text>{{bestScore}}/5</text><text>最佳成绩</text></view></view>
+    <button class="primary-button" bindtap="start">开始随机挑战</button><button class="back-link" bindtap="backToQuiz">返回身份测试</button>
+  </view>
+
+  <view wx:elif="{{state === 'question'}}" class="knowledge-question-page">
+    <view class="knowledge-head"><text>{{currentIndex + 1}} / {{total}}</text><text>本轮得分 {{score}}</text></view><view class="knowledge-track"><view style="width:{{progressPercent}}%"></view></view>
+    <view class="category-line"><text>{{current.category}}</text><text>{{current.difficulty === 'easy' ? '入门' : current.difficulty === 'medium' ? '进阶' : '挑战'}}</text></view>
+    <button wx:if="{{current.termHelp}}" class="term-help-toggle" bindtap="toggleTermHelp">{{showTermHelp ? '收起名词小抄' : '有陌生词？打开名词小抄（不扣分）'}}</button>
+    <view wx:if="{{current.termHelp && showTermHelp}}" class="term-help-card"><text>名词小抄</text><text>{{current.termHelp}}</text></view>
+    <text class="knowledge-question-title">{{current.question}}</text>
+    <view class="knowledge-options"><button wx:for="{{current.options}}" wx:key="optionIndex" class="{{item.stateClass}}" data-index="{{item.optionIndex}}" bindtap="choose"><text>{{index === 0 ? 'A' : index === 1 ? 'B' : index === 2 ? 'C' : 'D'}}</text><text>{{item.text}}</text></button></view>
+    <view wx:if="{{answered}}" class="answer-explanation"><text>{{isCorrect ? '回答正确' : '这次没有选中正确答案'}}</text><text>{{current.explanation}}</text><view class="answer-sources"><button wx:for="{{current.sources}}" wx:key="id" bindtap="copySource" data-url="{{item.url}}"><text>来源：{{item.organization}}</text><text>复制链接</text></button></view></view>
+    <button wx:if="{{answered}}" class="primary-button next-button" bindtap="next">{{currentIndex + 1 === total ? '查看本轮结果' : '下一题'}}</button>
+  </view>
+
+  <view wx:else class="knowledge-result">
+    <text class="result-small">本轮身份</text><text class="result-name">{{resultLabel}}</text><text class="result-score">{{score}} / 5</text>
+    <text class="result-copy">你已经读完五段带来源的深时间解释。知识挑战不只记录对错：下一轮会重新从五个章节各抽一题。</text>
+    <view class="best-card"><text>历史最佳</text><text>{{bestScore}} / 5</text></view>
+    <button class="primary-button" bindtap="start">再随机一轮</button><button class="share-button" open-type="share">分享成绩</button><button class="back-link" bindtap="backToQuiz">返回身份测试</button>
+  </view>
+</view>

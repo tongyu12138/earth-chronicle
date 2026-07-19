@@ -15,7 +15,7 @@
 
   <view class="detail-body">
     <view class="event-media-block">
-      <media-image media-id="{{event.mediaId}}" variant="hero" ratio="16:9" alt="{{event.imageAlt}}" placeholder-theme="rock" lazy-load="false" previewable="true" show-meta="true" show-source="true" />
+      <media-image media-id="{{event.mediaId}}" variant="hero" ratio="16:9" alt="{{event.imageAlt}}" placeholder-theme="rock" lazy-load="false" previewable="true" show-meta="{{true}}" show-source="{{true}}" />
       <text class="event-media-caption">事件头图与科学证据图片分别核验来源；缺图时显示主题降级画面。</text>
     </view>
     <view class="fact-strip">

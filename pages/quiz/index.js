@@ -1,8 +1,9 @@
 const { quizMeta, questions } = require('../../data/quiz')
 const { quizProfiles } = require('../../data/quiz-profiles')
+const { getPeriodById } = require('../../data/periods')
 const { buildResult } = require('../../utils/quiz-engine')
 const { getQuizProgress, saveQuizProgress, clearQuizProgress, saveQuizResult, consumeQuizReset } = require('../../utils/storage')
-const { redirectToPage, switchTabPage } = require('../../utils/router')
+const { navigateToPage, redirectToPage, switchTabPage } = require('../../utils/router')
 
 function validPartial(progress) {
   return progress && Array.isArray(progress.answers) && Number.isInteger(progress.currentIndex) &&
@@ -19,10 +20,19 @@ Page({
     resumeText: '',
     currentIndex: 0,
     currentQuestion: null,
+    currentPeriod: null,
     questionNumber: 1,
     progressPercent: 0,
     answers: [],
-    selectedIndex: -1
+    selectedIndex: -1,
+    reduceMotion: false,
+    showFact: false,
+    answerInsight: '',
+    afterAnswerFact: '',
+    showScienceDetail: false,
+    chapterTitle: '',
+    chapterPeriod: null,
+    chapterMediaId: ''
   },
 
   onLoad() {
@@ -33,7 +43,7 @@ Page({
     if (consumeQuizReset()) {
       clearQuizProgress()
       this._savedProgress = null
-      this.setData({ state: 'welcome', canResume: false, resumeText: '', currentIndex: 0, currentQuestion: null, questionNumber: 1, progressPercent: 0, answers: [], selectedIndex: -1 })
+      this.setData({ state: 'welcome', canResume: false, resumeText: '', currentIndex: 0, currentQuestion: null, questionNumber: 1, progressPercent: 0, answers: [], selectedIndex: -1, showFact: false })
       return
     }
     if (this.data.state === 'welcome') this.refreshResume()
@@ -48,7 +58,7 @@ Page({
 
   startNew() {
     clearQuizProgress()
-    this.enterQuestion(0, [])
+    this.enterChapter(0, [])
   },
 
   resumeQuiz() {
@@ -62,11 +72,47 @@ Page({
       state: 'question',
       currentIndex: index,
       currentQuestion: questions[index],
+      currentPeriod: getPeriodById(questions[index].periodId),
       questionNumber: index + 1,
       progressPercent: Math.round((index + 1) / questions.length * 100),
       answers,
-      selectedIndex: answers[index] === undefined ? -1 : answers[index]
+      selectedIndex: answers[index] === undefined ? -1 : answers[index],
+      showFact: false,
+      showScienceDetail: false,
+      answerInsight: '',
+      afterAnswerFact: ''
     })
+  },
+
+  enterChapter(index, answers) {
+    if (index < 0 || index >= questions.length) return
+    const question = questions[index]
+    this.setData({
+      state: 'chapter',
+      currentIndex: index,
+      answers,
+      chapterTitle: question.chapter,
+      chapterPeriod: getPeriodById(question.periodId),
+      chapterMediaId: question.sceneMediaId,
+      progressPercent: Math.round(index / questions.length * 100)
+    })
+    clearTimeout(this._timer)
+    this._timer = setTimeout(() => {
+      this._timer = null
+      this.enterQuestion(index, answers)
+    }, this.data.reduceMotion ? 280 : 1150)
+  },
+
+  toggleMotion() {
+    this.setData({ reduceMotion: !this.data.reduceMotion })
+  },
+
+  toggleScienceDetail() {
+    this.setData({ showScienceDetail: !this.data.showScienceDetail })
+  },
+
+  openKnowledgeChallenge() {
+    navigateToPage('/pages/knowledge-quiz/index', { toastTitle: '暂时无法打开知识挑战' })
   },
 
   chooseOption(event) {
@@ -75,14 +121,19 @@ Page({
     if (!Number.isInteger(optionIndex) || optionIndex < 0 || optionIndex > 3) return
     const answers = this.data.answers.slice()
     answers[this.data.currentIndex] = optionIndex
-    this.setData({ selectedIndex: optionIndex, answers })
+    const selected = this.data.currentQuestion.options[optionIndex]
+    this.setData({ selectedIndex: optionIndex, answers, showFact: true, answerInsight: selected.insight, afterAnswerFact: this.data.currentQuestion.afterAnswerFact })
+    saveQuizProgress({ answers, currentIndex: this.data.currentIndex })
+  },
+
+  continueAfterAnswer() {
+    if (!this.data.showFact || this.data.selectedIndex < 0) return
+    const answers = this.data.answers.slice()
     const nextIndex = this.data.currentIndex + 1
     saveQuizProgress({ answers, currentIndex: Math.min(nextIndex, questions.length - 1) })
-    this._timer = setTimeout(() => {
-      this._timer = null
-      if (nextIndex < questions.length) this.enterQuestion(nextIndex, answers)
-      else this.finishQuiz(answers)
-    }, 240)
+    if (nextIndex < questions.length && nextIndex % 5 === 0) this.enterChapter(nextIndex, answers)
+    else if (nextIndex < questions.length) this.enterQuestion(nextIndex, answers)
+    else this.finishQuiz(answers)
   },
 
   previousQuestion() {
