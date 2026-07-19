@@ -1,7 +1,7 @@
 const { quizMeta, questions } = require('../../data/quiz')
 const { quizProfiles } = require('../../data/quiz-profiles')
 const { buildResult } = require('../../utils/quiz-engine')
-const { getQuizProgress, saveQuizProgress, clearQuizProgress, saveQuizResult } = require('../../utils/storage')
+const { getQuizProgress, saveQuizProgress, clearQuizProgress, saveQuizResult, consumeQuizReset } = require('../../utils/storage')
 const { redirectToPage, switchTabPage } = require('../../utils/router')
 
 function validPartial(progress) {
@@ -30,6 +30,12 @@ Page({
   },
 
   onShow() {
+    if (consumeQuizReset()) {
+      clearQuizProgress()
+      this._savedProgress = null
+      this.setData({ state: 'welcome', canResume: false, resumeText: '', currentIndex: 0, currentQuestion: null, questionNumber: 1, progressPercent: 0, answers: [], selectedIndex: -1 })
+      return
+    }
     if (this.data.state === 'welcome') this.refreshResume()
   },
 
@@ -57,7 +63,7 @@ Page({
       currentIndex: index,
       currentQuestion: questions[index],
       questionNumber: index + 1,
-      progressPercent: Math.round(index / questions.length * 100),
+      progressPercent: Math.round((index + 1) / questions.length * 100),
       answers,
       selectedIndex: answers[index] === undefined ? -1 : answers[index]
     })

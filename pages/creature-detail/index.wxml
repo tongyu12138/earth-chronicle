@@ -1,8 +1,8 @@
 <page-meta page-style="background:#071319" />
 <view wx:if="{{creature}}" class="museum-page creature-page safe-bottom">
   <view class="creature-hero placeholder-visual">
-    <view class="creature-hero-media"><media-image media-id="{{creature.mediaId}}" ratio="4:3" alt="{{creature.imageAlt}}" placeholder-theme="rock" lazy-load="false" /></view>
-    <text class="hero-initial">{{creature.initial}}</text>
+    <view class="creature-hero-media"><media-image media-id="{{creature.mediaId}}" variant="hero" ratio="4:3" alt="{{creature.imageAlt}}" placeholder-theme="rock" lazy-load="false" previewable="true" bindready="handleHeroReady" /></view>
+    <text wx:if="{{!heroMediaReady}}" class="hero-initial">{{creature.initial}}</text>
     <view class="hero-gradient"></view>
     <view class="creature-hero-content">
       <view class="hero-actions"><text>{{creature.livedWhen}}</text><button class="{{isFavorite ? 'active' : ''}}" bindtap="toggleFavorite">{{isFavorite ? '★ 已收藏' : '☆ 收藏'}}</button></view>
@@ -31,7 +31,7 @@
     </view>
     <view wx:else class="source-status"><text>图鉴条目，不参与测试</text><text>为避免给所有物种强行套用性格，本条保留在图鉴中，但没有正式测试画像。</text></view>
 
-    <view class="detail-section"><text class="section-kicker-global">VISUAL ARCHIVE</text><text class="section-heading-global">图像与化石</text><view class="creature-gallery"><view class="gallery-item placeholder-visual" wx:for="{{gallery}}" wx:key="id"><media-image media-id="{{item.mediaId}}" src="{{item.src}}" ratio="4:3" alt="{{item.kind}}图片待补" placeholder-theme="rock" previewable="true" /><text>{{item.kind}}</text><text>{{item.status === 'missing' || item.status === 'needed' ? '授权图待补' : '可查看大图'}}</text></view></view></view>
+    <view wx:if="{{gallery.length}}" class="detail-section"><text class="section-kicker-global">VISUAL ARCHIVE</text><text class="section-heading-global">图像与化石</text><view class="creature-gallery"><view class="gallery-item placeholder-visual" wx:for="{{gallery}}" wx:key="id"><media-image media-id="{{item.mediaId}}" src="{{item.src}}" variant="full" ratio="4:3" alt="{{item.kind}}" placeholder-theme="rock" previewable="true" show-source="true" /><text>{{item.kind}}</text><text>可查看大图</text></view></view></view>
 
     <view class="source-status" wx:if="{{creature.sourceNeeded}}"><text>来源待核</text><text>本条已明确标记 sourceNeeded，没有生成看似真实但未经确认的链接。发布前应由古生物专业人员核对分类、年代与尺寸，并补入真实来源。</text></view>
     <view class="source-card" wx:for="{{creature.sourceUrls}}" wx:key="*this" bindtap="copySource" data-url="{{item}}"><text>{{item}}</text><text>复制</text></view>

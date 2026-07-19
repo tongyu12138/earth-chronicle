@@ -2,7 +2,8 @@ const KEYS = {
   recent: 'earthChronicle.recent',
   favorites: 'earthChronicle.favorites',
   quizProgress: 'earthChronicle.quizProgress',
-  quizResult: 'earthChronicle.quizResult'
+  quizResult: 'earthChronicle.quizResult',
+  quizReset: 'earthChronicle.quizReset'
 }
 
 function safeGet(key, fallback) {
@@ -83,7 +84,24 @@ function getQuizResult() {
   return safeGet(KEYS.quizResult, null)
 }
 
+function requestQuizReset() {
+  try {
+    wx.removeStorageSync(KEYS.quizProgress)
+    wx.removeStorageSync(KEYS.quizResult)
+  } catch (error) {}
+  return safeSet(KEYS.quizReset, true)
+}
+
+function consumeQuizReset() {
+  const requested = Boolean(safeGet(KEYS.quizReset, false))
+  if (requested) {
+    try { wx.removeStorageSync(KEYS.quizReset) } catch (error) {}
+  }
+  return requested
+}
+
 module.exports = {
   KEYS, safeGet, safeSet, recordView, getRecent, getFavorites, isFavorite, toggleFavorite,
-  getQuizProgress, saveQuizProgress, clearQuizProgress, saveQuizResult, getQuizResult
+  getQuizProgress, saveQuizProgress, clearQuizProgress, saveQuizResult, getQuizResult,
+  requestQuizReset, consumeQuizReset
 }

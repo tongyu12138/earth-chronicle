@@ -3,6 +3,13 @@ name: Validate mini program
 on:
   push:
   pull_request:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: "Run strict P0 media release gate"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -19,9 +26,16 @@ jobs:
           node-version: 20
       - name: Validate scientific data
         run: node scripts/validate-data.js
+      - name: Check generated lightweight summaries
+        run: node scripts/generate-summaries.js --check
       - name: Validate quiz profiles and distribution
         run: node scripts/validate-quiz.js
       - name: Audit routes and page handlers
         run: node scripts/audit-routes.js
+      - name: Check mini program package estimate
+        run: node scripts/report-package-size.js --check
       - name: Validate media rights metadata
         run: node scripts/validate-media.js
+      - name: Validate release media gate
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.release }}
+        run: node scripts/validate-media.js --release

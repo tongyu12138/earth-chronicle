@@ -24,7 +24,12 @@ function validateData(data) {
     period.creatureIds.forEach((id) => { if (!creatureIds.has(id)) problems.push(`period ${period.id} references missing creature ${id}`) })
     if (period.id !== 'hadean' && periods.indexOf(period) < 19) {
       const count = creatures.filter((creature) => creature.periodIds.includes(period.id)).length
-      if (count < 6) problems.push(`geologic period ${period.id} has only ${count} creatures`)
+      // The Silurian currently has three species-level records after removing
+      // Cephalaspis lyelli and the former Brontoscorpio anglicus, both now
+      // securely placed in the Early Devonian. Do not preserve a scientifically
+      // wrong date merely to satisfy a uniform catalogue-size heuristic.
+      const minimumCount = period.id === 'silurian' ? 3 : 6
+      if (count < minimumCount) problems.push(`geologic period ${period.id} has only ${count} creatures`)
     }
   })
   events.forEach((event) => {

@@ -45,7 +45,6 @@ function c(id, nameCn, scientificName, periodIds, group, habitat, diet, size, re
     modernAnalogy: intro,
     mediaId: `creature-${id}`,
     image: '',
-    thumbnail: '',
     gallery: [],
     imageAlt: `${nameCn}艺术复原图占位`,
     imageCredit: '',
@@ -94,22 +93,22 @@ const creatures = [
   c('arandaspis', '阿兰达甲鱼', 'Arandaspis prionotolepis', ['ordovician'], '无颌鱼类', '浅海', '微小有机物', '约15厘米', '澳大利亚', '流线身体与头甲配合避险', '没有下颌就不硬碰硬，你选择在浅海稳定运营。像装备有限却懂得路线规划的早期鱼类玩家。', ['鱼类', '浅海', '防御']),
   c('cameroceras', '房角石', 'Cameroceras trentonense', ['ordovician'], '头足类', '海洋', '捕食', '体长估算差异较大', '北美', '控制壳内气室浮力并伏击猎物', '你自带一根长直外壳，像潜水员背着一座信号塔。体型复原常被夸张，所以真正的强项是“保持科学估计的弹性”。', ['头足类', '海洋', '伏击']),
   c('eurypterus', '海蝎', 'Eurypterus remipes', ['silurian'], '板足鲎类', '浅海与河口', '小型动物', '约20—30厘米', '北美、欧洲', '桨状附肢游动，前肢捕捉', '你不是蝎子去学游泳，而是一支独立的水生节肢动物。像拿到“海蝎”艺名后一直被观众误认专业。', ['节肢动物', '水生', '捕食']),
-  c('pterygotus', '翼肢鲎', 'Pterygotus anglicus', ['silurian'], '板足鲎类', '浅海', '捕食鱼类与节肢动物', '部分种可超过1米', '欧洲、北美', '强壮螯肢抓取，快速游动', '你是海蝎家族里偏大型的行动派，像把开罐器装在手臂前端。看到机会就出手，不靠恐龙头衔撑场面。', ['节肢动物', '水生', '大型']),
+  c('pterygotus', '翼肢鲎', 'Pterygotus anglicus', ['devonian'], '板足鲎类', '浅海与河口', '捕食鱼类与节肢动物', '部分种可超过1米', '欧洲、北美', '强壮螯肢抓取，快速游动', '你是海蝎家族里偏大型的行动派，像把开罐器装在手臂前端。看到机会就出手，不靠恐龙头衔撑场面。', ['节肢动物', '水生', '大型']),
   c('cooksonia', '库克逊蕨', 'Cooksonia pertoni', ['silurian'], '早期维管植物', '潮湿陆地', '光合作用', '通常仅几厘米高', '欧洲等', '矮小枝轴和孢子囊适应陆地繁殖', '你只有几厘米高，却参与了“把陆地从石头背景变成生态舞台”的长期工程。远古创业不一定要先做大。', ['植物', '陆地', '小型']),
   c('birkenia', '比尔肯鱼', 'Birkenia elegans', ['silurian'], '无颌鱼类', '浅海与淡水', '小型颗粒', '约10厘米', '欧洲', '小型灵活游动并以鳞片保护身体', '你没有巨口和盔甲堡垒，路线是保持轻巧、别被看见。像把通知全关掉、专心穿过危险水域的低调用户。', ['鱼类', '小型', '灵活']),
-  c('cephalaspis', '头甲鱼', 'Cephalaspis lyelli', ['silurian', 'devonian'], '无颌鱼类', '淡水与浅水', '底部有机物', '约20—30厘米', '欧洲', '宽大头甲防御并感知水流', '头顶像自带一面盾牌，吃饭时却主要贴着底部慢慢搜索。你属于装备看起来进攻，实际很务实的类型。', ['鱼类', '装甲', '底栖']),
-  c('brontoscorpio', '雷蝎', 'Brontoscorpio anglicus', ['silurian'], '蛛形类', '近岸水域或湿润陆地', '小型动物', '可能接近1米，估算不确定', '英国', '大型螯肢与尾部结构用于捕食防御', '名字听起来像怪兽电影主角，真实生活环境却仍有争议。你提醒大家：一块不完整化石不该被包装成全套纪录片。', ['蛛形类', '争议复原', '捕食']),
+  c('cephalaspis', '头甲鱼', 'Cephalaspis lyelli', ['devonian'], '无颌鱼类', '河流与淡水浅水', '底部有机物', '约20—30厘米', '欧洲', '宽大头甲防御，感觉区帮助感知水流', '头顶像自带一面盾牌，吃饭时却主要贴着底部慢慢搜索。这个具体物种来自早泥盆世，不应因其近亲更早出现就放进志留纪。', ['鱼类', '装甲', '底栖']),
+  c('brontoscorpio', '古北蝎（曾称雷蝎）', 'Praearcturus gigas', ['devonian'], '早期蝎类', '河道与泛滥平，可能具水生或两栖习性', '小型动物', '明显大于现生蝎，体长估算仍有不确定性', '英国', '大型螯肢用于捕食，可能在水陆交界活动', '2026年的重新研究认为，“雷蝎”并非独立物种，而是古北蝎的同物异名。它来自早泥盆世河流环境，完整外形与生活方式仍须谨慎复原。', ['蛛形类', '分类修订', '争议复原', '捕食']),
   c('dunkleosteus', '邓氏鱼', 'Dunkleosteus terrelli', ['devonian'], '盾皮鱼', '海洋', '捕食', '体长估算仍在修订', '北美、欧洲', '颌部骨板形成强力切咬结构', '你没有普通牙齿，却把骨板磨成高效剪切器。像不用可替换刀片的重型开罐机，尺寸还在接受科学界重新测量。', ['鱼类', '海洋', '捕食']),
   c('tiktaalik', '提塔利克鱼', 'Tiktaalik roseae', ['devonian'], '四足形类', '浅水河道与洪泛平原', '鱼类和小型动物', '约1—3米', '加拿大北极地区', '鳍内骨骼支撑、颈部活动，适应浅水', '你像一台能在浅水里撑起前半身的两栖越野原型。不是“第一条决定上岸的鱼”，而是过渡特征的漂亮组合。', ['四足形类', '浅水', '过渡特征']),
   c('bothriolepis', '沟鳞鱼', 'Bothriolepis canadensis', ['devonian'], '盾皮鱼', '淡水与河口', '底部有机物', '多为几十厘米', '全球多地', '厚重头胸甲和底栖生活', '你像穿着硬壳马甲在河底稳定巡检。速度不是绩效指标，活得分布广才是。', ['鱼类', '装甲', '底栖']),
   c('cladoselache', '裂口鲨', 'Cladoselache fyleri', ['devonian'], '早期鲨类', '海洋', '鱼类与头足类', '约1—2米', '北美', '流线身体高速追击', '你采用“少装饰、重流线”的早期鲨类方案。没有巨齿鲨的营销声量，但游泳效率已经很现代。', ['鲨类', '海洋', '速度']),
   c('ichthyostega', '鱼石螈', 'Ichthyostega stensioei', ['devonian'], '早期四足动物', '浅水与岸边', '鱼类和小型动物', '约1.5米', '格陵兰', '强壮四肢配合尾部，在水陆边界活动', '你不是穿着鱼鳍上岸散步的现代两栖类，而是一套独特的早期四足动物方案。能离水活动，不代表适合长途徒步。', ['四足动物', '水陆边界', '适应']),
-  c('eusthenopteron', '真掌鳍鱼', 'Eusthenopteron foordi', ['devonian'], '肉鳍鱼类', '淡水', '捕食', '约1—2米', '加拿大', '肉质鳍内骨骼提供精细推进', '你的鳍里藏着与四足动物肢骨可比较的结构，但你依然是一条适应水中生活的鱼，不是排队等着变成人的中间站。', ['肉鳍鱼', '淡水', '捕食']),
+  c('eusthenopteron', '真掌鳍鱼', 'Eusthenopteron foordi', ['devonian'], '肉鳍鱼类', '河口与近岸半咸水', '捕食', '约1—2米', '加拿大', '流线身体与强壮肉质鳍配合游泳捕食', '你的鳍里藏着与四足动物肢骨可比较的结构，但你依然是一条适应河口水体的捕食性鱼类，不是排队等着变成人的中间站。', ['肉鳍鱼', '河口', '捕食']),
   c('arthropleura', '节胸蜈蚣', 'Arthropleura armata', ['carboniferous'], '多足类', '湿润森林地面', '可能以植物碎屑为主', '可超过2米', '欧洲、北美', '大型体型、硬质外骨骼和森林隐蔽', '你像一列贴地行驶的多节装甲列车。名字里虽有“蜈蚣”，但亲缘和食性都不能用现代蜈蚣简单套用。', ['节肢动物', '巨型', '森林']),
   c('meganeura', '巨脉蜻蜓', 'Meganeura monyi', ['carboniferous'], '巨脉蜓类', '森林与水域上空', '飞行昆虫', '翼展约60厘米以上', '欧洲', '快速飞行捕食', '你像把蜻蜓界的显示比例调到巨型。高氧可能帮忙，但飞行生态、捕食压力和身体结构也一起参与。', ['昆虫', '飞行', '捕食']),
   c('hylonomus', '林蜥', 'Hylonomus lyelli', ['carboniferous'], '早期羊膜动物', '森林地面与树洞', '小型无脊椎动物', '约20厘米', '加拿大', '羊膜卵减少对开放水体繁殖的依赖', '你体型像一只低调小蜥蜴，却带着影响深远的繁殖方案。真正的大升级往往不是外观，而是生命周期。', ['羊膜动物', '陆地', '小型']),
-  c('pulmonoscorpius', '肺蝎', 'Pulmonoscorpius kirktonensis', ['carboniferous'], '蛛形类', '湿润陆地', '小型动物', '可达约70厘米', '苏格兰', '螯肢与毒针防御捕食', '你像把现代蝎子做成加长版，但复原仍需谨慎。体型已经够让露营者重新考虑是否睡地面。', ['蛛形类', '大型', '捕食']),
-  c('eogyrinus', '始螈', 'Eogyrinus attheyi', ['carboniferous'], '离片椎类四足动物', '河流与沼泽', '鱼类与小型四足动物', '可达数米', '英国', '长身体和强尾适于水中伏击', '你看起来像鳄鱼、鳗鱼和两栖动物的混合印象，但不属于现代任何一个简单抽屉。最擅长在沼泽里等机会自己游过来。', ['四足动物', '水生', '伏击']),
+  c('pulmonoscorpius', '肺蝎', 'Pulmonoscorpius kirktonensis', ['carboniferous'], '蛛形类', '湿润陆地与湖岸', '小型动物', '完整标本多为13—28厘米；最大碎片推测可约70厘米', '苏格兰', '书肺支持陆生呼吸，螯肢与尾刺用于捕食防御', '你的化石保存了书肺线索，是早期完全陆生蝎类的重要证据。“70厘米”来自大型碎片外推，不代表每只肺蝎都有这么大。', ['蛛形类', '陆生', '书肺', '捕食']),
+  c('eogyrinus', '始螈（现归入弗利德螈属）', 'Pholiderpeton attheyi', ['carboniferous'], '并椎类四足动物', '河流与沼泽', '鱼类与小型四足动物', '可达数米', '英国', '细长身体和强壮尾部适于水中伏击', '你曾长期以 Eogyrinus attheyi 的名字出现，现在通常归入 Pholiderpeton。分类可以更新，但细长水生身体和伏击生活方式的核心图景没有变。', ['四足动物', '水生', '分类修订', '伏击']),
   c('megalichthys', '巨鳞鱼', 'Megalichthys hibberti', ['carboniferous'], '肉鳍鱼类', '淡水', '捕食', '约1米以上', '欧洲', '强壮身体在浑浊水域捕食', '你没有巨型陆生动物的流量，却在石炭纪水道里保持可靠输出。像一位不参加热搜、只管把生态位做稳的老员工。', ['鱼类', '淡水', '捕食']),
   c('edaphosaurus', '基龙', 'Edaphosaurus pogonias', ['permian'], '合弓动物', '干旱与半干旱陆地', '植食', '约2—3米', '北美、欧洲', '高纤维植物食性与背帆体温调节候选功能', '你背着一面帆，牙齿却更关心植物。和异齿龙外形相似不等于吃同一份菜单。', ['合弓动物', '植食', '背帆']),
   c('dimetrodon', '异齿龙', 'Dimetrodon grandis', ['permian'], '合弓动物', '陆地与水边', '捕食', '约3米', '北美', '异型牙齿分工和伏击捕食', '你常被玩具盒误塞进恐龙专区，其实与哺乳动物的亲缘比与恐龙更近。背帆很抢镜，分类更值得记住。', ['合弓动物', '捕食', '非恐龙']),
@@ -120,7 +119,7 @@ const creatures = [
   c('coelophysis', '腔骨龙', 'Coelophysis bauri', ['triassic'], '兽脚类恐龙', '干旱河谷陆地', '肉食', '约3米', '北美', '轻巧体型与快速奔跑', '你是恐龙早期阶段的轻量跑者，不需要霸王龙级别的体重，也能靠速度和灵活性把工作完成。', ['恐龙', '速度', '捕食']),
   c('plateosaurus', '板龙', 'Plateosaurus engelhardti', ['triassic'], '蜥脚形类恐龙', '陆地', '植食', '约5—10米', '欧洲', '较大体型、长颈取食与可能群体活动', '你像蜥脚类巨人的早期创业版本：已经有长颈和大体型方向，但还保留比较灵活的两足或四足切换。', ['恐龙', '植食', '大型']),
   c('herrerasaurus', '埃雷拉龙', 'Herrerasaurus ischigualastensis', ['triassic'], '早期恐龙', '陆地', '肉食', '约4—6米', '阿根廷', '两足快速追击与抓握前肢', '你出现在恐龙家族刚开始多样化的阶段，像组织架构还没完全定型时就加入的早期核心员工。', ['恐龙', '捕食', '早期']),
-  c('postosuchus', '波斯特鳄', 'Postosuchus kirkpatricki', ['triassic'], '伪鳄类主龙', '陆地', '肉食', '约4—6米', '北美', '大型体型与强颌伏击', '你看上去很有“恐龙气质”，却属于鳄类一侧的主龙亲属。三叠纪提醒我们，生态主角不只一家公司。', ['伪鳄类', '捕食', '非恐龙']),
+  c('postosuchus', '波斯特鳄', 'Postosuchus kirkpatricki', ['triassic'], '伪鳄类主龙', '河谷与泛滥平原陆地', '肉食', '约4—6米', '北美', '大型体型、深头骨与强壮后肢；究竟常用二足还是四足行走仍有争议', '你看上去很有“恐龙气质”，却属于鳄类一侧的主龙亲属。前肢较短、后肢强壮，但仅凭现有骨骼还不能断言你平时一定用两足或四足行走。', ['伪鳄类', '捕食', '非恐龙', '姿态有争议']),
   c('nothosaurus', '幻龙', 'Nothosaurus mirabilis', ['triassic'], '海生爬行动物', '浅海', '鱼类', '约3—4米', '欧洲、亚洲', '桨状四肢游泳并在岸边休息', '你像把海豹式生活交给一只长颈爬行动物来执行。会游、吃鱼，但仍然不是“海洋恐龙”。', ['海生爬行动物', '浅海', '捕食']),
   c('shonisaurus', '秀尼鱼龙', 'Shonisaurus popularis', ['triassic'], '鱼龙', '远海', '头足类和鱼类', '可达约15米', '北美', '流线身体长距离游泳', '你是鱼龙家族的大型远洋巡航舰。外形像鱼是趋同演化的结果，不是因为你偷偷加入了鱼类群聊。', ['海生爬行动物', '巨型', '远海']),
   c('stegosaurus', '剑龙', 'Stegosaurus stenops', ['jurassic'], '鸟臀类恐龙', '陆地森林与平原', '植食', '约7米', '北美', '背板展示或调节候选功能，尾刺防御', '你通常不主动制造冲突，但背着整排骨板，尾巴还配四根长刺。和平不是没有装备，而是装备让别人愿意和平。', ['恐龙', '植食', '防御']),
@@ -180,6 +179,117 @@ const creatures = [
   c('carpolestes', '卡波尔猴', 'Carpolestes simpsoni', ['paleocene'], '近灵长类哺乳动物', '森林树上', '果实与昆虫', '约鼠类大小', '北美', '抓握枝条并在树冠中谨慎移动', '你还不是现代意义上的灵长类，却已经把抓握能力写进树栖简历。像在正式产品发布前，先把关键交互做成了可用原型。', ['哺乳动物', '树栖', '小型'])
 ]
 
+const sourcedCreatureOverrides = {
+  pterygotus: {
+    discovery: 'Pterygotus anglicus 的形态与年代来自早泥盆世标本的重新研究；复眼和螯肢可帮助推测其捕食方式。',
+    sourceNeeded: false,
+    sourceUrls: [
+      'https://onlinelibrary.wiley.com/doi/10.1111/j.1475-4983.2007.00683.x',
+      'https://pmc.ncbi.nlm.nih.gov/articles/PMC4571687/'
+    ]
+  },
+  cephalaspis: {
+    discovery: 'Cephalaspis lyelli 的正模与苏格兰老红砂岩层均指向早泥盆世；头盾的感觉区和小眼是复原关键。',
+    sourceNeeded: false,
+    sourceUrls: [
+      'https://palass.org/publications/palaeontology-journal/archive/1/2/article_pp99-105',
+      'https://webapps.bgs.ac.uk/Palaeosaurus/Record.cfm?sample_id=39982'
+    ]
+  },
+  brontoscorpio: {
+    discovery: 'Howard 等人2026年重新检查标本后，将 Brontoscorpio anglicus 解释为 Praearcturus gigas 的晚出同物异名，并把层位置于早泥盆世洛克科夫期。',
+    sourceNeeded: false,
+    sourceUrls: [
+      'https://onlinelibrary.wiley.com/doi/10.1111/pala.70064',
+      'https://research.manchester.ac.uk/en/publications/a-revision-of-praearcturus-gigas-a-giant-scorpion-from-the-lower-/'
+    ]
+  },
+  bothriolepis: {
+    discovery: 'Bothriolepis canadensis 的米瓜沙标本保存了头胸甲和关节式胸鳍；新材料支持其缺少腹鳍的判断。',
+    sourceNeeded: false,
+    sourceUrls: [
+      'https://pmc.ncbi.nlm.nih.gov/articles/PMC6030608/',
+      'https://www.si.edu/object/nmnhpaleobiology_3415661'
+    ]
+  },
+  eusthenopteron: {
+    discovery: '米瓜沙的丰富标本展示了 Eusthenopteron foordi 的头骨、成对肉质鳍和捕食性齿列，也说明它是古河口中的完全水生鱼类。',
+    sourceNeeded: false,
+    sourceUrls: [
+      'https://www.miguasha.ca/mig-en/of_predators_and_prey.php',
+      'https://digimorph.geo.utexas.edu/specimens/Eusthenopteron_foordi/'
+    ]
+  },
+  pulmonoscorpius: {
+    discovery: '东柯克顿采石场的关节标本和大量角质层碎片保存了肺蝎的身体细节；书肺证据支持它是完全陆生蝎类。',
+    sourceNeeded: false,
+    sourceUrls: [
+      'https://doi.org/10.1017/S0263593300006106',
+      'https://geoguide.scottishgeologytrust.org/page/2996.pdf'
+    ]
+  },
+  eogyrinus: {
+    discovery: 'Panchen 详细描述了轴骨骼与头骨；Clack 后来认为 Eogyrinus attheyi 与 Pholiderpeton 的差异不足以支持独立属。',
+    sourceNeeded: false,
+    sourceUrls: [
+      'https://royalsocietypublishing.org/doi/10.1098/rstb.1972.0002',
+      'https://royalsocietypublishing.org/doi/10.1098/rstb.1987.0082'
+    ]
+  },
+  megalichthys: {
+    discovery: 'Megalichthys hibberti 的头骨、鳞片和鳍骨来自英国石炭纪淡水与半咸水地层，完整外观是多件标本比较后的组合复原。',
+    sourceNeeded: false,
+    sourceUrls: [
+      'https://onlinelibrary.wiley.com/doi/10.1111/pala.12249',
+      'https://onlinelibrary.wiley.com/doi/10.1111/pala.12112'
+    ]
+  },
+  inostrancevia: {
+    discovery: '俄罗斯晚二叠世的较完整骨架保存了头骨、大型上犬齿与肢骨；毛发、嘴唇和皮肤外观仍缺少直接证据。',
+    sourceNeeded: false,
+    sourceUrls: [
+      'https://peerj.com/articles/15378/',
+      'https://museumsvictoria.com.au/melbournemuseum/resources/dinosaur-walk/'
+    ]
+  },
+  mesosaurus: {
+    discovery: '中龙的颅骨、细长齿列、较大的后足和侧扁长尾显示它擅长水中活动；它究竟完全水生还是也会上岸，仍存在讨论。',
+    sourceNeeded: false,
+    sourceUrls: [
+      'https://www.frontiersin.org/journals/ecology-and-evolution/articles/10.3389/fevo.2018.00109/full',
+      'https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1096-3642.2006.00205.x'
+    ]
+  },
+  postosuchus: {
+    discovery: '波斯特鳄的骨骼显示后肢肌肉发达、前肢较短；2026年的肌肉骨骼重建认为，现有证据仍不足以确定它主要采用二足还是四足、跖行还是趾行。',
+    sourceNeeded: false,
+    sourceUrls: [
+      'https://onlinelibrary.wiley.com/doi/10.1111/joa.70189',
+      'https://www.ldeo.columbia.edu/~polsen/nbcp/peyer_et_al_08.pdf'
+    ]
+  },
+  ichthyosaurus: {
+    discovery: '欧洲早侏罗世的完整骨架、幼体和软组织轮廓共同支持鱼龙的流线体形、鳍状肢、尾鳍与胎生复原；它是海生爬行动物而不是鱼或海豚。',
+    sourceNeeded: false,
+    sourceUrls: [
+      'https://www.nhm.ac.uk/discover/what-is-an-ichthyosaur.html',
+      'https://www.nhm.ac.uk/our-science/services/collections/palaeontology/marine-reptiles.html'
+    ]
+  },
+  brachiosaurus: {
+    discovery: 'Brachiosaurus altithorax 依据北美莫里逊组标本建立；它与非洲的 Giraffatitan 并非同一属，而且腕龙的头骨材料不足，因此头部外观比躯干比例更具推测性。',
+    sourceNeeded: false,
+    sourceUrls: [
+      'https://www.miketaylor.org.uk/dino/pubs/taylor2009/Taylor2009-brachiosaurus-and-giraffatitan.pdf',
+      'https://www.nps.gov/dino/learn/nature/brachiosaurus.htm'
+    ]
+  }
+}
+
+creatures.forEach((creature) => {
+  if (sourcedCreatureOverrides[creature.id]) Object.assign(creature, sourcedCreatureOverrides[creature.id])
+})
+
 function getCreatureById(id) {
   return creatures.find((creature) => creature.id === id)
 }
@@ -200,7 +310,6 @@ function getCreatureSummaries(list) {
     size: creature.size,
     funIntro: creature.funIntro,
     mediaId: creature.mediaId,
-    thumbnail: creature.thumbnail,
     imageAlt: creature.imageAlt,
     tags: creature.tags
   }))

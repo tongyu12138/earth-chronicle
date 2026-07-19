@@ -6,7 +6,7 @@
     <view class="earth-stage">
       <view class="earth-glow"></view>
       <view class="orbit-ring"></view>
-      <view class="earth-media"><media-image media-id="{{meta.heroMediaId}}" ratio="1:1" alt="NASA 蓝色弹珠地球影像" lazy-load="false" /></view>
+      <view class="earth-media"><media-image media-id="{{meta.heroMediaId}}" variant="hero" ratio="1:1" alt="从太空观看现代地球的 AI 艺术复原" lazy-load="false" /></view>
     </view>
     <text class="hero-eyebrow">DEEP TIME · EARTH ARCHIVE</text>
     <text class="hero-number">45.4亿年</text>
@@ -18,7 +18,7 @@
       <view><text class="stat-number">{{meta.eventCount}}</text><text class="stat-label">关键事件</text></view>
       <view><text class="stat-number">{{meta.creatureCount}}</text><text class="stat-label">古生物档案</text></view>
     </view>
-    <text class="hero-credit">地球影像：NASA Earth Observatory · Public Domain</text>
+    <text class="hero-credit">首页影像：项目自有 AI 艺术复原 · 科学内容人工审核</text>
   </view>
 
   <view class="top-tools">
@@ -32,7 +32,7 @@
     <text class="section-kicker-global">TODAY'S SPECIMEN</text>
     <text class="section-heading-global">今日古生物</text>
     <view class="daily-card" hover-class="tap-card-active" bindtap="openCreature" data-id="{{dailyCreature.id}}">
-      <view class="daily-visual"><media-image media-id="{{dailyCreature.mediaId}}" ratio="4:3" alt="{{dailyCreature.nameCn}}科学复原图待补" placeholder-theme="rock" /></view>
+      <view class="daily-visual"><media-image media-id="{{dailyCreature.mediaId}}" variant="card" ratio="4:3" alt="{{dailyCreature.nameCn}}科学图片" placeholder-theme="rock" /></view>
       <view class="daily-content"><text class="daily-time">{{dailyCreature.livedWhen}}</text><text class="daily-name">{{dailyCreature.nameCn}}</text><text class="daily-latin">{{dailyCreature.scientificName}}</text><text class="daily-copy">{{dailyCreature.funIntro}}</text><text class="inline-link">查看完整档案 →</text></view>
     </view>
   </view>
@@ -50,7 +50,7 @@
     <scroll-view class="period-strip" scroll-x="true" enhanced="true" show-scrollbar="false">
       <view class="period-strip-inner">
         <view class="period-mini-card" wx:for="{{visiblePeriods}}" wx:key="id" hover-class="tap-card-active" bindtap="openPeriod" data-id="{{item.id}}" style="border-color:{{item.color}}66">
-          <view class="period-mini-art"><media-image media-id="{{item.mediaId}}" ratio="16:9" alt="{{item.name}}环境图待补" placeholder-theme="{{item.id === 'hadean' ? 'volcanic' : item.id === 'pleistocene' ? 'ice' : 'ocean'}}" /><text class="period-mini-icon">{{item.icon}}</text></view>
+          <view class="period-mini-art"><media-image media-id="{{item.mediaId}}" variant="card" ratio="16:9" alt="{{item.name}}代表图片" placeholder-theme="{{item.id === 'hadean' ? 'volcanic' : item.id === 'pleistocene' ? 'ice' : 'ocean'}}" /><text class="period-mini-icon">{{item.icon}}</text></view>
           <view class="period-mini-body"><text class="period-mini-name">{{item.name}}</text><text class="period-mini-en">{{item.englishName}}</text><text class="period-mini-range">{{item.range}}</text><text class="period-mini-copy">{{item.tagline}}</text><view class="period-mini-footer"><text>代表：{{item.representativeName}}</text><text>↗</text></view></view>
         </view>
       </view>
@@ -62,7 +62,7 @@
     <scroll-view class="event-strip" scroll-x="true" enhanced="true" show-scrollbar="false">
       <view class="event-strip-inner">
         <view class="event-feature-card" wx:for="{{featuredEvents}}" wx:key="id" hover-class="tap-card-active" bindtap="openEvent" data-id="{{item.id}}" style="border-top-color:{{item.color}}">
-          <media-image media-id="{{item.mediaId}}" ratio="16:9" alt="{{item.title}}科学图待补" placeholder-theme="rock" />
+          <media-image media-id="{{item.mediaId}}" variant="card" ratio="16:9" alt="{{item.title}}科学图片" placeholder-theme="rock" />
           <view class="event-feature-body"><text class="event-feature-meta">{{item.displayTime}} · {{item.category}}</text><text class="event-feature-title">{{item.title}}</text><text class="event-feature-copy">{{item.summary}}</text><text class="inline-link">阅读事件说明 →</text></view>
         </view>
       </view>
@@ -73,7 +73,7 @@
     <text class="section-kicker-global warning-kicker">FIVE MASS EXTINCTIONS</text>
     <text class="section-heading-global">危机不是一瞬间的按钮</text>
     <text class="section-copy">每次大灭绝都包含多重环境压力，并在之后开启漫长的生态恢复与重组。</text>
-    <scroll-view class="extinction-strip" scroll-x="true" enhanced="true" show-scrollbar="false"><view class="extinction-strip-inner"><view class="extinction-card" wx:for="{{massExtinctions}}" wx:key="id" hover-class="tap-card-active" bindtap="openPeriod" data-id="{{item.id}}"><text class="extinction-number">0{{index + 1}}</text><text class="extinction-title">{{item.title}}</text><text class="extinction-time">{{item.time}}</text><text class="extinction-copy">{{item.copy}}</text><text class="inline-link">进入相关时期 →</text></view></view></scroll-view>
+    <scroll-view class="extinction-strip" scroll-x="true" enhanced="true" show-scrollbar="false"><view class="extinction-strip-inner"><view class="extinction-card" wx:for="{{massExtinctions}}" wx:key="id" hover-class="tap-card-active" bindtap="openEvent" data-id="{{item.id}}"><view class="extinction-media"><media-image media-id="{{item.mediaId}}" variant="thumbnail" ratio="16:9" alt="{{item.title}}大灭绝科学图片" placeholder-theme="volcanic" /></view><view class="extinction-body"><text class="extinction-number">0{{index + 1}}</text><text class="extinction-title">{{item.title}}</text><text class="extinction-time">{{item.time}}</text><text class="extinction-copy">{{item.copy}}</text><text class="inline-link">查看独立事件档案 →</text></view></view></view></scroll-view>
   </view>
 
   <view class="section-block lens-section">

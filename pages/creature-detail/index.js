@@ -3,11 +3,10 @@ const { DIMENSIONS } = require('../../data/quiz-profiles')
 const { getPeriodById } = require('../../data/periods')
 const { dimensionLabels } = require('../../data/quiz')
 const { recordView, isFavorite, toggleFavorite } = require('../../utils/storage')
-const { previewImages } = require('../../utils/image')
 const { buildUrl, navigateToPage, switchTabPage } = require('../../utils/router')
 
 Page({
-  data: { creature: null, period: null, profileBars: [], gallery: [], isFavorite: false, imageFailed: false },
+  data: { creature: null, period: null, profileBars: [], gallery: [], isFavorite: false, heroMediaReady: false },
 
   onLoad(options) {
     const creature = getCreatureById(options.id)
@@ -19,18 +18,16 @@ Page({
     const profileBars = creature.quizEligible && creature.personalityProfile
       ? DIMENSIONS.map((key) => ({ key, label: dimensionLabels[key], value: Math.round(creature.personalityProfile[key] * 100) }))
       : []
-    const gallery = creature.gallery.length ? creature.gallery : [
-      { id: 'reconstruction', mediaId: `${creature.mediaId}-reconstruction`, src: '', kind: '全身艺术复原', status: 'missing' },
-      { id: 'fossil', mediaId: `${creature.mediaId}-fossil`, src: '', kind: '代表化石', status: 'missing' },
-      { id: 'scale', mediaId: `${creature.mediaId}-scale`, src: '', kind: '体型比例', status: 'missing' }
-    ]
+    // 主图已经承担经过审核的艺术复原展示。没有独立馆藏图时不再制造
+    // “复原 / 化石 / 比例图待补”空卡片，避免把缺失媒体误呈现为内容。
+    const gallery = creature.gallery.filter((item) => item && (item.src || item.mediaId))
     const displayCreature = Object.assign({}, creature, { initial: creature.nameCn.charAt(0) })
     this.setData({ creature: displayCreature, period: getPeriodById(creature.periodId), profileBars, gallery, isFavorite: isFavorite('creature', creature.id) })
     wx.setNavigationBarTitle({ title: creature.nameCn })
     recordView('creature', creature.id, creature.nameCn, buildUrl('/pages/creature-detail/index', { id: creature.id }))
   },
 
-  handleImageError() { this.setData({ imageFailed: true }) },
+  handleHeroReady() { this.setData({ heroMediaReady: true }) },
   toggleFavorite() {
     const creature = this.data.creature
     if (!creature) return
@@ -40,10 +37,6 @@ Page({
   },
   openPeriod() {
     if (this.data.period) navigateToPage(buildUrl('/pages/period/index', { id: this.data.period.id }), { toastTitle: '暂时无法打开所属时期' })
-  },
-  previewGallery(event) {
-    const item = this.data.gallery[Number(event.currentTarget.dataset.index)]
-    previewImages(this.data.gallery, item && item.src)
   },
   copySource(event) {
     const url = event.currentTarget.dataset.url

@@ -38,9 +38,9 @@ Page({
   search(value) {
     const query = String(value || '').trim().toLowerCase()
     if (!query) return this.clearQuery()
-    const periodResults = periods.filter((period) => includes([period.name, period.englishName, period.tagline, period.overview].join(' '), query)).slice(0, 20).map((period) => ({ id: period.id, name: period.name, meta: period.range, copy: period.tagline }))
-    const eventResults = events.filter((item) => includes([item.title, item.category, item.summary, item.detail, item.periodName].join(' '), query)).slice(0, 20).map((item) => ({ id: item.id, name: item.title, meta: `${item.displayTime} · ${item.periodName}`, copy: item.summary }))
-    const creatureResults = creatures.filter((creature) => includes([creature.nameCn, creature.scientificName, creature.group, creature.habitat, creature.diet].concat(creature.tags).join(' '), query)).slice(0, 24).map((creature) => ({ id: creature.id, name: creature.nameCn, latin: creature.scientificName, meta: `${creature.livedWhen} · ${creature.group}`, copy: creature.funIntro }))
+    const periodResults = periods.filter((period) => includes([period.name, period.englishName, period.tagline, period.overview].join(' '), query)).slice(0, 20).map((period) => ({ id: period.id, name: period.name, meta: period.range, copy: period.tagline, mediaId: period.mediaId, typeLabel: '时期' }))
+    const eventResults = events.filter((item) => includes([item.title, item.category, item.summary, item.detail, item.periodName].join(' '), query)).slice(0, 20).map((item) => ({ id: item.id, name: item.title, meta: `${item.displayTime} · ${item.periodName}`, copy: item.summary, mediaId: item.mediaId, typeLabel: '事件' }))
+    const creatureResults = creatures.filter((creature) => includes([creature.nameCn, creature.scientificName, creature.group, creature.habitat, creature.diet].concat(creature.tags).join(' '), query)).slice(0, 24).map((creature) => ({ id: creature.id, name: creature.nameCn, latin: creature.scientificName, meta: `${creature.livedWhen} · ${creature.group}`, copy: creature.funIntro, mediaId: creature.mediaId, typeLabel: '古生物' }))
     this.setData({ periodResults, eventResults, creatureResults, total: periodResults.length + eventResults.length + creatureResults.length, searched: true })
   },
 

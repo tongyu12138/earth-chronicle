@@ -321,6 +321,85 @@ const rawEvents = [
     ]
   },
   {
+    id: 'ordovician-extinction',
+    title: '奥陶纪末大灭绝',
+    displayTime: '约4.438亿年前',
+    era: '古生代',
+    category: '大灭绝',
+    summary: '冰期、海退和海洋氧化还原结构变化分阶段冲击了以海洋为主的生态系统。',
+    detail: '奥陶纪末的大灭绝至少包含两个主要脉冲。冈瓦纳大陆附近形成大型冰盖，全球降温与海平面下降压缩浅海栖息地；随后的海洋环流和氧含量变化又对幸存群落施加压力。不同海域的响应并不完全同步。',
+    significance: '当时绝大多数复杂生物生活在海中，因此浅海面积和水体含氧变化会迅速影响多个类群。这一事件也提醒我们，“冰期”并不等于所有海水都更富氧：海底和上层海水可能出现不同变化。',
+    mechanism: '冰盖增长把水储存在陆地，造成全球海退；降温、海盆形态与环流重组改变营养盐输送。模型与碘/钙等氧化还原代用指标显示，冰期中上层海洋可增氧，同时海底缺氧范围扩展。',
+    evidence: '全球地层中的笔石、腕足动物和三叶虫更替记录灭绝脉冲；氧同位素、沉积相和氧化还原代用指标用于重建冰量、海平面与海洋含氧状态。',
+    openQuestions: '两次灭绝脉冲中降温、栖息地丧失、缺氧和复温各占多大作用，以及不同海盆为何表现不同，仍在研究。',
+    confidence: '灭绝与冰期、海退的关联证据强，具体杀伤机制仍是多因素模型',
+    misconception: '奥陶纪末灭绝不是“海洋全部结冰”。主要压力来自气候、海平面、栖息地和海洋化学的快速组合变化。',
+    dateNote: '奥陶纪—志留纪边界约为4.438亿年前。灭绝不是单日事件，而是跨越较短地质时间的多脉冲危机。',
+    sources: [
+      {
+        name: 'Vertical decoupling in Late Ordovician anoxia due to reorganization of ocean circulation',
+        publisher: 'Nature Geoscience',
+        url: 'https://www.nature.com/articles/s41561-021-00843-9'
+      },
+      {
+        name: 'International Chronostratigraphic Chart',
+        publisher: 'International Commission on Stratigraphy',
+        url: 'https://stratigraphy.org/chart'
+      }
+    ]
+  },
+  {
+    id: 'silurian-vascular-plants',
+    title: '早期维管植物在陆地扩展',
+    displayTime: '约4.30亿—4.19亿年前',
+    era: '古生代',
+    category: '陆地生态',
+    summary: '库克逊蕨等小型植物展示了输导组织、气孔和孢子囊等早期陆生适应。',
+    detail: '志留纪陆地上的植物仍然低矮，通常生长在湿润环境。库克逊蕨类化石保存了分叉茎和顶生孢子囊；部分标本具有气孔、支持组织和中央输导结构。它们代表陆地植物身体结构逐步复杂化，而不是突然出现现代森林。',
+    significance: '输导与支撑结构提高了水和养分运输能力，为植物后来长高、形成更深根系并改造土壤创造条件。植物扩展也逐渐改变风化、碳循环和陆地食物网。',
+    mechanism: '防水表皮减少失水，气孔调节气体交换，中央输导细胞帮助运输水分；孢子囊位于分叉枝端，有利于孢子散布。不同特征并非一次同时完成。',
+    evidence: '压印化石显示枝轴与孢子囊，显微切片中的加厚细胞壁可用于判断输导组织；孢子组合和沉积环境帮助重建植物分布。',
+    openQuestions: '部分极小的库克逊蕨型植物是否能独立完成光合作用、哪些标本真正属于维管植物，以及最早输导组织出现的时间仍需谨慎判断。',
+    confidence: '志留纪陆生植物化石可靠，具体分类和生理能力仍有争议',
+    misconception: '志留纪的植物扩展不等于当时已经出现高大森林；真正的树木和复杂森林主要在泥盆纪以后发展。',
+    dateNote: '志留纪中晚期已有较可靠陆生植物宏体化石。不同库克逊蕨标本年代和解剖保存程度不同，不能全部视为完全相同的植物。',
+    sources: [
+      {
+        name: 'A vascular conducting strand in the early land plant Cooksonia',
+        publisher: 'Nature',
+        url: 'https://www.nature.com/articles/357683a0'
+      },
+      {
+        name: 'A timeline for terrestrialization: consequences for the carbon cycle in the Palaeozoic',
+        publisher: 'Philosophical Transactions of the Royal Society B',
+        url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC3248713/'
+      }
+    ]
+  },
+  {
+    id: 'silurian-jawed-fishes',
+    title: '有颌脊椎动物早期辐射',
+    displayTime: '约4.36亿—4.25亿年前',
+    era: '古生代',
+    category: '脊椎动物演化',
+    summary: '保存完整的早志留世鱼类化石揭示，有颌脊椎动物已比过去记录显示的更早多样化。',
+    detail: '中国重庆早志留世特异埋藏化石群保存了完整的有颌鱼身体，包括盾皮鱼类干群和早期软骨鱼型成员。它们补上了以往主要依赖零散鳞片、棘刺和牙齿研究的记录空白。',
+    significance: '颌、成对附肢和多样取食方式是后来鱼类以及全部有颌四足动物演化的关键基础。完整化石显示主要支系的分化在志留纪早期已经深入展开。',
+    mechanism: '颌可能由前部鳃弓系统演化并被新的肌肉和感觉结构整合；随后不同支系在头甲、牙齿、鳍和身体装甲上形成多种组合。',
+    evidence: '关节相连的全身化石能够同时比较头骨、躯干和鳍；高分辨率成像、形态矩阵与系统发育分析用于确定这些鱼类在有颌脊椎动物树上的位置。',
+    openQuestions: '更早的奥陶纪鳞片和棘刺属于哪些支系、颌与牙齿最初如何组合，以及软骨鱼和硬骨鱼共同祖先的外形仍会随新化石调整。',
+    confidence: '完整化石显著加强早期辐射证据，深层亲缘关系仍在更新',
+    misconception: '“泥盆纪是鱼类时代”不表示有颌鱼到泥盆纪才出现；志留纪甚至更早已有重要分化。',
+    dateNote: '重庆化石群约为4.36亿年前。晚志留世约4.25亿年前也有多类完整有颌鱼记录。',
+    sources: [
+      {
+        name: 'The oldest complete jawed vertebrates from the early Silurian of China',
+        publisher: 'Nature',
+        url: 'https://www.nature.com/articles/s41586-022-05136-8'
+      }
+    ]
+  },
+  {
     id: 'first-tetrapods',
     title: '脊椎动物走上陆地',
     displayTime: '约3.75亿年前',
@@ -335,6 +414,34 @@ const rawEvents = [
         name: 'The Origin of Tetrapods',
         publisher: 'Understanding Evolution, UC Berkeley',
         url: 'https://evolution.berkeley.edu/what-are-evograms/the-origin-of-tetrapods/'
+      }
+    ]
+  },
+  {
+    id: 'late-devonian-extinction',
+    title: '晚泥盆世多阶段灭绝',
+    displayTime: '约3.72亿—3.59亿年前',
+    era: '古生代',
+    category: '大灭绝',
+    summary: '多次缺氧和有毒含硫水体扩展，长期削弱礁生态与海洋生物多样性。',
+    detail: '晚泥盆世危机不是一次撞击式事件，而包括凯尔瓦瑟事件和接近泥盆纪末的汉根堡事件等多个阶段。海洋富营养化、缺氧乃至硫化水进入浅海，对造礁生物和多类海洋动物造成持续压力。',
+    significance: '泥盆纪大型礁系统遭受重创，部分鱼类和无脊椎动物支系消失。分阶段危机说明生态系统可以在长期环境波动中反复受损，而不是只由一次瞬时灾变触发。',
+    mechanism: '陆地植物扩展、风化增强、营养盐输入、气候与海平面变化以及火山活动可能共同扰动碳循环。高生产力消耗氧气，缺氧与硫化水随后向浅海扩展。',
+    evidence: '黑色页岩、有机碳和硫同位素、铀与钼等氧化还原指标记录水体缺氧；化石群在多个地层层位出现分阶段锐减。',
+    openQuestions: '陆地植物、火山、轨道周期和海平面变化各自的触发作用，以及凯尔瓦瑟与汉根堡事件应否作为同一场大灭绝处理，仍有讨论。',
+    confidence: '多阶段生物危机和海洋缺氧证据强，最终触发链仍属活跃研究',
+    misconception: '晚泥盆世灭绝不是单一年份的全球同步事件，也不能只归因于“植物制造了灾难”。植物扩展只是复杂地球系统变化中的一个可能因素。',
+    dateNote: '晚泥盆世危机跨越约一千多万年，其中凯尔瓦瑟事件约在3.72亿年前，汉根堡事件接近3.59亿年前。',
+    sources: [
+      {
+        name: 'Basin-scale reconstruction of euxinia and Late Devonian mass extinctions',
+        publisher: 'Nature',
+        url: 'https://www.nature.com/articles/s41586-023-05716-2'
+      },
+      {
+        name: 'Timing and pacing of the Late Devonian mass extinction event regulated by eccentricity and obliquity',
+        publisher: 'Nature Communications',
+        url: 'https://www.nature.com/articles/s41467-017-02407-1'
       }
     ]
   },
@@ -461,6 +568,34 @@ const rawEvents = [
     ]
   },
   {
+    id: 'triassic-extinction',
+    title: '三叠纪末大灭绝',
+    displayTime: '约2.014亿年前',
+    era: '中生代',
+    category: '大灭绝',
+    summary: '中央大西洋岩浆活动与碳循环突变引发增温、酸化和生态重组。',
+    detail: '盘古大陆裂解前后，中央大西洋岩浆省发生大规模岩浆侵入和喷发。火山及岩浆加热富有机质沉积物释放温室气体，使大气二氧化碳和全球温度快速变化，海洋酸化与缺氧压力增强。',
+    significance: '许多海洋无脊椎动物和陆生主龙类支系消失。灭绝后的生态空位帮助恐龙在侏罗纪成为更占优势的陆地大型脊椎动物，但这不是恐龙“必然胜出”的预设过程。',
+    mechanism: '岩墙和岩床侵入沉积盆地，可同时释放岩浆来源和沉积物受热产生的碳；喷发气体与硫化物造成短期和长期气候扰动，海洋吸收二氧化碳后酸度上升。',
+    evidence: '高精度铀铅定年把岩浆侵入与灭绝层附近的碳同位素变化对应起来；玄武岩、岩床、叶片气孔和海相化学指标提供独立证据。',
+    openQuestions: '侵入与喷发各释放多少碳和硫、灭绝是否包含多个脉冲、陆地和海洋生态受损的时间差仍需更高分辨率地层记录。',
+    confidence: 'CAMP岩浆活动与灭绝的时间联系强，具体气体来源比例仍研究中',
+    misconception: '不是“火山熔岩直接覆盖全球生物”。主要全球压力来自岩浆活动驱动的大气、气候和海洋化学变化。',
+    dateNote: '三叠纪—侏罗纪边界约2.014亿年前。高精度定年显示部分岩浆侵入早于最早已知熔岩流，并与灭绝开始接近。',
+    sources: [
+      {
+        name: 'End-Triassic mass extinction started by intrusive CAMP activity',
+        publisher: 'Nature Communications',
+        url: 'https://www.nature.com/articles/ncomms15596'
+      },
+      {
+        name: 'New U–Pb geochronology for the Central Atlantic Magmatic Province',
+        publisher: 'Scientific Reports',
+        url: 'https://www.nature.com/articles/s41598-023-32534-3'
+      }
+    ]
+  },
+  {
     id: 'dinosaur-to-birds',
     title: '羽毛恐龙与鸟类起源',
     displayTime: '约1.65亿—1.5亿年前',
@@ -575,6 +710,62 @@ const rawEvents = [
         name: 'The evolution of whales',
         publisher: 'Understanding Evolution, UC Berkeley',
         url: 'https://evolution.berkeley.edu/what-are-evograms/the-evolution-of-whales/'
+      }
+    ]
+  },
+  {
+    id: 'antarctic-ice-expansion',
+    title: '南极大陆冰盖快速扩张',
+    displayTime: '约3390万—3370万年前',
+    era: '新生代',
+    category: '气候转型',
+    summary: '始新世—渐新世界线附近，南极大陆冰量快速增加，地球进入更持久的冰室状态。',
+    detail: '经过长期冷却后，南极冰盖在较短地质时间内扩大到接近大陆尺度。深海氧同位素、海平面和沉积记录显示，转型既包含海水降温，也包含大量海水被锁入陆地冰盖。',
+    significance: '南极冰盖扩张改变全球海平面、海洋环流和高纬气候，是新生代从温室世界转向冰室世界的关键节点。它也影响陆地植被和动物群落，但各地区响应并不相同。',
+    mechanism: '长期下降的大气二氧化碳使南极高地积雪更容易跨过持续成冰阈值；轨道变化调节高纬夏季日照，冰—反照率和冰盖高度反馈随后放大增长。',
+    evidence: '底栖有孔虫氧同位素记录海温与全球冰量变化，海岸和深海沉积物记录海平面下降；冰盖—气候模型用于检验二氧化碳与轨道强迫。',
+    openQuestions: '冰盖分几步增长、当时西南极各区域是否同步结冰，以及二氧化碳、洋流通道和轨道强迫的相对贡献仍在精细研究。',
+    confidence: '大陆尺度冰盖扩张为强共识，区域时序和反馈强度持续更新',
+    misconception: '南极结冰不是只因为大陆“漂到南极”。大陆位置提供条件，但温室气体下降和轨道、冰盖反馈对跨越结冰阈值同样重要。',
+    dateNote: '始新世—渐新世边界约3390万年前。高分辨率记录常把主要冰量增长放在约3370万年前附近的阶跃中。',
+    sources: [
+      {
+        name: 'Multi-proxy evidence for sea level fall at the onset of the Eocene-Oligocene transition',
+        publisher: 'Nature Communications',
+        url: 'https://www.nature.com/articles/s41467-023-39806-6'
+      },
+      {
+        name: 'Rapid Cenozoic glaciation of Antarctica induced by declining atmospheric CO2',
+        publisher: 'Nature',
+        url: 'https://www.nature.com/articles/nature01290'
+      }
+    ]
+  },
+  {
+    id: 'oligocene-faunal-turnover',
+    title: '气候转冷与哺乳动物群重组',
+    displayTime: '约3400万—3000万年前',
+    era: '新生代',
+    category: '生态重组',
+    summary: '欧亚与非洲多地的哺乳动物群在降温和环境变化中发生显著更替，但区域模式并不完全一致。',
+    detail: '始新世—渐新世转型后，欧洲的“大间断”和亚洲的“蒙古重组”记录了多个哺乳动物类群消失、迁入或改变优势度。亚洲部分记录显示温暖森林向更干冷的森林—草原镶嵌环境转变；非洲—阿拉伯的一些特有支系也出现多样性下降。',
+    significance: '化石群落把全球气候转型与陆地生态变化联系起来，也显示同一次气候事件不会在所有大陆产生相同结果。地理隔离、迁徙通道和局地植被共同塑造响应。',
+    mechanism: '降温、降水季节性和植被结构变化改变食物与栖息地；海平面变化和陆桥又影响物种迁徙。小型啮齿类、兔形类与不同食性哺乳动物在新环境中重新组合。',
+    evidence: '连续地层中的牙齿、骨骼、花粉、古土壤和磁性地层可同步比较动物、植被和气候。牙齿形态还能帮助推断食物磨蚀度与取食方式。',
+    openQuestions: '气候、植被变化和跨大陆迁入各自造成多少灭绝与替代，不同地区记录缺口是否夸大“突然性”，仍有争论。',
+    confidence: '区域群落更替证据强，全球同步性和因果比例需谨慎',
+    misconception: '“大间断”不是全球所有哺乳动物在同一时刻集体消失；它是欧洲命名的区域事件，其他大陆有不同但可比较的重组记录。',
+    dateNote: '主要转型集中在约3390万年前边界及其后数百万年。不同大陆化石层的时间分辨率和更替节奏并不一致。',
+    sources: [
+      {
+        name: 'Synchronous turnover of flora, fauna and climate at the Eocene–Oligocene Boundary in Asia',
+        publisher: 'Scientific Reports',
+        url: 'https://www.nature.com/articles/srep07463'
+      },
+      {
+        name: 'Widespread loss of mammalian lineage and dietary diversity in the early Oligocene of Afro-Arabia',
+        publisher: 'Communications Biology',
+        url: 'https://www.nature.com/articles/s42003-021-02707-9'
       }
     ]
   },
@@ -881,6 +1072,57 @@ const rawEvents = [
         name: 'Papermaking',
         publisher: 'Encyclopaedia Britannica',
         url: 'https://www.britannica.com/technology/papermaking'
+      }
+    ]
+  },
+  {
+    id: 'medieval-knowledge-networks',
+    title: '跨欧亚知识翻译与传播网络',
+    displayTime: '约公元8—13世纪',
+    era: '人类文明',
+    category: '知识传播',
+    summary: '学者、商人和翻译者在阿拉伯语、希腊语、波斯语、拉丁语等知识传统之间持续转译和改造。',
+    detail: '中世纪知识并非停滞在彼此隔绝的文明中。巴格达等城市的翻译活动保存并扩展希腊、波斯和印度学术；医学、数学、天文学与哲学著作又经地中海、西西里和伊比利亚等网络进入拉丁欧洲。东亚、南亚和伊斯兰世界内部也有各自庞大的教育与书写体系。',
+    significance: '知识传播不是简单“搬运”。翻译者需要创造术语、比较证据并把文本适配新的教学传统；多轮转译和评论为后来的大学、医学与科学研究积累材料。',
+    mechanism: '纸张、驿路、港口、商贸语言、图书馆、宗教机构和宫廷赞助共同降低复制与交流成本。战争和政治竞争有时破坏网络，也可能移动学者和手稿。',
+    evidence: '现存多语种手稿、译者序言、书目、抄写痕迹和术语对应可以追踪文本传播；纸张、墨水和装帧分析帮助确定制作地点与年代。',
+    openQuestions: '大量无名译者和区域传统未被文献充分记录；把复杂网络压缩为单向“从东方传到西方”会忽略反向和多中心交流。',
+    confidence: '手稿与文献证据充分，网络规模和具体路径因材料保存而不均衡',
+    misconception: '中世纪不是统一的“黑暗时代”。不同地区在不同时间经历战争、繁荣与知识创新，不能用单一欧洲标签概括全球。',
+    dateNote: '8—13世纪概括多轮翻译与制度发展，并非单一运动的精确起止。部分知识传播更早开始，也在此后继续。',
+    sources: [
+      {
+        name: 'The role of Ibn Sina’s medical poem in the transmission of medical knowledge to medieval Europe',
+        publisher: 'International Journal of Health Sciences',
+        url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC3963335/'
+      },
+      {
+        name: 'From the History of Science to the History of Knowledge – and Back',
+        publisher: 'Centaurus',
+        url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC4320774/'
+      }
+    ]
+  },
+  {
+    id: 'black-death',
+    title: '黑死病重创欧亚与北非社会',
+    displayTime: '约公元1346—1353年',
+    era: '人类文明',
+    category: '疾病与社会',
+    summary: '鼠疫耶尔森菌沿贸易和交通网络扩散，造成巨大人口损失并长期改变社会结构。',
+    detail: '第二次鼠疫大流行在14世纪中叶席卷欧洲、西亚和北非等地区。古DNA研究从中亚14世纪墓葬中重建的鼠疫耶尔森菌基因组，位于与黑死病相关大分化的祖先位置，支持中亚天山地区附近的早期来源。传播路径仍需结合历史、生态和考古证据研究。',
+    significance: '高死亡率改变劳动力、土地使用、宗教生活和公共管理。城市逐步发展隔离、检疫和死亡登记等做法，但当时并不知道细菌与媒介机制，措施效果因地区而异。',
+    mechanism: '鼠疫耶尔森菌可在啮齿动物和跳蚤等宿主—媒介系统中维持，也可在人群中形成不同传播链。贸易网络提高远距离连通性，但不能把传播简化为单一路线或单一动物。',
+    evidence: '历史死亡记录与墓地考古提供规模和时间线，牙齿中的古DNA可直接识别病原体并重建谱系，现代鼠疫菌多样性用于比较可能的动物储存宿主区域。',
+    openQuestions: '不同地区跳蚤、啮齿动物和人际传播各占多大比例，死亡人数如何估计，以及疫情如何与气候和贸易互动仍在持续研究。',
+    confidence: '病原体身份与大流行事实为强证据，区域传播机制仍有差异',
+    misconception: '黑死病不能只解释成“老鼠造成”。病原体、跳蚤和多种宿主、贸易网络、居住条件及人群流动共同影响传播。',
+    dateNote: '1346—1353年指最著名的黑死病主波；第二次鼠疫大流行在许多地区又持续了数百年。',
+    sources: [
+      {
+        name: 'The source of the Black Death in fourteenth-century central Eurasia',
+        publisher: 'Nature',
+        url: 'https://www.nature.com/articles/s41586-022-04800-3'
       }
     ]
   },
@@ -1822,7 +2064,6 @@ const events = rawEvents.map((event, index) => {
   return Object.assign({
     mediaId: `event-${event.id}`,
     image: '',
-    thumbnail: '',
     gallery: [],
     imageAlt: `${event.title}科学插图占位`,
     imageCredit: '',

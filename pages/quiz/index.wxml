@@ -2,11 +2,14 @@
 <view class="quiz-page">
   <view wx:if="{{state === 'welcome'}}" class="welcome-screen">
     <view class="quiz-orbit orbit-a"></view><view class="quiz-orbit orbit-b"></view>
-    <view class="fossil-mark">✦</view>
+    <view class="quiz-media-collage" aria-label="寒武纪、晚侏罗世和更新世彼此分隔的AI艺术复原图">
+      <media-image media-id="quiz-welcome-triptych" variant="hero" ratio="1:1" mode="aspectFill" alt="寒武纪奇虾、晚侏罗世始祖鸟与更新世猛犸象的分隔时代窗口" lazy-load="false" show-reconstruction-badge="true" />
+      <text class="quiz-media-note">寒武纪 · 晚侏罗世 · 更新世｜AI 艺术复原</text>
+    </view>
     <text class="quiz-kicker">PALEO PERSONALITY LAB</text>
     <text class="quiz-title">{{meta.title}}</text>
     <text class="quiz-subtitle">{{meta.subtitle}}</text>
-    <view class="quiz-facts"><view><text>15</text><text>现代场景题</text></view><view><text>14</text><text>匹配维度</text></view><view><text>110</text><text>可能身份</text></view></view>
+    <view class="quiz-facts"><view><text>15</text><text>现代场景题</text></view><view><text>14</text><text>匹配维度</text></view><view><text>60</text><text>正式结果</text></view></view>
     <text class="quiz-intro">{{meta.intro}}</text>
     <button class="primary-button start-button" bindtap="startNew">开始测试</button>
     <button wx:if="{{canResume}}" class="resume-button" bindtap="resumeQuiz">{{resumeText}} →</button>

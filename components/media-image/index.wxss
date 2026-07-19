@@ -12,7 +12,17 @@
 .fallback-orbit { font-size: 50rpx; color: #65d4c1; opacity: .75; }
 .fallback-label { margin-top: 10rpx; font-size: 24rpx; font-weight: 700; }
 .fallback-alt { margin-top: 8rpx; max-width: 84%; font-size: 20rpx; line-height: 1.45; color: #819ba0; }
+.retry-button { margin-top: 18rpx; min-width: 0; padding: 0 24rpx; height: 54rpx; line-height: 54rpx; border: 1rpx solid rgba(255,255,255,.3); border-radius: 28rpx; background: rgba(5,18,23,.7); color: #eefafa; font-size: 21rpx; pointer-events: auto; }
+.retry-button::after { border: 0; }
+.media-type-badge { position: absolute; z-index: 4; top: 16rpx; left: 16rpx; padding: 8rpx 14rpx; border: 1rpx solid rgba(255,255,255,.22); border-radius: 22rpx; background: rgba(5,18,23,.78); color: #eaf6f3; font-size: 19rpx; line-height: 1; }
 .preview-button { position: absolute; z-index: 4; right: 18rpx; bottom: 18rpx; min-width: 0; padding: 0 22rpx; height: 54rpx; line-height: 54rpx; border: 1rpx solid rgba(255,255,255,.26); border-radius: 30rpx; background: rgba(5,18,23,.72); color: #eefafa; font-size: 21rpx; }
 .preview-button::after { border: 0; }
-.media-meta { display: flex; flex-wrap: wrap; gap: 10rpx 22rpx; padding: 14rpx 4rpx 0; color: #789096; font-size: 20rpx; line-height: 1.5; }
+.media-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10rpx 22rpx; padding: 14rpx 4rpx 0; color: #789096; font-size: 20rpx; line-height: 1.5; }
+.media-caption { width: 100%; color: #9db2b3; }
+.source-button { min-width: 0; margin: 0; padding: 0; background: transparent; color: #65d4c1; font-size: 20rpx; line-height: 1.5; text-decoration: underline; }
+.source-button::after { border: 0; }
 @keyframes media-shimmer { from { background-position: 160% 0; } to { background-position: -80% 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .media-content { transition: none; }
+  .media-skeleton { animation: none; background: rgba(255,255,255,.07); }
+}

@@ -20,7 +20,7 @@
     <view class="result-heading"><text>{{resultCount}} 条档案</text><button bindtap="resetFilters">重置筛选</button></view>
     <view wx:if="{{visibleCreatures.length}}" class="atlas-grid">
       <view class="atlas-card" wx:for="{{visibleCreatures}}" wx:key="id" hover-class="tap-card-active" bindtap="openCreature" data-id="{{item.id}}">
-        <view class="atlas-art placeholder-visual"><media-image media-id="{{item.mediaId}}" ratio="4:3" alt="{{item.nameCn}}科学复原图待补" placeholder-theme="rock" /><view>{{item.groupCategory}}</view></view>
+        <view class="atlas-art placeholder-visual"><media-image media-id="{{item.mediaId}}" variant="thumbnail" ratio="4:3" alt="{{item.nameCn}}科学复原或化石图片" placeholder-theme="rock" /><view>{{item.groupCategory}}</view></view>
         <view class="atlas-info"><text class="atlas-name">{{item.nameCn}}</text><text class="atlas-latin">{{item.scientificName}}</text><text class="atlas-time">{{item.livedWhen}}</text><view class="atlas-tags"><text>{{item.diet}}</text><text>{{item.sizeCategory}}</text></view><text class="atlas-intro">{{item.funIntro}}</text></view>
       </view>
     </view>

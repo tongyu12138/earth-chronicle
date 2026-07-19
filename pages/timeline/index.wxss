@@ -163,16 +163,25 @@
   background: #4aa995;
 }
 
-.era-nav-wrap {
+.filter-panel {
   position: sticky;
   z-index: 20;
   top: 0;
-  padding: 20rpx 0;
+  padding: 22rpx 0 20rpx;
   border-top: 1rpx solid rgba(255, 255, 255, 0.05);
   border-bottom: 1rpx solid rgba(255, 255, 255, 0.08);
   background: rgba(7, 19, 25, 0.94);
   backdrop-filter: blur(18rpx);
 }
+
+.filter-heading { padding: 0 34rpx 18rpx; display: flex; align-items: center; gap: 18rpx; }
+.filter-heading > view:first-child { flex: 1; display: flex; flex-direction: column; gap: 5rpx; }
+.filter-heading > view:first-child text:first-child { color: #dce9e5; font-size: 24rpx; font-weight: 750; }
+.filter-heading > view:first-child text:last-child { color: #6f8688; font-size: 18rpx; }
+.mode-switch { display: flex; padding: 4rpx; border-radius: 16rpx; background: rgba(255,255,255,.05); }
+.mode-switch button { min-width: 0; margin: 0; padding: 10rpx 13rpx; border-radius: 12rpx; color: #72898b; font-size: 17rpx; line-height: 1.2; }
+.mode-switch button.active { background: rgba(101,212,193,.15); color: #74d9c7; }
+.mode-switch button::after, .era-chip::after, .period-chip::after { border: 0; }
 
 .era-nav {
   width: 100%;
@@ -197,11 +206,18 @@
   background: rgba(255, 255, 255, 0.035);
 }
 
+.era-chip.selected { border-color: rgba(101,212,193,.45); background: rgba(101,212,193,.12); color: #ddf3ed; }
+
 .era-dot {
   width: 10rpx;
   height: 10rpx;
   border-radius: 50%;
 }
+
+.period-nav { width: 100%; margin-top: 14rpx; white-space: nowrap; }
+.period-nav-inner { display: inline-flex; gap: 11rpx; padding: 0 36rpx; }
+.period-chip { min-width: 0; margin: 0; padding: 11rpx 17rpx; border: 1rpx solid; border-radius: 12rpx; background: rgba(255,255,255,.025); color: #718789; font-size: 19rpx; line-height: 1.3; }
+.period-chip.selected { background: rgba(255,255,255,.09); color: #edf7f4; }
 
 .timeline-intro {
   display: flex;
@@ -306,13 +322,18 @@
 
 .event-card {
   flex: 1;
-  padding: 30rpx 30rpx 28rpx;
+  padding: 0;
+  overflow: hidden;
   border: 1rpx solid rgba(226, 242, 236, 0.1);
   border-radius: 22rpx;
   background: linear-gradient(150deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.025));
   box-shadow: 0 18rpx 50rpx rgba(0, 0, 0, 0.13);
   transition: transform 0.15s ease, background 0.15s ease;
 }
+
+.event-media { position: relative; width: 100%; }
+.period-color-bar { width: 100%; height: 5rpx; }
+.event-card-body { padding: 26rpx 28rpx 28rpx; }
 
 .event-card-active {
   transform: scale(0.985);
@@ -376,6 +397,8 @@
   height: 2rpx;
   opacity: 0.65;
 }
+
+.timeline-empty { margin: 30rpx 20rpx 60rpx 70rpx; padding: 34rpx; border: 1rpx dashed rgba(255,255,255,.13); border-radius: 22rpx; color: #748b8c; font-size: 22rpx; line-height: 1.6; text-align: center; }
 
 .now-node {
   position: relative;

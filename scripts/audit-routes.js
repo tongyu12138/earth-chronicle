@@ -80,6 +80,47 @@ smokeLoad('pages/science/index')
 smokeLoad('pages/quiz/index')
 smokeLoad('pages/search/index')
 smokeLoad('pages/creatures/index')
+
+const creaturesDefinition = pageDefinitions['pages/creatures/index']
+if (creaturesDefinition) {
+  try {
+    const creaturesContext = pageContext(creaturesDefinition)
+    creaturesDefinition.onLoad.call(creaturesContext, {})
+    creaturesDefinition.selectFilter.call(creaturesContext, {
+      currentTarget: { dataset: { kind: 'size', value: '巨型' } }
+    })
+    const giantIds = new Set((creaturesContext._matched || []).map((item) => item.id))
+    const missingTaggedGiants = creatures
+      .filter((creature) => creature.tags.includes('巨型') && !giantIds.has(creature.id))
+      .map((creature) => creature.id)
+    if (missingTaggedGiants.length) {
+      problems.push(`Creature size filter omitted tagged giants: ${missingTaggedGiants.join(', ')}`)
+    }
+    if (!giantIds.has('brachiosaurus')) problems.push('Brachiosaurus must be classified as 巨型 in the creature atlas')
+  } catch (error) {
+    problems.push(`pages/creatures/index size-filter smoke failed: ${error.message}`)
+  }
+}
+
+const timelineDefinition = pageDefinitions['pages/timeline/index']
+if (timelineDefinition) {
+  try {
+    const timelineContext = pageContext(timelineDefinition)
+    timelineDefinition.onLoad.call(timelineContext)
+    const timelineEvents = timelineContext.data.events || []
+    const timelinePayloadBytes = Buffer.byteLength(JSON.stringify(timelineEvents))
+    if (timelineEvents.length !== events.length) {
+      problems.push(`Timeline should render ${events.length} cards, received ${timelineEvents.length}`)
+    }
+    if (timelinePayloadBytes > 100000) {
+      problems.push(`Timeline card payload is too large: ${timelinePayloadBytes} bytes (limit: 100000)`)
+    }
+    console.log(`Timeline smoke: ${timelineEvents.length} cards, ${timelinePayloadBytes} bytes`)
+  } catch (error) {
+    problems.push(`pages/timeline/index full-list smoke failed: ${error.message}`)
+  }
+}
+
 periods.forEach((period) => smokeLoad('pages/period/index', { id: period.id }))
 events.forEach((event) => smokeLoad('pages/detail/index', { id: event.id }))
 creatures.forEach((creature) => smokeLoad('pages/creature-detail/index', { id: creature.id }))
@@ -152,7 +193,7 @@ codeFiles.forEach((file) => {
 })
 
 if (periods.length !== 29) problems.push(`Expected 29 periods, received ${periods.length}`)
-if (events.length !== 61) problems.push(`Expected 61 events, received ${events.length}`)
+if (events.length !== 70) problems.push(`Expected 70 events after phase-three data additions, received ${events.length}`)
 if (creatures.length !== 110) problems.push(`Expected 110 creatures, received ${creatures.length}`)
 periods.forEach((period) => {
   if (getPeriodById(period.id) !== period) problems.push(`getPeriodById failed for ${period.id}`)

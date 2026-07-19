@@ -25,10 +25,15 @@ function dietCategory(diet) {
   return '其他'
 }
 
-function sizeCategory(size) {
+function sizeCategory(size, tags) {
+  const explicit = ['微小', '小型', '中型', '大型', '巨型'].find((label) => (tags || []).includes(label))
+  if (explicit) return explicit
   if (/微米|微观/.test(size)) return '微小'
   if (/厘米|鼠类|乌鸦|火鸡|小型/.test(size)) return '小型'
-  if (/巨|超过10米|15米|18米|20米|24米|小汽车|犀牛|象级/.test(size)) return '巨型'
+  const meterRange = String(size).match(/(\d+(?:\.\d+)?)(?:\s*[—–-]\s*(\d+(?:\.\d+)?))?\s*米/)
+  const maximumMeters = meterRange ? Number(meterRange[2] || meterRange[1]) : 0
+  if (/巨|小汽车|犀牛|象级/.test(size) || maximumMeters >= 10) return '巨型'
+  if (maximumMeters >= 3) return '大型'
   if (/约[5-9]|10米|3—|4—|牛大小|狮子大小|豹大小/.test(size)) return '大型'
   return '中型'
 }
@@ -38,7 +43,7 @@ function compact(creature) {
   return Object.assign({}, summary, {
     initial: creature.nameCn.charAt(0),
     groupCategory: groupCategory(creature.group),
-    sizeCategory: sizeCategory(creature.size)
+    sizeCategory: sizeCategory(creature.size, creature.tags)
   })
 }
 
@@ -107,7 +112,7 @@ Page({
       if (filter.habitat === '陆地' && !/陆|森林|草原|林地|地面|山地|沙漠/.test(creature.habitat)) return false
       if (filter.habitat === '天空' && !/空|飞|树冠/.test(`${creature.habitat}${creature.survivalStrategy}`)) return false
       if (filter.diet !== 'all' && dietCategory(creature.diet) !== filter.diet) return false
-      if (filter.size !== 'all' && sizeCategory(creature.size) !== filter.size) return false
+      if (filter.size !== 'all' && sizeCategory(creature.size, creature.tags) !== filter.size) return false
       if (filter.group !== 'all' && groupCategory(creature.group) !== filter.group) return false
       if (query) {
         const text = [creature.nameCn, creature.scientificName, creature.group, creature.habitat, creature.diet].concat(creature.tags).join(' ').toLowerCase()
@@ -134,11 +139,6 @@ Page({
     const id = event.currentTarget.dataset.id
     if (!id) return
     navigateToPage(buildUrl('/pages/creature-detail/index', { id }), { toastTitle: '暂时无法打开古生物档案' })
-  },
-
-  handleThumbnailError(event) {
-    const id = event.currentTarget.dataset.id
-    this.setData({ visibleCreatures: this.data.visibleCreatures.map((item) => item.id === id ? Object.assign({}, item, { thumbnail: '' }) : item) })
   },
 
   onShareAppMessage() {

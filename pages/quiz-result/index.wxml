@@ -2,10 +2,9 @@
 <view wx:if="{{primary}}" class="museum-page result-page safe-bottom">
   <view class="result-hero placeholder-visual">
     <view class="reveal-rays"></view>
-    <view class="result-main-media"><media-image media-id="{{primary.mediaId}}" ratio="4:3" alt="{{primary.imageAlt}}" placeholder-theme="rock" lazy-load="false" /></view>
-    <text class="result-initial">{{primary.initial}}</text>
+    <view class="result-main-media"><media-image media-id="{{primary.mediaId}}" variant="hero" ratio="4:3" alt="{{primary.imageAlt}}" placeholder-theme="rock" lazy-load="false" /></view>
     <view class="result-overlay"></view>
-    <view class="result-hero-content"><text class="result-kicker">YOUR PALEO IDENTITY</text><text class="identity-label">你的远古身份</text><text class="identity-name">{{primary.nameCn}}</text><text class="identity-latin">{{primary.scientificName}}</text><text class="identity-title">{{primary.nickname}}</text><view class="match-ring"><text>{{match}}%</text><text>匹配度</text></view></view>
+    <view class="result-hero-content"><text class="result-kicker">YOUR PALEO IDENTITY</text><text class="identity-label">你的远古身份</text><text class="identity-name">{{primary.nameCn}}</text><text class="identity-latin">{{primary.scientificName}}</text><text class="identity-title">{{primary.nickname}}</text><view wx:if="{{showMatch}}" class="match-ring"><text>{{match}}%</text><text>娱乐匹配分</text></view><view wx:else class="shared-score-note">好友分享结果 · 分数不随链接传播</view></view>
   </view>
 
   <view class="result-body">
@@ -19,7 +18,7 @@
 
     <view class="result-section"><text class="section-kicker-global">YOUR VECTOR</text><text class="section-heading-global">14维匹配画像</text><view class="result-bars"><view wx:for="{{profileBars}}" wx:key="key"><view><text>{{item.label}}</text><text>{{item.value}}</text></view><view class="result-track"><view style="width:{{item.value}}%"></view></view></view></view></view>
 
-    <view class="result-section"><text class="section-kicker-global">NEARBY MATCHES</text><text class="section-heading-global">两个相近结果</text><view class="similar-grid"><view wx:for="{{similar}}" wx:key="id" hover-class="tap-card-active" bindtap="openCreature" data-id="{{item.id}}"><view class="similar-art placeholder-visual"><media-image media-id="{{item.mediaId}}" ratio="4:3" alt="{{item.nameCn}}科学复原图待补" placeholder-theme="rock" /></view><text>{{item.nameCn}}</text><text>{{item.scientificName}}</text></view></view></view>
+    <view class="result-section"><text class="section-kicker-global">NEARBY MATCHES</text><text class="section-heading-global">两个相近结果</text><view class="similar-grid"><view wx:for="{{similar}}" wx:key="id" hover-class="tap-card-active" bindtap="openCreature" data-id="{{item.id}}"><view class="similar-art placeholder-visual"><media-image media-id="{{item.mediaId}}" variant="thumbnail" ratio="4:3" alt="{{item.nameCn}}科学图片" placeholder-theme="rock" /></view><text>{{item.nameCn}}</text><text>{{item.scientificName}}</text></view></view></view>
 
     <view class="result-actions"><button class="primary-button" bindtap="openCreature" data-id="{{primary.id}}">查看{{primary.nameCn}}完整图鉴</button><button class="secondary-button" bindtap="openAtlas">浏览全部古生物</button><button class="secondary-button" bindtap="retake">重新测试</button><button class="share-button" open-type="share">分享结果</button></view>
     <text class="result-disclaimer">性格匹配是科普娱乐模型，不代表对已灭绝生物心理的科学测量；古生物事实与现代类比分区展示。</text>

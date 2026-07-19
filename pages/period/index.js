@@ -2,7 +2,6 @@ const { periods, getPeriodById } = require('../../data/periods')
 const { events } = require('../../data/events')
 const { getCreaturesByPeriod, getCreatureSummaries } = require('../../data/creatures')
 const { recordView, isFavorite, toggleFavorite } = require('../../utils/storage')
-const { previewImages } = require('../../utils/image')
 const { buildUrl, navigateToPage, redirectToPage, switchTabPage } = require('../../utils/router')
 
 const environmentLabels = {
@@ -13,7 +12,7 @@ const environmentLabels = {
 function compactEvent(item) {
   return {
     id: item.id, title: item.title, displayTime: item.displayTime, category: item.category,
-    summary: item.summary, significance: item.significance, mediaId: item.mediaId, thumbnail: item.thumbnail, imageAlt: item.imageAlt,
+    summary: item.summary, significance: item.significance, mediaId: item.mediaId, imageAlt: item.imageAlt,
     color: item.color
   }
 }
@@ -26,8 +25,7 @@ Page({
     periodCreatures: [],
     previousPeriod: null,
     nextPeriod: null,
-    isFavorite: false,
-    imageFailed: false
+    isFavorite: false
   },
 
   onLoad(options) {
@@ -56,20 +54,6 @@ Page({
     recordView('period', period.id, period.name, buildUrl('/pages/period/index', { id: period.id }))
   },
 
-  handleImageError() {
-    this.setData({ imageFailed: true })
-  },
-
-  handleEventImageError(event) {
-    const id = event.currentTarget.dataset.id
-    this.setData({ periodEvents: this.data.periodEvents.map((item) => item.id === id ? Object.assign({}, item, { thumbnail: '' }) : item) })
-  },
-
-  handleCreatureImageError(event) {
-    const id = event.currentTarget.dataset.id
-    this.setData({ periodCreatures: this.data.periodCreatures.map((item) => item.id === id ? Object.assign({}, item, { thumbnail: '' }) : item) })
-  },
-
   openEvent(event) {
     const id = event.currentTarget.dataset.id
     if (!id) return wx.showToast({ title: '事件参数缺失', icon: 'none' })
@@ -80,12 +64,6 @@ Page({
     const id = event.currentTarget.dataset.id
     if (!id) return
     navigateToPage(buildUrl('/pages/creature-detail/index', { id }), { toastTitle: '暂时无法打开古生物档案' })
-  },
-
-  previewGallery(event) {
-    const index = Number(event.currentTarget.dataset.index)
-    const current = this.data.period.gallery[index]
-    previewImages(this.data.period.gallery, current && current.src)
   },
 
   toggleFavorite() {
@@ -104,6 +82,11 @@ Page({
 
   backToAll() {
     switchTabPage('/pages/science/index')
+  },
+
+  openHumanHistory() {
+    const id = this.data.period && this.data.period.humanHistoryEntryId
+    if (id) navigateToPage(buildUrl('/pages/period/index', { id }), { toastTitle: '暂时无法进入人类历史线' })
   },
 
   copySource(event) {

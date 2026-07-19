@@ -1,7 +1,9 @@
 const MEDIA_BASE_URLS = {
-  develop: '',
-  trial: '',
-  release: ''
+  // 开发者工具中先运行：node scripts/serve-media.js
+  develop: 'http://127.0.0.1:4173',
+  // GitHub Pages 只承载本项目已审批并重新托管的开放授权媒体，不使用 GitHub Raw。
+  trial: 'https://tongyu12138.github.io/earth-chronicle',
+  release: 'https://tongyu12138.github.io/earth-chronicle'
 }
 
 function getEnvVersion() {
@@ -22,7 +24,7 @@ function getMediaBaseUrl() {
 function resolveMediaUrl(value) {
   const url = typeof value === 'string' ? value.trim() : ''
   if (!url) return ''
-  if (/^https:\/\//.test(url) || /^\//.test(url)) return url
+  if (/^https:\/\//.test(url) || /^http:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?\//.test(url) || /^\//.test(url)) return url
   const baseUrl = getMediaBaseUrl().replace(/\/$/, '')
   return baseUrl ? `${baseUrl}/${url.replace(/^\//, '')}` : ''
 }

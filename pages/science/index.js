@@ -24,8 +24,10 @@ Page({
   },
 
   onLoad() {
-    const dayIndex = Math.floor(Date.now() / 86400000) % creatureSummaries.length
-    this.setData({ dailyCreature: creatureSummaries[dayIndex] })
+    const readyCreatures = creatureSummaries.filter((creature) => creature.mediaReady)
+    const pool = readyCreatures.length ? readyCreatures : creatureSummaries
+    const dayIndex = Math.floor(Date.now() / 86400000) % pool.length
+    this.setData({ dailyCreature: pool[dayIndex] })
   },
 
   onShow() {
