@@ -1,5 +1,5 @@
 const { getMediaById } = require('../../data/media-catalog')
-const { resolveMediaUrl } = require('../../config/media')
+const { getMediaUrlCandidates } = require('../../config/media')
 
 const loadedUrls = new Set()
 const failedUrls = new Set()
@@ -52,7 +52,8 @@ Component({
     mediaType: '',
     mediaTypeLabel: '',
     isReconstruction: false,
-    fallbackSrc: '',
+    candidateSrcs: [],
+    candidateIndex: -1,
     ratioPadding: '56.25%'
   },
   observers: {
@@ -68,13 +69,20 @@ Component({
   methods: {
     resolveMedia() {
       const record = this.properties.mediaId ? getMediaById(this.properties.mediaId) : null
-      const thumbnail = resolveMediaUrl(this.properties.thumbnail) || (record && record.thumbnailUrl) || ''
-      const source = resolveMediaUrl(this.properties.src) || (record && record.imageUrl) || thumbnail
+      const thumbnailValue = this.properties.thumbnail || (record && record.thumbnailUrl) || ''
+      const sourceValue = this.properties.src || (record && record.imageUrl) || thumbnailValue
+      const thumbnailCandidates = getMediaUrlCandidates(thumbnailValue)
+      const sourceCandidates = getMediaUrlCandidates(sourceValue)
       const useLarge = this.properties.variant === 'hero' || this.properties.variant === 'full'
-      const preferred = useLarge ? source : thumbnail
-      const fallbackSrc = preferred === source ? thumbnail : source
-      const activeSrc = failedUrls.has(preferred) && fallbackSrc ? fallbackSrc : preferred
-      const state = activeSrc ? (loadedUrls.has(activeSrc) ? 'ready' : 'loading') : 'missing'
+      const candidateSrcs = (useLarge
+        ? sourceCandidates.concat(thumbnailCandidates)
+        : thumbnailCandidates.concat(sourceCandidates))
+        .filter((candidate, index, list) => candidate && list.indexOf(candidate) === index)
+      const candidateIndex = candidateSrcs.findIndex((candidate) => !failedUrls.has(candidate))
+      const activeSrc = candidateIndex >= 0 ? candidateSrcs[candidateIndex] : ''
+      const state = activeSrc
+        ? (loadedUrls.has(activeSrc) ? 'ready' : 'loading')
+        : (candidateSrcs.length ? 'error' : 'missing')
       const mediaType = (record && record.mediaType) || ''
       const displayAlt = record && record.status === 'ready' && record.alt
         ? record.alt
@@ -82,8 +90,9 @@ Component({
       this.setData({
         state,
         activeSrc,
-        previewSrc: source || activeSrc,
-        fallbackSrc: fallbackSrc && fallbackSrc !== activeSrc ? fallbackSrc : '',
+        previewSrc: sourceCandidates.find((candidate) => !failedUrls.has(candidate)) || activeSrc,
+        candidateSrcs,
+        candidateIndex,
         displayAlt,
         displayCredit: this.properties.credit || (record && record.credit) || '',
         displayLicense: this.properties.license || (record && record.license) || '',
@@ -104,19 +113,28 @@ Component({
     },
     handleError(event) {
       const error = event && event.detail ? event.detail : event
-      console.error('[MediaImage]', { mediaId: this.properties.mediaId, src: this.data.activeSrc, error })
       if (this.data.activeSrc) failedUrls.add(this.data.activeSrc)
-      if (this.data.fallbackSrc && this.data.fallbackSrc !== this.data.activeSrc && !failedUrls.has(this.data.fallbackSrc)) {
-        this.setData({ state: loadedUrls.has(this.data.fallbackSrc) ? 'ready' : 'loading', activeSrc: this.data.fallbackSrc, fallbackSrc: '' })
+      const nextIndex = this.data.candidateSrcs.findIndex((candidate, index) => index > this.data.candidateIndex && !failedUrls.has(candidate))
+      if (nextIndex >= 0) {
+        const nextSrc = this.data.candidateSrcs[nextIndex]
+        console.warn('[MediaImage] primary unavailable, using fallback', { mediaId: this.properties.mediaId, src: this.data.activeSrc, fallback: nextSrc })
+        this.setData({
+          state: loadedUrls.has(nextSrc) ? 'ready' : 'loading',
+          activeSrc: nextSrc,
+          candidateIndex: nextIndex
+        })
         return
       }
+      console.error('[MediaImage]', { mediaId: this.properties.mediaId, src: this.data.activeSrc, error })
       this.setData({ state: 'error', activeSrc: '' })
       this.triggerEvent('error', { mediaId: this.properties.mediaId, error })
     },
     retry() {
       if (!this.properties.retryable) return
       const record = this.properties.mediaId ? getMediaById(this.properties.mediaId) : null
-      ;[(record && record.imageUrl), (record && record.thumbnailUrl), this.properties.src, this.properties.thumbnail].filter(Boolean).forEach((url) => failedUrls.delete(resolveMediaUrl(url)))
+      ;[(record && record.imageUrl), (record && record.thumbnailUrl), this.properties.src, this.properties.thumbnail]
+        .filter(Boolean)
+        .forEach((url) => getMediaUrlCandidates(url).forEach((candidate) => failedUrls.delete(candidate)))
       this.resolveMedia()
     },
     copySource() {

@@ -3,7 +3,7 @@ const path = require('path')
 const crypto = require('crypto')
 const { imageManifest } = require('../data/image-manifest')
 const { mediaCatalog } = require('../data/media-catalog')
-const { MEDIA_BASE_URLS } = require('../config/media')
+const { MEDIA_BASE_URLS, getMediaUrlCandidates } = require('../config/media')
 const { licenseAllowed, readImageInfo, ensureDir } = require('./media-utils')
 
 const releaseMode = process.argv.includes('--release')
@@ -19,6 +19,10 @@ const localPathOwners = new Map()
 const PROJECT_AI_CREDIT = '地球编年史项目 · OpenAI 图像生成'
 const PROJECT_AI_LICENSE = 'Project-owned AI-generated artwork'
 const PROJECT_AI_SOURCE = '项目自有 AI 艺术复原'
+
+const routingProbe = getMediaUrlCandidates('media/public/__routing-probe__.jpg')
+if (!routingProbe.some((url) => /^http:\/\/(?:127\.0\.0\.1|localhost):4173\//.test(url))) problems.push('develop media routing is missing the local preview origin')
+if (!routingProbe.some((url) => /^https:\/\//.test(url))) problems.push('develop media routing is missing the release HTTPS fallback')
 
 function isHttps(value) { return /^https:\/\//i.test(String(value || '')) }
 function isRelative(value) { return Boolean(value) && !/^[a-z]+:\/\//i.test(value) && !String(value).startsWith('/') }
