@@ -1,14 +1,15 @@
+const DEFAULT_MEDIA_BASE_URL = 'https://tongyu12138.github.io/earth-chronicle'
+const DEVELOP_MEDIA_OVERRIDE_STORAGE_KEY = 'earthChronicle.developMediaHttpsBaseUrl'
+
 const MEDIA_BASE_URLS = {
-  // 开发者工具中先运行：node scripts/serve-media.js
-  develop: 'http://127.0.0.1:4173',
-  // GitHub Pages 只承载本项目已审批并重新托管的开放授权媒体，不使用 GitHub Raw。
-  trial: 'https://tongyu12138.github.io/earth-chronicle',
-  release: 'https://tongyu12138.github.io/earth-chronicle'
+  develop: DEFAULT_MEDIA_BASE_URL,
+  trial: DEFAULT_MEDIA_BASE_URL,
+  release: DEFAULT_MEDIA_BASE_URL
 }
 
 function getEnvVersion() {
   try {
-    const info = wx.getAccountInfoSync && wx.getAccountInfoSync()
+    const info = typeof wx !== 'undefined' && wx.getAccountInfoSync ? wx.getAccountInfoSync() : null
     return info && info.miniProgram && info.miniProgram.envVersion
       ? info.miniProgram.envVersion
       : 'develop'
@@ -17,46 +18,76 @@ function getEnvVersion() {
   }
 }
 
-function getMediaBaseUrl() {
-  return MEDIA_BASE_URLS[getEnvVersion()] || ''
+function normalizeBaseUrl(value) {
+  return String(value || '').trim().replace(/\/+$/, '')
 }
 
-function normalizeBaseUrl(value) {
-  return String(value || '').replace(/\/$/, '')
+function isHttpsUrl(value) {
+  return /^https:\/\/[^/]+/i.test(String(value || '').trim())
+}
+
+function getDevelopMediaOverride() {
+  if (getEnvVersion() !== 'develop') return ''
+  try {
+    const value = typeof wx !== 'undefined' && wx.getStorageSync
+      ? normalizeBaseUrl(wx.getStorageSync(DEVELOP_MEDIA_OVERRIDE_STORAGE_KEY))
+      : ''
+    return isHttpsUrl(value) ? value : ''
+  } catch (error) {
+    return ''
+  }
+}
+
+function getMediaBaseUrl() {
+  return getDevelopMediaOverride() || MEDIA_BASE_URLS[getEnvVersion()] || MEDIA_BASE_URLS.release
 }
 
 function joinMediaUrl(baseUrl, relativePath) {
   const base = normalizeBaseUrl(baseUrl)
   const path = String(relativePath || '').replace(/^\/+/, '')
-  return base && path ? `${base}/${path}` : ''
+  return isHttpsUrl(base) && path ? `${base}/${path}` : ''
 }
 
-function getLocalMediaPath(value) {
+function getMediaRelativePath(value) {
   const url = typeof value === 'string' ? value.trim() : ''
   if (!url) return ''
-  const localMatch = url.match(/^http:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?\/(.+)$/i)
-  if (localMatch) return localMatch[1].replace(/^\/+/, '')
-  if (!/^[a-z]+:\/\//i.test(url) && !url.startsWith('/')) return url.replace(/^\/+/, '')
+  const legacyLocalMatch = url.match(/^http:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?\/(.+)$/i)
+  if (legacyLocalMatch) return legacyLocalMatch[1].replace(/^\/+/, '')
+  if (!/^[a-z]+:\/\//i.test(url) && !url.startsWith('/') && !url.startsWith('//')) return url.replace(/^\/+/, '')
   return ''
+}
+
+function uniqueHttps(values) {
+  return values.filter((candidate, index, list) => isHttpsUrl(candidate) && list.indexOf(candidate) === index)
 }
 
 function getMediaUrlCandidates(value) {
   const url = typeof value === 'string' ? value.trim() : ''
   if (!url) return []
-  if (/^https:\/\//i.test(url) || (url.startsWith('/') && !url.startsWith('//'))) return [url]
+  if (isHttpsUrl(url)) return [url]
+  if (url.startsWith('/') && !url.startsWith('//')) return [url]
 
-  const relativePath = getLocalMediaPath(url)
-  if (!relativePath) return [url]
+  const relativePath = getMediaRelativePath(url)
+  if (!relativePath) return []
 
   const envVersion = getEnvVersion()
-  const candidates = [joinMediaUrl(MEDIA_BASE_URLS[envVersion], relativePath)]
-  // 本地媒体服务关闭或电脑锁屏后，开发者工具自动回退到与正式版相同的 HTTPS 媒体。
-  if (envVersion === 'develop') candidates.push(joinMediaUrl(MEDIA_BASE_URLS.release, relativePath))
-  return candidates.filter((candidate, index, list) => candidate && list.indexOf(candidate) === index)
+  const bases = envVersion === 'develop'
+    ? [getDevelopMediaOverride(), MEDIA_BASE_URLS.develop, MEDIA_BASE_URLS.release]
+    : [MEDIA_BASE_URLS[envVersion], MEDIA_BASE_URLS.release]
+  return uniqueHttps(bases.map((base) => joinMediaUrl(base, relativePath)))
 }
 
 function resolveMediaUrl(value) {
   return getMediaUrlCandidates(value)[0] || ''
 }
 
-module.exports = { MEDIA_BASE_URLS, getEnvVersion, getMediaBaseUrl, getMediaUrlCandidates, resolveMediaUrl }
+module.exports = {
+  DEFAULT_MEDIA_BASE_URL,
+  DEVELOP_MEDIA_OVERRIDE_STORAGE_KEY,
+  MEDIA_BASE_URLS,
+  getEnvVersion,
+  getMediaBaseUrl,
+  getMediaUrlCandidates,
+  isHttpsUrl,
+  resolveMediaUrl
+}

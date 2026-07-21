@@ -1,6 +1,6 @@
 # 图片来源与授权记录
 
-本文件是媒体上线前的版权与科学复核说明。当前运行时使用的 298 张媒体全部为项目自有 AI 艺术复原；每张图都必须具备生成记录、人工视觉复核说明、替代文字、图注、文件哈希和用途信息，才能在 `data/media-catalog.js` 中标记为 `ready`。
+本文件是媒体上线前的版权与科学复核说明。当前运行时使用的 305 张媒体全部为项目自有 AI 艺术复原；每张图都必须具备生成记录、人工视觉复核说明、替代文字、图注、文件哈希和用途信息，才能在 `data/media-catalog.js` 中标记为 `ready`。
 
 ## 已接入图片
 
@@ -8,11 +8,11 @@
 | --- | --- | --- | --- | --- | --- |
 | `hero-earth-blue-marble` | 科普首页地球主视觉 | 地球编年史项目 / OpenAI 图像生成 | Project-owned AI-generated artwork | 本节生成与审核记录 | 是，明确标注 AI 艺术复原 |
 | `quiz-welcome-triptych` | 测试欢迎页深时间三联画 | 地球编年史项目 / OpenAI 图像生成 | Project-owned AI-generated artwork | 本节生成记录 | 是，明确标注 AI 艺术复原 |
-| 其余 296 个媒体 ID | 时期、时期画廊、事件与古生物 | 地球编年史项目 / OpenAI 图像生成 | Project-owned AI-generated artwork | `media/ai-generations.json` | 是，逐图标注 AI 艺术复原 |
+| 其余 303 个媒体 ID | 时期、时期画廊、事件与古生物 | 地球编年史项目 / OpenAI 图像生成 | Project-owned AI-generated artwork | `media/ai-generations.json` | 是，逐图标注 AI 艺术复原 |
 
 ## 项目自有 AI 艺术复原
 
-项目首页、29 个时期、87 个时期画廊位、70 个事件、110 个古生物以及测试欢迎页三联画，现已全部使用项目自有 AI 艺术复原。`media/ai-generations.json` 保存每个内容媒体位的文件尺寸、字节数、SHA-256、生成方式、视觉审核状态和逐图审核说明；`data/ai-media-catalog.js` 是由该记录生成的运行时目录。
+项目首页、29 个时期、87 个时期画廊位、77 个事件、110 个古生物以及测试欢迎页三联画，现已全部使用项目自有 AI 艺术复原。新增的太阳系形成、休伦冰期、“无聊十亿年”、罗迪尼亚、奥陶纪生物大辐射、最早森林和深时间人类事件也各有独立复原，不复用旧图。`media/ai-generations.json` 保存每个内容媒体位的文件尺寸、字节数、SHA-256、生成方式、视觉审核状态和逐图审核说明；`data/ai-media-catalog.js` 是由该记录生成的运行时目录。
 
 `quiz-welcome-triptych` 把三个时代放在彼此独立的窗口中：左侧为寒武纪海洋中的奇虾、三叶虫和海绵，中间为晚侏罗世石灰岩岛屿环境中的始祖鸟，右侧为更新世猛犸象草原。窗口边框用于明确表达它们不曾共存于同一生态系统。
 
@@ -24,10 +24,10 @@
 
 ## 媒体清单与发布等级
 
-现有清单共 297 个时期、时期画廊、事件、古生物和首页媒体位：
+现有清单共 304 个时期、时期画廊、事件、古生物和首页媒体位：
 
 - P0：96 个，由首页主视觉、29 个时期头图、60 个正式测试生物主图和 6 个首页精选事件图组成。
-- P1：93 个，用于普通事件与化石/地层画廊；本轮额外优先补齐奥陶纪、晚泥盆世、三叠纪末和 K—Pg 灭绝事件图。
+- P1：100 个，用于普通事件与化石/地层画廊；本轮新增的 7 个故事关键事件均有独立 AI 复原。
 - P2：108 个，用于其他古生物与扩展画廊。
 
 release 门禁要求 P0、P1、P2 全部 ready，且每条运行时记录都必须是项目自有 AI 复原；任何旧资料图、远程热链或内容缺失都会阻断发布。
@@ -95,9 +95,9 @@ node scripts/sync-media.js --input ./media/media.json --write
 
 ## 部署与合法域名
 
-开发环境优先使用只监听本机的 `http://127.0.0.1:4173`，运行 `node scripts/serve-media.js` 可预览尚未部署的新图片。服务不可用时组件会自动回退到正式 HTTPS 媒体；该服务不会暴露候选文件、审核记录或仓库代码，只允许 `media/public/` 中的图片路径。
+开发、体验和正式环境默认都使用 `https://tongyu12138.github.io/earth-chronicle`，普通 HTTP 不会进入图片候选。`scripts/serve-media.js` 仅保留为显式可选的 HTTPS 调试服务，要求受信任证书与非回环 HTTPS 域名；该服务不会暴露候选文件、审核记录或仓库代码，只允许 `media/public/` 中的图片路径。
 
-体验版和正式版使用 `https://tongyu12138.github.io/earth-chronicle`。`.github/workflows/deploy-media.yml` 先执行严格 release 校验，再由 `scripts/stage-media-site.js` 只复制运行时目录实际引用的 596 个大小图文件，部署完成后由 `scripts/verify-deployed-media.js` 逐一验证 HTTP 状态与图片 MIME；未引用的早期素材不会进入 Pages 产物。这是项目自有媒体的自托管路径，不是 GitHub Raw 热链。
+体验版和正式版使用 `https://tongyu12138.github.io/earth-chronicle`。`.github/workflows/deploy-media.yml` 先执行严格 release 校验，再由 `scripts/stage-media-site.js` 只复制运行时目录实际引用的 610 个大小图文件，部署完成后由 `scripts/verify-deployed-media.js` 逐一验证 HTTP 状态与图片 MIME；未引用的早期素材不会进入 Pages 产物。这是项目自有媒体的自托管路径，不是 GitHub Raw 热链。
 
 发布前必须在微信公众平台把实际图片域名加入 `downloadFile` 合法域名。当前图片需要允许：
 
@@ -113,7 +113,7 @@ https://tongyu12138.github.io
 # 日常维护：权利、路径、MIME、像素和哈希错误会失败，尚未补图只警告
 node scripts/validate-media.js
 
-# 体验/正式发布：要求 297 个内容位全部 ready、298 条运行时媒体全部为项目自有 AI 复原，且最终地址可解析到 HTTPS
+# 体验/正式发布：要求 304 个内容位全部 ready、305 条运行时媒体全部为项目自有 AI 复原，且最终地址可解析到 HTTPS
 node scripts/validate-media.js --release
 ```
 

@@ -62,6 +62,32 @@ const eras = [
 
 const rawEvents = [
   {
+    id: 'solar-system-formation',
+    title: '太阳系从旋转尘埃盘中形成',
+    displayTime: '约46亿年前开始',
+    era: '冥古宙',
+    category: '太阳系起源',
+    mediaId: 'event-solar-system-formation',
+    summary: '一团星际气体与尘埃坍缩成原太阳和旋转圆盘，行星的原料在盘中聚集。',
+    detail: '太阳诞生于分子云坍缩。角动量让周围物质形成扁平旋转的原行星盘；尘埃从微小颗粒黏结为卵石、微行星和行星胚胎。靠近太阳的高温区域更容易保留岩石与金属，较远区域则能保存更多冰。',
+    significance: '地球并非先独立存在、后来才“加入”太阳系。它的元素、轨道和最初水源问题，都要从同一片行星形成盘理解。',
+    mechanism: '引力使云团坍缩并形成原太阳；盘内颗粒经碰撞、黏结和引力聚集逐级长大。行星之间的碰撞与轨道迁移继续改写早期结构。',
+    evidence: '陨石中富钙铝包体的放射性定年约束太阳系最早固体的年龄；年轻恒星周围的原行星盘影像与行星形成模型提供可比较的现代样本。',
+    openQuestions: '尘埃如何快速跨过容易碰碎或漂入恒星的尺度、巨行星何时迁移，以及地球水的来源比例仍在研究。',
+    confidence: '太阳星云与吸积框架为强共识，早期轨道细节仍依模型调整',
+    claimStatus: 'supported',
+    misconception: '太阳系不是太阳突然爆炸后甩出八颗完整行星；恒星和行星在同一坍缩云团及圆盘中逐步形成。',
+    glossary: [
+      { term: '原行星盘', definition: '围绕年轻恒星旋转、由气体与尘埃构成的扁平圆盘，是行星形成的原料库。' },
+      { term: '吸积', definition: '小颗粒或小天体通过碰撞和引力逐渐聚合成更大天体的过程。' }
+    ],
+    dateNote: '太阳系最早固体形成约在45.67亿年前；“约46亿年前”是面向公众的圆整表达，不代表单一瞬间。',
+    sources: [
+      { name: 'Solar System: Facts — Formation', publisher: 'NASA Science', url: 'https://science.nasa.gov/solar-system/solar-system-facts/' },
+      { name: 'Building Terrestrial Planets', publisher: 'Annual Review of Earth and Planetary Sciences', url: 'https://doi.org/10.1146/annurev-earth-042711-105319' }
+    ]
+  },
+  {
     id: 'earth-formation',
     title: '地球形成',
     displayTime: '约45.4亿年前',
@@ -212,6 +238,32 @@ const rawEvents = [
     ]
   },
   {
+    id: 'huronian-glaciations',
+    title: '休伦冰期群与早期氧化世界',
+    displayTime: '约24.5亿—22.2亿年前',
+    era: '元古宙',
+    category: '古气候转折',
+    mediaId: 'event-huronian-glaciations',
+    summary: '多次广泛冰川作用与大氧化事件相邻发生，年轻地球经历剧烈气候—大气重组。',
+    detail: '加拿大休伦超群等地层保存了多层冰碛沉积，显示古元古代不是一次连续冰封，而是多次冰川推进与消退。它们与大气氧显著上升的时代相近，但“氧气直接造成全部冰期”仍是需要检验的机制解释。',
+    significance: '这一阶段把微生物代谢、大气温室气体、风化和全球气候联系起来，说明生命活动能够参与改写行星环境。',
+    mechanism: '一种重要假说认为，氧气增加消耗了强温室气体甲烷，使气候更容易降温；大陆位置、裂谷抬升、风化和火山二氧化碳通量也可能共同控制冰期。',
+    evidence: '冰碛岩、落石、冰川擦痕和沉积盆地序列记录冰川活动；硫同位素信号约束大气氧化转折，地层定年用于比较冰期与大氧化事件的先后。',
+    openQuestions: '各次冰期是否达到全球尺度、甲烷下降贡献多大、构造抬升与风化是否是主要触发因素，仍无单一答案。',
+    confidence: '多次广泛冰川作用证据强，全球覆盖范围与触发机制有争议',
+    claimStatus: 'debated',
+    misconception: '休伦冰期不是一场持续两亿多年的同一场暴雪，也不能只用“氧气变多”一个按钮解释。',
+    glossary: [
+      { term: '冰碛岩', definition: '冰川搬运的不同大小碎屑混杂沉积并固结形成的岩石。' },
+      { term: '硫同位素非质量分馏', definition: '早期无氧大气光化学留下的特殊硫同位素模式，其消失可约束大气氧上升。' }
+    ],
+    dateNote: '不同盆地中的冰期层位与年龄并不完全相同，约24.5亿—22.2亿年前表示一组冰川事件的宽范围。',
+    sources: [
+      { name: 'Aspects of the Archean–Proterozoic transition', publisher: 'Earth-Science Reviews', url: 'https://doi.org/10.1016/j.earscirev.2018.12.013' },
+      { name: 'The Great Oxidation Event: How Cyanobacteria Changed Life', publisher: 'Smithsonian Ocean', url: 'https://ocean.si.edu/ocean-life/microbes/great-oxidation-event-how-cyanobacteria-changed-life' }
+    ]
+  },
+  {
     id: 'first-eukaryotes',
     title: '真核细胞出现',
     displayTime: '至少约18亿年前',
@@ -227,6 +279,58 @@ const rawEvents = [
         publisher: 'Nature Education',
         url: 'https://www.nature.com/scitable/topicpage/the-origin-of-eukaryotes-14311165/'
       }
+    ]
+  },
+  {
+    id: 'boring-billion',
+    title: '“无聊十亿年”其实并不无聊',
+    displayTime: '约18亿—8亿年前',
+    era: '元古宙',
+    category: '地球中年',
+    mediaId: 'event-boring-billion',
+    summary: '地球化学记录相对平稳，却发生了真核生物扩展、超大陆重组与复杂细胞创新。',
+    detail: '“无聊十亿年”是研究者对中元古代较平稳碳同位素记录的非正式昵称，不是正式地层单位。海洋大范围低氧、营养供给受限可能压低大型生命扩展速度，但真核生物多样化、性生殖和多细胞化的重要步骤仍在发生。',
+    significance: '它提醒我们：化石数量少或某条地球化学曲线平稳，不等于演化停止。复杂生命的前置条件可能在漫长低氧世界中逐步积累。',
+    mechanism: '大陆与超大陆循环影响浅海面积、营养元素和火山二氧化碳；海洋氧化还原分层限制可利用氧与磷。不同局部海域可能比全球平均状态更适合真核生物。',
+    evidence: '碳、硫和金属同位素约束海洋化学，微体化石和分子钟记录真核生物分化，古地磁与造山带用于重建努纳和罗迪尼亚。',
+    openQuestions: '全球氧含量究竟多低、局部“氧气绿洲”有多常见、营养限制与捕食创新哪个更影响复杂生命节奏，仍在研究。',
+    confidence: '长期相对平稳记录可靠，对其生态含义和内部阶段划分持续修订',
+    claimStatus: 'supported',
+    misconception: '“无聊”不是说十亿年里什么都没发生；它只概括部分记录看起来相对平稳。',
+    glossary: [
+      { term: '氧化还原分层', definition: '同一海洋中表层、深层或不同水团具有不同含氧和化学状态。' },
+      { term: '分子钟', definition: '利用遗传差异和校准点估计支系分化时间的方法，结果带有模型不确定性。' }
+    ],
+    dateNote: '约18亿—8亿年前是常见宽泛定义；不同论文可能采用略有差异的起止时间。',
+    sources: [
+      { name: 'The Boring Billion, a slingshot for Complex Life on Earth', publisher: 'Scientific Reports', url: 'https://doi.org/10.1038/s41598-018-22695-x' },
+      { name: 'The Not-So-Boring Billion', publisher: 'Earth-Science Reviews', url: 'https://doi.org/10.1016/j.earscirev.2022.104287' }
+    ]
+  },
+  {
+    id: 'rodinia-cycle',
+    title: '罗迪尼亚聚合与裂解',
+    displayTime: '约11亿—7.5亿年前',
+    era: '元古宙',
+    category: '超大陆循环',
+    mediaId: 'event-rodinia-cycle',
+    summary: '大陆块聚成罗迪尼亚，又在裂谷与新洋盆中分散，重画了海岸和海洋通道。',
+    detail: '地质学家用古地磁、同年代造山带和岩石来源把散落大陆拼回古老格局。罗迪尼亚的存在有广泛支持，但每块大陆的准确位置、聚合顺序和裂解路径仍有多套模型。',
+    significance: '超大陆循环改变海陆分布、浅海面积、风化和海洋环流，也为随后新元古代冰期与生态转变提供背景，但不能把后续变化都归因于一次大陆裂解。',
+    mechanism: '板块汇聚造成大陆碰撞和造山，随后地幔热异常、岩石圈伸展与裂谷活动打开新海盆；海岸线和火山活动随之重新分布。',
+    evidence: '跨大陆可对比的格伦维尔期造山带、碎屑锆石年龄、岩脉群和古地磁方向约束大陆相邻关系及纬度。',
+    openQuestions: '亚马孙、华南、澳大利亚等陆块在罗迪尼亚中的精确位置，以及裂解是连续还是多阶段发生，仍有竞争模型。',
+    confidence: '超大陆聚散框架获广泛支持，具体古地理拼图有争议',
+    claimStatus: 'debated',
+    misconception: '古地理图不是一张从卫星拍下的旧地图，而是多种地质证据约束下、会随新数据更新的重建。',
+    glossary: [
+      { term: '超大陆', definition: '地球大部分大陆地壳在一段时期聚合形成的巨大连续陆块。' },
+      { term: '古地磁', definition: '岩石形成时记录的地球磁场方向，可帮助估计古纬度和大陆旋转。' }
+    ],
+    dateNote: '罗迪尼亚大致在约11亿至9亿年前聚合，约8.25亿至7.5亿年前开始多阶段裂解；边界不是正式年代。',
+    sources: [
+      { name: 'Assembly, configuration, and break-up history of Rodinia: A synthesis', publisher: 'Precambrian Research', url: 'https://doi.org/10.1016/j.precamres.2007.04.021' },
+      { name: 'Linking collisional and accretionary orogens during Rodinia assembly and breakup', publisher: 'Earth and Planetary Science Letters', url: 'https://doi.org/10.1016/j.epsl.2016.05.049' }
     ]
   },
   {
@@ -321,7 +425,34 @@ const rawEvents = [
     ]
   },
   {
+    id: 'great-ordovician-biodiversification',
+    title: '奥陶纪生物大辐射',
+    displayTime: '约4.85亿—4.44亿年前持续展开',
+    era: '古生代',
+    category: '海洋多样化',
+    mediaId: 'event-great-ordovician-biodiversification',
+    summary: '寒武纪建立的许多动物门类，在奥陶纪扩展出更丰富的物种、栖息层次和生态关系。',
+    detail: '奥陶纪海洋中的腕足动物、苔藓虫、棘皮动物、珊瑚、笔石和头足类等显著多样化。它不是全球同时开始的单一爆发，而是不同大陆、类群和生态系统在数千万年中交错发生的辐射。',
+    significance: '海底附着、钻埋、滤食与游泳生态进一步分层，许多后来古生代海洋生态系统的基本结构在这里建立。',
+    mechanism: '高海平面和广阔浅海提供栖息地；气候变化、海洋氧化、营养供给、板块分散与生态互动可能共同推动多样化，没有一个被证明能独立解释全部模式。',
+    evidence: '全球化石数据库记录科、属和物种丰富度上升；分层良好的腕足动物、三叶虫、笔石与牙形石地层帮助比较不同海域的先后。',
+    openQuestions: '氧气增加是驱动还是伴随结果、不同类群的辐射能否归入同一“事件”，以及采样与岩石保存对曲线影响多大，仍有讨论。',
+    confidence: '长期海洋多样化模式明确，统一起点和主导驱动有争议',
+    claimStatus: 'supported',
+    misconception: '奥陶纪生物大辐射不是寒武纪大爆发的简单重播，也不是一颗小行星在某天制造了全部新物种。',
+    glossary: [
+      { term: '生物大辐射', definition: '多个支系在较长地质时间内出现多样性、形态或生态角色显著扩展。' },
+      { term: '非同步性', definition: '同一变化在不同地区或类群中并非同时发生。' }
+    ],
+    dateNote: '常用缩写为 GOBE。其范围可覆盖整个奥陶纪，而最强阶段依指标和类群定义不同。',
+    sources: [
+      { name: 'The Great Ordovician Biodiversification Event: Reviewing two decades of research', publisher: 'Palaeoworld', url: 'https://doi.org/10.1016/j.palwor.2015.03.003' },
+      { name: 'Oxygenation as a driver of the Great Ordovician Biodiversification Event', publisher: 'Nature Geoscience', url: 'https://doi.org/10.1038/s41561-017-0006-3' }
+    ]
+  },
+  {
     id: 'ordovician-extinction',
+    claimStatus: 'debated',
     title: '奥陶纪末大灭绝',
     displayTime: '约4.438亿年前',
     era: '古生代',
@@ -400,6 +531,32 @@ const rawEvents = [
     ]
   },
   {
+    id: 'first-forests',
+    title: '最早森林开始改造陆地',
+    displayTime: '约3.9亿年前已有森林证据',
+    era: '古生代',
+    category: '陆地革命',
+    mediaId: 'event-first-forests',
+    summary: '中泥盆世树状植物形成早期森林，根系与枝干开始系统改造河流、土壤和碳循环。',
+    detail: '英国西南部约3.9亿年前的地层保存了拟树状的 Calamophyton 植物及其原位分布、倒木和植被影响沉积的结构。晚些时候，枝叶更复杂、根系更深的 Archaeopteris 等又把森林推向新的尺度。',
+    significance: '树木增加地表粗糙度、稳定部分河岸并制造木质碎屑；根系促进土壤和化学风化。森林扩展改变大气二氧化碳、营养盐输入和陆地动物栖息地。',
+    mechanism: '直立木质组织争夺光照，根状结构固定植物并扰动沉积物；光合作用固定碳，植物残体埋藏与风化反馈共同影响长期气候。',
+    evidence: '原位树桩、根痕、倒伏枝干、孢子与植物化石组合，以及由植被诱发的沉积结构共同显示这里不是漂来的零散木头。',
+    openQuestions: '“森林”的最低密度和树形标准如何统一、最早森林是否还有更老地点、早期根系对全球风化贡献多大，仍待更多地层比较。',
+    confidence: '中泥盆世森林现场证据强，全球最早纪录可能随新发现更新',
+    claimStatus: 'supported',
+    misconception: '第一片森林不像现代雨林，也不是清一色高大 Archaeopteris；早期树状植物形态和根系差异很大。',
+    glossary: [
+      { term: '原位化石', definition: '保存在生物原来生长或生活位置的化石，而非被水流搬运后堆积。' },
+      { term: '木质部', definition: '运输水分并提供支撑的植物组织，其演化帮助植物长高。' }
+    ],
+    dateNote: '当前最早森林现场之一来自中泥盆世 Eifelian 阶，约3.93亿—3.88亿年前；“最早”会随新发现更新。',
+    sources: [
+      { name: 'Earth’s earliest forest: fossilized trees and vegetation-induced sedimentary structures', publisher: 'Journal of the Geological Society', url: 'https://doi.org/10.1144/jgs2023-204' },
+      { name: 'Archaeopteris is the earliest known modern tree', publisher: 'Nature', url: 'https://doi.org/10.1038/19516' }
+    ]
+  },
+  {
     id: 'first-tetrapods',
     title: '脊椎动物走上陆地',
     displayTime: '约3.75亿年前',
@@ -419,6 +576,7 @@ const rawEvents = [
   },
   {
     id: 'late-devonian-extinction',
+    claimStatus: 'debated',
     title: '晚泥盆世多阶段灭绝',
     displayTime: '约3.72亿—3.59亿年前',
     era: '古生代',
@@ -501,6 +659,7 @@ const rawEvents = [
   },
   {
     id: 'permian-extinction',
+    claimStatus: 'supported',
     title: '二叠纪末大灭绝',
     displayTime: '约2.519亿年前',
     era: '古生代',
@@ -569,6 +728,7 @@ const rawEvents = [
   },
   {
     id: 'triassic-extinction',
+    claimStatus: 'supported',
     title: '三叠纪末大灭绝',
     displayTime: '约2.014亿年前',
     era: '中生代',
@@ -647,6 +807,7 @@ const rawEvents = [
   },
   {
     id: 'kpg-extinction',
+    claimStatus: 'consensus',
     title: '小行星撞击与恐龙灭绝',
     displayTime: '约6600万年前',
     era: '新生代',
@@ -956,6 +1117,32 @@ const rawEvents = [
         publisher: 'Smithsonian Human Origins Program',
         url: 'https://humanorigins.si.edu/evidence/human-fossils/species/homo-sapiens'
       }
+    ]
+  },
+  {
+    id: 'humanity-in-deep-time',
+    title: '把整个人类史放回深时间',
+    displayTime: '智人约30万年；地球约45.4亿年',
+    era: '人类文明',
+    category: '尺度转换',
+    mediaId: 'event-humanity-in-deep-time',
+    summary: '如果把地球史压缩成一天，智人直到最后约6秒才出现，工业时代更接近最后一眨眼。',
+    detail: '人类故事非常丰富，却只占地球时间线极薄的一层。用当前常用年龄估算，智人的约30万年只占地球历史约0.0066%；农业、城市、工业和数字技术又只占这段时间的末端。这个比例是帮助建立尺度感的类比，不是新的地层单位。',
+    significance: '深时间视角不会贬低人类成就，反而显示我们在极短时间内获得了改变碳循环、土地、生物迁移和信息网络的巨大能力，也提醒我们现代环境依赖数十亿年形成的系统。',
+    mechanism: '把两个独立定年的时间长度按比例映射到24小时、日历或手臂长度，就能直观看到尺度差异；结果随所取年龄和四舍五入略有变化。',
+    evidence: '地球年龄来自陨石、月球样本和古老矿物的放射性定年；智人时间范围来自可定年的化石、考古遗址与遗传研究。',
+    openQuestions: '早期智人的形态和行为在非洲多个人群间如何拼接、何时适合把某件化石归入智人，以及文化能力怎样累积，仍会随证据更新。',
+    confidence: '数量级和比例关系可靠，物种边界与最早记录会随发现调整',
+    claimStatus: 'supported',
+    misconception: '“最后几秒出现”只是时间压缩类比，不表示人类演化突然发生，也不表示此前历史只是为人类铺路。',
+    glossary: [
+      { term: '深时间', definition: '远超人类寿命和文明记录、以百万至十亿年理解地球变化的时间尺度。' },
+      { term: '放射性定年', definition: '利用不稳定同位素按已知速率衰变来测定岩石或矿物年龄。' }
+    ],
+    dateNote: '以地球45.4亿年、智人30万年估算：30万 ÷ 45.4亿约为0.0066%；换算成24小时约5.7秒。',
+    sources: [
+      { name: 'Facts About Earth', publisher: 'NASA Science', url: 'https://science.nasa.gov/earth/facts/' },
+      { name: 'Homo sapiens', publisher: 'Smithsonian Human Origins Program', url: 'https://humanorigins.si.edu/evidence/human-fossils/species/homo-sapiens' }
     ]
   },
   {
@@ -2076,6 +2263,7 @@ const events = rawEvents.map((event, index) => {
     isEraStart: !previous || previous.era !== event.era,
     keyPoints: event.keyPoints || [event.summary, event.significance, event.dateNote],
     confidence: event.confidence || notes.confidence || '主流结论，具体年代与机制持续更新',
+    claimStatus: event.claimStatus || (/争议|仍在研究|持续更新|多因素|不确定/.test([event.confidence, notes.confidence, event.openQuestions, deep.openQuestions].join('')) ? 'debated' : 'consensus'),
     misconception: event.misconception || notes.misconception || `“${event.title}”通常代表一段过程，不应把时间轴上的日期理解为所有变化在同一瞬间完成。`,
     glossary: event.glossary || deep.glossary || [],
     readingMinutes: Math.max(3, Math.ceil(readingText.length / 160))

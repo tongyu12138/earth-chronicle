@@ -18,7 +18,7 @@
       <view><text class="stat-number">{{meta.eventCount}}</text><text class="stat-label">关键事件</text></view>
       <view><text class="stat-number">{{meta.creatureCount}}</text><text class="stat-label">古生物档案</text></view>
     </view>
-    <text class="hero-credit">首页影像：项目自有 AI 艺术复原 · 科学内容人工审核</text>
+    <text class="hero-credit">首页影像：项目自有 AI 艺术复原 · 科学内容分级策展</text>
   </view>
 
   <view class="top-tools">
@@ -32,8 +32,15 @@
     <text class="section-kicker-global">TODAY'S SPECIMEN</text>
     <text class="section-heading-global">今日古生物</text>
     <view class="daily-card" hover-class="tap-card-active" bindtap="openCreature" data-id="{{dailyCreature.id}}">
-      <view class="daily-visual"><media-image media-id="{{dailyCreature.mediaId}}" variant="card" ratio="4:3" alt="{{dailyCreature.nameCn}}科学图片" placeholder-theme="rock" /></view>
+      <view class="daily-visual"><media-image media-id="{{dailyCreature.mediaId}}" variant="card" ratio="4:3" alt="{{dailyCreature.nameCn}}AI 艺术复原" placeholder-theme="rock" /></view>
       <view class="daily-content"><text class="daily-time">{{dailyCreature.livedWhen}}</text><text class="daily-name">{{dailyCreature.nameCn}}</text><text class="daily-latin">{{dailyCreature.scientificName}}</text><text class="daily-copy">{{dailyCreature.funIntro}}</text><text class="inline-link">查看完整档案 →</text></view>
+    </view>
+  </view>
+
+  <view class="section-block story-entry-section">
+    <view class="story-entry" hover-class="tap-card-active" bindtap="openStory">
+      <view class="story-entry-visual"><media-image media-id="event-solar-system-formation" variant="card" ratio="16:9" alt="太阳系尘埃盘与微行星吸积的AI艺术复原" placeholder-theme="volcanic" show-caption="{{false}}" /></view>
+      <view class="story-entry-copy"><text>12 CHAPTERS · 15 MINUTES</text><text>15分钟看懂地球史</text><text>从太阳系尘埃到现代文明，阅读一条连续因果主线。</text><text>进入故事模式 →</text></view>
     </view>
   </view>
 
@@ -62,7 +69,7 @@
     <scroll-view class="event-strip" scroll-x="true" enhanced="true" show-scrollbar="false">
       <view class="event-strip-inner">
         <view class="event-feature-card" wx:for="{{featuredEvents}}" wx:key="id" hover-class="tap-card-active" bindtap="openEvent" data-id="{{item.id}}" style="border-top-color:{{item.color}}">
-          <media-image media-id="{{item.mediaId}}" variant="card" ratio="16:9" alt="{{item.title}}科学图片" placeholder-theme="rock" />
+          <media-image media-id="{{item.mediaId}}" variant="card" ratio="16:9" alt="{{item.title}}AI 科学艺术复原" placeholder-theme="rock" />
           <view class="event-feature-body"><text class="event-feature-meta">{{item.displayTime}} · {{item.category}}</text><text class="event-feature-title">{{item.title}}</text><text class="event-feature-copy">{{item.summary}}</text><text class="inline-link">阅读事件说明 →</text></view>
         </view>
       </view>
@@ -73,7 +80,7 @@
     <text class="section-kicker-global warning-kicker">FIVE MASS EXTINCTIONS</text>
     <text class="section-heading-global">危机不是一瞬间的按钮</text>
     <text class="section-copy">每次大灭绝都包含多重环境压力，并在之后开启漫长的生态恢复与重组。</text>
-    <scroll-view class="extinction-strip" scroll-x="true" enhanced="true" show-scrollbar="false"><view class="extinction-strip-inner"><view class="extinction-card" wx:for="{{massExtinctions}}" wx:key="id" hover-class="tap-card-active" bindtap="openEvent" data-id="{{item.id}}"><view class="extinction-media"><media-image media-id="{{item.mediaId}}" variant="thumbnail" ratio="16:9" alt="{{item.title}}大灭绝科学图片" placeholder-theme="volcanic" /></view><view class="extinction-body"><text class="extinction-number">0{{index + 1}}</text><text class="extinction-title">{{item.title}}</text><text class="extinction-time">{{item.time}}</text><text class="extinction-copy">{{item.copy}}</text><text class="inline-link">查看独立事件档案 →</text></view></view></view></scroll-view>
+    <extinction-comparison />
   </view>
 
   <view class="section-block lens-section">

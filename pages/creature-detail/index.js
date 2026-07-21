@@ -19,7 +19,15 @@ function toLifeFunctions(lifeFunctions) {
 
 function decorateKnowledge(knowledge) {
   if (!knowledge) return null
+  const reviewStatus = knowledge.reviewStatus || 'unreviewed'
+  const statusCopy = reviewStatus === 'publish-ready'
+    ? { label: '逐条人工策展', note: '本页正文已逐条编写并核查，来源卡用于追溯关键科学判断。' }
+    : reviewStatus === 'scientific-review'
+      ? { label: '逐条科学复核', note: '本页已完成逐条人工复核；后续仍会随新研究更新证据边界。' }
+      : { label: '基础资料整理', note: '本页已完成结构化整理，仍等待逐条人工复核；有争议处按不确定信息呈现。' }
   return Object.assign({}, knowledge, {
+    contentStatusLabel: statusCopy.label,
+    contentStatusNote: statusCopy.note,
     taxonomyPath: knowledge.taxonomy && knowledge.taxonomy.displayPath ? knowledge.taxonomy.displayPath.join(' · ') : '',
     taxonomyConfidenceLabel: knowledge.taxonomy ? taxonomyConfidenceLabels[knowledge.taxonomy.confidence] : '',
     distributionRegions: knowledge.distribution && knowledge.distribution.regions ? knowledge.distribution.regions.join('、') : '',

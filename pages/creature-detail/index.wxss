@@ -22,6 +22,7 @@
 .status-pill { margin-top: 28rpx; padding: 22rpx 24rpx; border-radius: 20rpx; background: rgba(99,210,190,.08); border: 1rpx solid rgba(99,210,190,.18); display: flex; flex-direction: column; gap: 7rpx; }
 .status-pill text:first-child { color: #6ed1bf; font-size: 21rpx; font-weight: 800; }
 .status-pill text:last-child { color: #78908e; font-size: 18rpx; }
+.period-connection { display: block; margin-top: 20rpx; padding-left: 18rpx; border-left: 4rpx solid rgba(99,210,190,.45); color: #91aaa8; font-size: 23rpx; line-height: 1.7; }
 .quick-grid { margin-top: 34rpx; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12rpx; }
 .quick-grid > view { min-height: 160rpx; padding: 22rpx; border-radius: 22rpx; background: rgba(255,255,255,.045); display: flex; flex-direction: column; gap: 12rpx; }
 .quick-grid > view text:first-child { color: #6e888a; font-size: 18rpx; }

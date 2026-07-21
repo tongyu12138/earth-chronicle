@@ -1,7 +1,7 @@
 // 此文件由 scripts/generate-summaries.js 生成，请勿手工维护重复字段。
 const indexMeta = {
   "periodCount": 29,
-  "eventCount": 70,
+  "eventCount": 77,
   "creatureCount": 110,
   "quizResultCount": 60,
   "heroMediaId": "hero-earth-blue-marble"
@@ -12,7 +12,7 @@ const categories = [
     "id": "timeline",
     "icon": "↧",
     "name": "生命演化",
-    "copy": "沿70个关键事件穿越深时间"
+    "copy": "沿77个关键事件穿越深时间"
   },
   {
     "id": "creatures",

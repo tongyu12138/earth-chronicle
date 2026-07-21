@@ -21,8 +21,9 @@ quizProfiles.forEach((profile) => {
     const value = profile.personalityProfile && profile.personalityProfile[dimension]
     if (typeof value !== 'number' || value < 0 || value > 1) problems.push(`${profile.id} has invalid ${dimension}`)
   })
-  if (!Array.isArray(profile.matchReasons) || profile.matchReasons.length < 2) problems.push(`${profile.id} missing matchReasons`)
-  if (!profile.resultSummary) problems.push(`${profile.id} missing resultSummary`)
+  if (!profile.paleoTypeCode) problems.push(`${profile.id} missing paleoTypeCode`)
+  if (!profile.oneLineIdentity || !profile.creatureStrategy || !profile.sharedMechanism || !profile.evidenceBoundary) problems.push(`${profile.id} missing curated result semantics`)
+  if (profile.curationStatus !== 'manual') problems.push(`${profile.id} is not manually curated`)
   if (!Array.isArray(profile.resultStrengths) || profile.resultStrengths.length < 2) problems.push(`${profile.id} missing resultStrengths`)
   if (!profile.resultCaution) problems.push(`${profile.id} missing resultCaution`)
 })
@@ -98,6 +99,7 @@ if (averageNeighborSimilarity < 0.82 || illogicalJumps / stabilitySamples > 0.02
 const profileSource = fs.readFileSync(path.resolve(__dirname, '../data/quiz-profiles.js'), 'utf8')
 const creatureSource = fs.readFileSync(path.resolve(__dirname, '../data/creatures.js'), 'utf8')
 if (/hashUnit|Math\.random/.test(profileSource)) problems.push('quiz-profiles.js must not generate profiles from hashes or randomness')
+if (/summaryOpeners|scienceBridges|summaryClosers|modernRoles/.test(profileSource)) problems.push('quiz-profiles.js still contains visible copy generators')
 if (/personalityProfile\s*=\s*buildProfile/.test(creatureSource)) problems.push('creatures.js still generates personality profiles automatically')
 
 if (rows.length < 48) problems.push(`Only ${rows.length} profiles became first place; expected at least 48`)
@@ -106,13 +108,13 @@ if (maximum && maximum.count / sampleSize > 0.1) problems.push(`${maximum.id} ex
 const reportRows = quizProfiles.map((profile) => {
   const count = counts[profile.id] || 0
   const creature = creatures.find((item) => item.id === profile.id)
-  return `| ${profile.nameCn} | \`${profile.id}\` | ${creature ? creature.periodId : 'unknown'} | ${profile.archetype} | ${count} | ${(count / sampleSize * 100).toFixed(2)}% |`
+  return `| ${profile.nameCn} | \`${profile.id}\` | ${creature ? creature.periodId : 'unknown'} | ${profile.paleoTypeCode} | ${count} | ${(count / sampleSize * 100).toFixed(2)}% |`
 })
 const report = `# 古生物测试分布报告\n\n` +
   `- 固定种子：20260718\n- 模拟答案：${sampleSize} 组\n- 正式结果：${quizProfiles.length} 种\n- 成为第一名：${rows.length} 种\n- 最大单项占比：${maximum ? `${maximum.id} ${(maximum.count / sampleSize * 100).toFixed(2)}%` : '无'}\n` +
   `- 单题变化后结果不变：${(stableSame / stabilitySamples * 100).toFixed(2)}%\n- 单题变化前后结果平均画像相似度：${(averageNeighborSimilarity * 100).toFixed(2)}%\n- 明显跨越（相似度低于58%）：${illogicalJumps}/${stabilitySamples}\n\n` +
-  `画像由人工选择的生态原型与题库样本簇共同校准。ID 哈希不参与正式画像；流行度不参与权重。该模型用于科普娱乐，不是对已灭绝动物心理的科学测量。\n\n` +
-  `| 结果 | ID | 首要时期 | 原型 | 出现次数 | 占比 |\n| --- | --- | --- | --- | ---: | ---: |\n${reportRows.join('\n')}\n`
+  `画像由人工选择的生态画像与题库样本簇共同校准。PaleoCode 先由四组非环境轴确定，水域、陆地、空域和寒冷亲和只在同类型物种中参与排序。ID 哈希与流行度均不参与权重。该模型用于科普娱乐，不是对已灭绝动物心理的科学测量。\n\n` +
+  `| 结果 | ID | 首要时期 | PaleoCode | 出现次数 | 占比 |\n| --- | --- | --- | --- | ---: | ---: |\n${reportRows.join('\n')}\n`
 const reportDir = path.resolve(__dirname, '../reports')
 fs.mkdirSync(reportDir, { recursive: true })
 fs.writeFileSync(path.join(reportDir, 'quiz-distribution.md'), report)

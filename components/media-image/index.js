@@ -105,6 +105,8 @@ Component({
         mediaTypeLabel: TYPE_LABELS[mediaType] || '',
         isReconstruction: Boolean(record && record.isReconstruction),
         ratioPadding: this.properties.ratio === '4:3' ? '75%' : (this.properties.ratio === '1:1' || this.properties.ratio === 'square' ? '100%' : '56.25%')
+      }, () => {
+        if (state === 'ready') this.triggerEvent('ready', { src: activeSrc, mediaId: this.properties.mediaId })
       })
     },
     handleLoad() {
@@ -114,11 +116,17 @@ Component({
     },
     handleError(event) {
       const error = event && event.detail ? event.detail : event
-      if (this.data.activeSrc) failedUrls.add(this.data.activeSrc)
+      const attemptedUrl = this.data.activeSrc
+      if (attemptedUrl) failedUrls.add(attemptedUrl)
       const nextIndex = this.data.candidateSrcs.findIndex((candidate, index) => index > this.data.candidateIndex && !failedUrls.has(candidate))
       if (nextIndex >= 0) {
         const nextSrc = this.data.candidateSrcs[nextIndex]
-        console.warn('[MediaImage] primary unavailable, using fallback', { mediaId: this.properties.mediaId, src: this.data.activeSrc, fallback: nextSrc })
+        console.warn('[MediaImage] candidate unavailable, using HTTPS fallback', {
+          mediaId: this.properties.mediaId,
+          attemptedUrl,
+          finalAttemptUrl: nextSrc,
+          error
+        })
         this.setData({
           state: loadedUrls.has(nextSrc) ? 'ready' : 'loading',
           activeSrc: nextSrc,
@@ -126,9 +134,13 @@ Component({
         })
         return
       }
-      console.error('[MediaImage]', { mediaId: this.properties.mediaId, src: this.data.activeSrc, error })
+      console.warn('[MediaImage] all candidates unavailable', {
+        mediaId: this.properties.mediaId,
+        finalAttemptUrl: attemptedUrl,
+        error
+      })
       this.setData({ state: 'error', activeSrc: '' })
-      this.triggerEvent('error', { mediaId: this.properties.mediaId, error })
+      this.triggerEvent('error', { mediaId: this.properties.mediaId, finalAttemptUrl: attemptedUrl, error })
     },
     retry() {
       if (!this.properties.retryable) return

@@ -1,0 +1,69 @@
+{
+  "mode": "after",
+  "projectPath": "/Users/tongyu/Desktop/历史",
+  "results": [
+    {
+      "id": "megalodon",
+      "name": "巨齿鲨",
+      "code": "OPSR",
+      "family": "builder",
+      "match": 88,
+      "mediaState": "ready"
+    },
+    {
+      "id": "methanogen",
+      "name": "产甲烷古菌",
+      "code": "OPSG",
+      "family": "guardian",
+      "match": 89,
+      "mediaState": "ready"
+    },
+    {
+      "id": "archaeopteryx",
+      "name": "始祖鸟",
+      "code": "EPSR",
+      "family": "explorer",
+      "match": 90,
+      "mediaState": "ready"
+    },
+    {
+      "id": "ankylosaurus",
+      "name": "甲龙",
+      "code": "OPSG",
+      "family": "guardian",
+      "match": 89,
+      "mediaState": "ready"
+    },
+    {
+      "id": "woolly-mammoth",
+      "name": "真猛犸象",
+      "code": "EPCG",
+      "family": "connector",
+      "match": 87,
+      "mediaState": "ready"
+    },
+    {
+      "id": "australopithecus",
+      "name": "阿法南方古猿",
+      "code": "EBCR",
+      "family": "connector",
+      "match": 89,
+      "mediaState": "ready"
+    },
+    {
+      "story": {
+        "chapters": 12,
+        "mediaState": "ready"
+      }
+    },
+    {
+      "extinctions": {
+        "comparisons": 5,
+        "selectedId": "ordovician-extinction"
+      }
+    }
+  ],
+  "errorLogs": [],
+  "exceptions": [],
+  "consoleCount": 0
+}

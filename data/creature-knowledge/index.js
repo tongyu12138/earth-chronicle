@@ -2,9 +2,12 @@ const precambrian = require('./precambrian')
 const paleozoic = require('./paleozoic')
 const mesozoic = require('./mesozoic')
 const cenozoic = require('./cenozoic')
+const p0Reviewed = require('./p0-reviewed/index')
 const { sources, sourceMap, getSources } = require('./sources')
 
-const entries = [].concat(precambrian, paleozoic, mesozoic, cenozoic)
+const explicitEntries = [].concat(precambrian, paleozoic, mesozoic, cenozoic)
+  .map((entry) => entry.contentOrigin ? entry : Object.assign({ contentOrigin: 'manual', reviewStatus: 'publish-ready' }, entry))
+const entries = explicitEntries.concat(p0Reviewed)
 const knowledgeMap = entries.reduce((map, entry) => {
   map[entry.id] = entry
   return map

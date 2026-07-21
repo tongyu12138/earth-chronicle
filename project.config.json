@@ -11,7 +11,7 @@
     "enhance": true,
     "postcss": true,
     "minified": true,
-    "urlCheck": false,
+    "urlCheck": true,
     "coverView": true,
     "showShadowRootInWxmlPanel": true,
     "packNpmManually": false,
@@ -36,15 +36,42 @@
   "simulatorPluginLibVersion": {},
   "packOptions": {
     "ignore": [
-      { "type": "folder", "value": "scripts" },
-      { "type": "folder", "value": "docs" },
-      { "type": "folder", "value": "reports" },
-      { "type": "folder", "value": "media" },
-      { "type": "folder", "value": ".github" },
-      { "type": "file", "value": "README.md" },
-      { "type": "file", "value": "data/image-manifest.js" },
-      { "type": "file", "value": "data/media-queries.js" },
-      { "type": "file", "value": "封面图.jpg" }
+      {
+        "type": "folder",
+        "value": "scripts"
+      },
+      {
+        "type": "folder",
+        "value": "docs"
+      },
+      {
+        "type": "folder",
+        "value": "reports"
+      },
+      {
+        "type": "folder",
+        "value": "media"
+      },
+      {
+        "type": "folder",
+        "value": ".github"
+      },
+      {
+        "type": "file",
+        "value": "README.md"
+      },
+      {
+        "type": "file",
+        "value": "data/image-manifest.js"
+      },
+      {
+        "type": "file",
+        "value": "data/media-queries.js"
+      },
+      {
+        "type": "file",
+        "value": "封面图.jpg"
+      }
     ],
     "include": []
   },

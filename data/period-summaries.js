@@ -10,7 +10,7 @@ const periodSummaries = [
     "icon": "◉",
     "tagline": "一颗由碰撞、岩浆与冷却共同塑造的年轻行星。",
     "representativeName": "尚无已确认生命",
-    "eventCount": 3,
+    "eventCount": 4,
     "mediaId": "period-hadean",
     "mediaReady": true
   },
@@ -38,7 +38,7 @@ const periodSummaries = [
     "icon": "✧",
     "tagline": "氧气、真核细胞、全球冰期与大型多细胞生命登场。",
     "representativeName": "格里帕尼亚",
-    "eventCount": 4,
+    "eventCount": 7,
     "mediaId": "period-proterozoic",
     "mediaReady": true
   },
@@ -66,7 +66,7 @@ const periodSummaries = [
     "icon": "≋",
     "tagline": "海洋生物大辐射，最早陆生植物留下微小痕迹。",
     "representativeName": "艾吉罗卡西斯",
-    "eventCount": 2,
+    "eventCount": 3,
     "mediaId": "period-ordovician",
     "mediaReady": true
   },
@@ -94,7 +94,7 @@ const periodSummaries = [
     "icon": "◇",
     "tagline": "鱼类多样化，森林成长，脊椎动物开始探索陆地。",
     "representativeName": "邓氏鱼",
-    "eventCount": 2,
+    "eventCount": 3,
     "mediaId": "period-devonian",
     "mediaReady": true
   },
@@ -290,7 +290,7 @@ const periodSummaries = [
     "icon": "✣",
     "tagline": "智人扩散，复杂工具、艺术与远距离社会网络不断增加。",
     "representativeName": "人类社会与技术",
-    "eventCount": 2,
+    "eventCount": 3,
     "mediaId": "period-hunter-gatherer",
     "mediaReady": true
   },

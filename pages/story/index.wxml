@@ -1,0 +1,68 @@
+<page-meta page-style="background:#071319" />
+<view class="museum-page story-page safe-bottom">
+  <view class="story-hero">
+    <media-image media-id="event-solar-system-formation" variant="hero" ratio="16:9" alt="太阳系原行星盘与微行星吸积的AI艺术复原" lazy-load="false" show-caption="{{false}}" />
+    <view class="story-hero-shade"></view>
+    <view class="story-hero-copy">
+      <text class="story-eyebrow">A 15-MINUTE EARTH STORY</text>
+      <text class="story-title">15分钟看懂地球史</text>
+      <text class="story-intro">12章连续因果主线，从太阳系尘埃、氧气与生命，走到城市、工业和人工智能。</text>
+      <view class="story-meta"><text>12章</text><text>77个事件中的精选路线</text><text>来源可追溯</text></view>
+    </view>
+  </view>
+
+  <view class="story-progress">
+    <view><text>阅读进度</text><text>{{progress}}%</text></view>
+    <view class="story-track"><view style="width:{{progress}}%"></view></view>
+    <text>它不是29个时期与完整时间轴的替代品，而是一条先建立因果骨架、再深入档案的路线。</text>
+  </view>
+
+  <view class="story-chapters">
+    <view wx:for="{{chapters}}" wx:key="id" class="story-chapter {{activeId === item.id ? 'is-open' : ''}}">
+      <view class="chapter-cover" data-id="{{item.id}}" bindtap="toggleChapter">
+        <view class="chapter-image"><media-image media-id="{{item.mediaId}}" variant="card" ratio="16:9" alt="{{item.title}}艺术复原" placeholder-theme="rock" show-caption="{{false}}" /></view>
+        <view class="chapter-cover-copy"><text>{{item.number}}</text><text>{{item.title}}</text><text>{{item.openingQuestion}}</text></view>
+        <text class="chapter-toggle">{{activeId === item.id ? '收起 −' : '阅读 +'}}</text>
+      </view>
+
+      <view wx:if="{{activeId === item.id}}" class="chapter-body">
+        <view class="story-answer previous"><text>上一幕留下了什么</text><text>{{item.previousCondition}}</text></view>
+        <view class="narrative-block"><text>这一幕发生了什么</text><text>{{item.narrative}}</text></view>
+
+        <view class="key-facts">
+          <text class="chapter-section-title">三个事实锚点</text>
+          <view wx:for="{{item.keyFacts}}" wx:key="*this"><text>{{index + 1}}</text><text>{{item}}</text></view>
+        </view>
+
+        <view class="evidence-section">
+          <text class="chapter-section-title">科学家如何知道</text>
+          <view class="evidence-card" wx:for="{{item.evidenceCards}}" wx:key="title">
+            <view><text>{{item.title}}</text><text class="status-{{item.claimStatus}}">{{item.statusLabel}}</text></view>
+            <text>{{item.evidence}}</text>
+          </view>
+        </view>
+
+        <view class="misconception"><text>别被一句话带偏</text><text>{{item.misconception}}</text></view>
+        <view class="story-answer next"><text>它怎样推动下一幕</text><text>{{item.nextTransition}}</text></view>
+
+        <view class="archive-section">
+          <text class="chapter-section-title">继续进入完整档案</text>
+          <scroll-view scroll-x="true" enhanced="true" show-scrollbar="false"><view class="archive-links">
+            <button wx:for="{{item.eventIds}}" wx:key="*this" data-id="{{item}}" bindtap="openEvent">事件 · {{item}} →</button>
+          </view></scroll-view>
+          <view class="period-links"><button wx:for="{{item.periodIds}}" wx:key="*this" data-id="{{item}}" bindtap="openPeriod">时期 · {{item}}</button></view>
+        </view>
+
+        <view class="story-sources">
+          <text class="chapter-section-title">本章科学来源</text>
+          <button wx:for="{{item.sourceCards}}" wx:key="id" data-url="{{item.url}}" bindtap="copySource"><view><text>{{item.title}}</text><text>{{item.organization}} · {{item.type}}</text></view><text>复制</text></button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="story-ending">
+    <text>故事没有终章</text>
+    <text>时间轴抵达“现在”，但气候、生态、社会和技术仍在继续变化。故事模式只给出一条可追溯主线；争议处保留证据强度，不把演化写成通往人类的预定路线。</text>
+  </view>
+</view>

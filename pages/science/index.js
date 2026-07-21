@@ -78,6 +78,10 @@ Page({
     navigateToPage('/pages/timeline/index', { toastTitle: '暂时无法打开时间轴' })
   },
 
+  openStory() {
+    navigateToPage('/pages/story/index', { toastTitle: '暂时无法打开故事模式' })
+  },
+
   openAtlas() {
     navigateToPage('/pages/creatures/index', { toastTitle: '暂时无法打开图鉴' })
   },

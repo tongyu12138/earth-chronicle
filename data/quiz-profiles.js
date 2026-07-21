@@ -4,17 +4,13 @@ const DIMENSIONS = [
   'aerialAffinity', 'coldAffinity'
 ]
 
+const { getResultContentById } = require('./quiz-result-content')
+
 const dimensionLabels = {
   curiosity: '愿意去看看', boldness: '敢先行动', sociability: '愿意找同伴', patience: '愿意等一等',
   adaptability: '会临时换办法', strategy: '会提前想路线', speed: '反应很快', defense: '先保护自己',
   independence: '喜欢自己判断', sizePreference: '愿意处理大任务', aquaticAffinity: '喜欢流动环境',
   terrestrialAffinity: '偏爱脚下稳当', aerialAffinity: '喜欢先看全局', coldAffinity: '能承受寒冷'
-}
-
-const modernRoles = {
-  community: '把大家组织起来的人', adaptive: '遇到变化会换办法的人', sentinel: '能稳稳守住长期任务的人', explorer: '愿意先去探路的人',
-  ambusher: '很会等待好时机的人', sprinter: '遇事能快速启动的人', armored: '会保护边界和重要资源的人', aerial: '习惯先看全局再行动的人',
-  giant: '愿意慢慢完成大工程的人', aquatic: '能在变化中及时转向的人', coldSocial: '困难时会照顾同伴的人', transition: '能把旧经验带到新环境的人'
 }
 
 const lowNeedTips = {
@@ -121,79 +117,30 @@ function toProfile(values) {
   }, {})
 }
 
-const summaryOpeners = [
-  (pattern) => `15道题里，你多次选择这样的做法：${pattern}。`,
-  (pattern) => `回看你的答案，一个反复出现的习惯是：${pattern}。`,
-  (pattern) => `系统不是看你喜欢哪种动物，而是看到：${pattern}。`,
-  (pattern) => `最影响结果的不是某一道题，而是同一种选择出现了好几次：${pattern}。`,
-  (pattern) => `当场景变得陌生时，你的答案常常指向同一件事：${pattern}。`,
-  (pattern) => `你的答案并非每次都一样，但最常出现的路线是：${pattern}。`,
-  (pattern) => `把15次选择放在一起看，你的做法可以概括成：${pattern}。`,
-  (pattern) => `这张卡读的是做法，不是性格标签。你最常用的做法是：${pattern}。`,
-  (pattern) => `你可能没有刻意这样想，但多道题都显示：${pattern}。`,
-  (pattern) => `这次匹配先从你的真实选择出发：${pattern}。`
-]
-
-const scienceBridges = [
-  (science) => `物种这边的化石与研究告诉我们：${science}`,
-  (science) => `再看这个物种的真实生活：${science}`,
-  (science) => `为什么会找到它？关键的科学依据是：${science}`,
-  (science) => `和你的答案放在一起比较的事实是：${science}`,
-  (science) => `它并不是凭名字入选。研究线索显示：${science}`,
-  (science) => `这次类比使用的生物事实很具体：${science}`
-]
-
-const summaryClosers = [
-  (name, shared) => `所以你和${name}像的不是外形，而是${shared}。这只是有科学依据的趣味类比，不是在判断动物的性格。`,
-  (name, shared) => `把两边连起来，最像的地方就是：${shared}。${name}没有接受“性格测试”，这里比较的是生存办法。`,
-  (name, shared) => `因此匹配点很简单：${shared}。名字只是结果的外壳，真正被比较的是你的选择和它的生存方式。`,
-  (name, shared) => `两者共同出现的动作是：${shared}。这不代表你真的像${name}，也不代表化石保存了它的心理。`,
-  (name, shared) => `一句话收尾：${shared}。这个结论只用于科普娱乐，科学事实仍以化石和研究资料为准。`,
-  (name, shared) => `这就是${name}成为结果的原因：${shared}。如果你的选择改变，下次匹配也可能不同。`,
-  (name, shared) => `共同点落在做法上：${shared}。我们没有把人类情绪硬套给${name}，只借用了可观察的生态习性。`,
-  (name, shared) => `你们被放在一起，是因为${shared}。它是一面有化石依据的“远古镜子”，不是人格诊断。`,
-  (name, shared) => `所以答案不是“你长得像${name}”，而是${shared}。物种事实与娱乐类比在这里分开阅读。`,
-  (name, shared) => `最后的连接只有这一条：${shared}。它足以支持趣味匹配，却不能证明${name}拥有人的想法。`
-]
-
-const quizProfiles = rows.map(([id, nameCn, archetype, values, scienceBasis], rowIndex) => {
-  const copy = archetypes[archetype]
-  const rankedDimensions = DIMENSIONS.map((key, index) => ({ key, value: values[index] })).sort((left, right) => right.value - left.value)
-  const primaryDimension = rankedDimensions[0].key
-  const secondaryDimension = rankedDimensions[1].key
-  const lowDimension = rankedDimensions[rankedDimensions.length - 1].key
-  const strengthOne = dimensionLabels[primaryDimension]
-  const strengthTwo = dimensionLabels[secondaryDimension]
-  const resultTitle = `${nameCn}式·${copy.title}`
-  const punchline = `${copy.userPattern}；${nameCn}的真实生存方式也有相似之处。`
-  const resultSummary = [
-    summaryOpeners[rowIndex % summaryOpeners.length](copy.userPattern),
-    scienceBridges[Math.floor(rowIndex / summaryOpeners.length) % scienceBridges.length](scienceBasis),
-    summaryClosers[(rowIndex * 7 + Math.floor(rowIndex / 10)) % summaryClosers.length](nameCn, copy.sharedPoint)
-  ].join('')
-  return {
+const quizProfiles = rows.map(([id, nameCn, archetype, values]) => {
+  const curated = getResultContentById(id)
+  if (!curated) throw new Error(`Missing manually curated result content: ${id}`)
+  return Object.assign({
     id,
     nameCn,
     archetype,
     quizEligible: true,
-    personalityProfile: toProfile(values),
-    resultTitle,
-    punchline,
-    resultSummary,
-    matchReasons: [
-      `你这边：${copy.userPattern}。`,
-      `它那边：${scienceBasis}`,
-      `相似点：${copy.sharedPoint}。`
-    ],
-    modernRole: `如果生活在今天，你可能是${modernRoles[archetype]}。你不一定最抢眼，但往往能把事情真正往前推。`,
-    hiddenStrength: `你的隐藏优点是：${copy.strengths[2]}。这不是超能力，而是你在多道题里反复选择出来的做事习惯。`,
-    stressResponse: lowNeedTips[lowDimension],
-    resultCaution: copy.caution,
-    survivalLesson: `${nameCn}提醒我们：一种办法能成功，是因为身体、食物和环境刚好配合。环境一变，原来的好办法也可能失效。`,
-    ecosystemJob: `用一句话概括它的真实生存方式：${scienceBasis}`,
-    comparisonNotes: { shared: `你和它都比较像“${copy.title}”这一路线。`, difference: `另一个结果会在“${strengthTwo}”上表现得更明显。` },
-    resultStrengths: copy.strengths.slice()
-  }
+    personalityProfile: toProfile(values)
+  }, curated, {
+    punchline: curated.oneLineIdentity,
+    matchExplanation: {
+      userEvidence: '',
+      creatureStrategy: curated.creatureStrategy,
+      sharedMechanism: curated.sharedMechanism,
+      evidenceBoundary: curated.evidenceBoundary
+    },
+    resultStrengths: curated.strengths.slice(),
+    resultCaution: curated.blindSpot,
+    modernRole: curated.modernAnalogy,
+    stressResponse: curated.stressResponse,
+    survivalLesson: curated.survivalLesson,
+    ecosystemJob: curated.ecosystemRoleSummary
+  })
 })
 
 const quizProfileMap = quizProfiles.reduce((map, item) => {

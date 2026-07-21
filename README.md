@@ -8,12 +8,13 @@
 
 - 2 个 Tab：地球史、测测你是谁；
 - 29 个地质时期及人类历史阶段；
-- 70 个关键事件；
+- 77 个关键事件；
 - 110 种古生物或古老生命类型；
 - 15 道题，每题固定 4 个选项；
-- 60 个正式、人工选择并经分布校准的测试结果，其他 50 种只保留在图鉴；
-- 297 个内容媒体位：96 个 P0、93 个 P1、108 个 P2，现已全部完成；
-- 加上测试欢迎页三联画，运行时共 298 张项目自有 AI 艺术复原，每张都有独立文件哈希、生成记录、人工视觉审核说明和推测性声明。
+- 16 种“远古生存码”，60 个正式人工策展结果，每型覆盖 3—4 种古生物；其他 50 种只保留在图鉴；
+- 12 章“15分钟看懂地球史”连续故事模式，以及可横向切换的五次大灭绝对比馆；
+- 304 个内容媒体位：96 个 P0、100 个 P1、108 个 P2，现已全部完成；
+- 加上测试欢迎页三联画，运行时共 305 张项目自有 AI 艺术复原，每张都有独立文件哈希、生成记录、人工视觉审核说明和推测性声明。
 
 ## 在微信开发者工具中运行
 
@@ -23,13 +24,13 @@
 4. 使用项目已有 AppID，点击“编译”。
 5. 默认打开“地球史”；底部 Tab 可切换到“测测你是谁”。
 
-需要查看本地已审批高清图片时，在编译前保持下列命令运行：
+开发、体验和正式环境默认都从以下 HTTPS 地址读取媒体，不依赖本机服务：
 
-```bash
-node scripts/serve-media.js
+```text
+https://tongyu12138.github.io/earth-chronicle
 ```
 
-该服务只监听 `127.0.0.1:4173`，而且只允许读取 `media/public/`。真机不能访问开发电脑的 `127.0.0.1`，真机预览必须先完成 HTTPS 媒体部署和微信合法域名配置。
+`scripts/serve-media.js` 只保留为显式可选的 HTTPS 调试服务：它必须提供受信任证书、HTTPS 域名和私钥环境变量，否则会拒绝启动；普通 HTTP 与 `127.0.0.1` 不会进入小程序图片候选。若确实需要启用，可在开发者工具控制台用 `wx.setStorageSync('earthChronicle.developMediaHttpsBaseUrl', 'https://受信任域名')` 指定临时地址，清除该键即可恢复 GitHub Pages 默认值。
 
 不要替换或提交 `project.private.config.json`。不要把 AppSecret、私钥、访问令牌或对象存储密钥写入前端仓库。
 
@@ -38,15 +39,16 @@ node scripts/serve-media.js
 ## 信息架构
 
 ```text
-pages/science/index          轻量地球史首页、五大时代、精选事件与专题
+pages/science/index          轻量地球史首页、五大时代、故事入口与灭绝对比馆
 pages/quiz/index             测试欢迎页与15题答题流程
 pages/period/index           29个时期详情
-pages/detail/index           70个事件详情
+pages/detail/index           77个事件详情
 pages/creatures/index        110种古生物图鉴、搜索与筛选
 pages/creature-detail/index  古生物详情
 pages/search/index           全局搜索
-pages/quiz-result/index      测试结果、相近结果与分享
-pages/timeline/index         70个事件时间轴
+pages/quiz-result/index      远古生存码身份海报、语义解释、科学预览与分享
+pages/timeline/index         77个事件时间轴
+pages/story/index            12章“15分钟看懂地球史”连续故事
 ```
 
 旧的 `pages/event/index` 重定向层已删除。时期、时间轴、搜索、最近浏览和分享统一使用：
@@ -69,7 +71,7 @@ data/creature-summaries.js
 
 测试页只导入 `data/quiz-profiles.js`。完整事件、时期和古生物数据仅由详情、图鉴、搜索和时间轴页面使用。
 
-当前依据 `project.config.json` 排除规则得到的主包静态未压缩估算约为 1.20 MiB，高清图片位于 `media/` 并明确排除，不会被打进小程序主包。项目仍保持单主包；精确数据见 `reports/package-size.md`，最终数字以微信开发者工具“代码依赖分析 / 包体积”为准。
+当前依据 `project.config.json` 排除规则得到的主包静态未压缩估算约为 1.75 MiB。AI 媒体目录采用共享字段与逐图字段分离的无损结构，高清图片位于 `media/` 并明确排除，不会被打进小程序主包。项目仍保持单主包；精确数据见 `reports/package-size.md`，最终数字以微信开发者工具“代码依赖分析 / 包体积”为准。
 
 ## 图片系统
 
@@ -77,7 +79,7 @@ data/creature-summaries.js
 config/media.js                 开发、体验、生产媒体 Base URL
 data/media-catalog.js           已核验媒体目录
 components/media-image/         loading / ready / error / missing 组件
-data/image-manifest.js          297个内容媒体位及P0/P1/P2优先级
+data/image-manifest.js          304个内容媒体位及P0/P1/P2优先级
 data/ai-media-catalog.js        由逐图审核记录生成的AI运行时目录
 data/media-queries.js           时期、生物和事件的开放媒体查询表
 scripts/discover-open-media.js  Commons API候选发现，不会自动入库
@@ -86,7 +88,7 @@ scripts/build-media-proposals.js 生成四选一短名单，仍不会批准
 scripts/approve-media.js        只执行media/decisions.json中的显式批准
 scripts/sync-media.js           MIME、尺寸、哈希、路径和权利字段检查
 scripts/validate-media.js       普通校验与全量AI发布门禁
-scripts/serve-media.js          仅供微信开发者工具使用的本地媒体服务
+scripts/serve-media.js          显式可选、要求受信任证书的HTTPS媒体服务
 scripts/stage-media-site.js     只发布运行时实际引用的AI媒体
 scripts/verify-deployed-media.js 逐一探测正式HTTPS媒体地址
 docs/IMAGE_SOURCES.md           授权记录、同步格式与待补说明
@@ -94,11 +96,13 @@ docs/IMAGE_SOURCES.md           授权记录、同步格式与待补说明
 
 图片组件区分 thumbnail / card / hero / full 四种模式，支持骨架屏、加载失败降级、手动重试、焦点裁切、大图预览、作者/许可/图注、原始来源复制和“艺术复原”类型标记。详情图加载失败时会先降级到缩略图，再降级到可读占位，不显示系统破图。
 
-开发版优先使用 `http://127.0.0.1:4173`，本地服务不可用时会自动回退到正式 HTTPS 媒体；体验版与正式版只使用 `https://tongyu12138.github.io/earth-chronicle`，不会访问用户设备上的 `127.0.0.1`。GitHub Pages 工作流只上传运行时目录实际引用并通过审核的 596 个 AI 大小图文件，并在部署后逐一探测，不使用 GitHub Raw 热链。微信公众平台需配置：
+开发版、体验版与正式版默认均使用 `https://tongyu12138.github.io/earth-chronicle`，不会先访问 HTTP 或等待本机服务超时。大图失败后仍会按顺序回退到 HTTPS 缩略图；全部媒体不可用时显示可读占位，结果海报也会生成无图片降级版。GitHub Pages 工作流只上传运行时目录实际引用并通过审核的 610 个 AI 大小图文件，并在部署后逐一探测，不使用 GitHub Raw 热链。正式上线前，必须在微信公众平台把下列域名加入图片/下载所需的合法域名配置，并保持 TLS 证书有效：
 
 ```text
 https://tongyu12138.github.io
 ```
+
+尤其要把该域名加入 `downloadFile` 合法域名，因为结果海报会通过 `wx.getImageInfo` 下载同源 HTTPS 图片后绘制到 Canvas 2D。`project.config.json` 中开发者工具的 `urlCheck: false` 只用于本地调试，不能替代正式版域名白名单；未配置时结果页 `<image>` 可能仍可显示，但海报会自动降级为无图片版本。
 
 不要使用 GitHub Raw 作为生产图片服务。列表缩略图建议 40—100KB，普通内容图 100—250KB，头图在清晰度允许时控制在 300—500KB。
 
@@ -129,10 +133,12 @@ node scripts/validate-media.js --release
 
 ## 测试画像
 
-正式结果集中在 `data/quiz-profiles.js`：
+正式结果由 `data/quiz-result-content.js` 的人工文案与 `data/quiz-profiles.js` 的数值画像共同组成：
 
 - 60 种 `quizEligible: true`；
-- 每种都有完整 14 维画像、匹配依据、结果摘要、优势和提醒；
+- 每种都有独立 PaleoCode、标题、一句话身份、古生物真实策略、共同机制、证据边界、优势和提醒；
+- 16 型由探索方式、行动节奏、协作方式和应对方向四组非环境轴确定，环境亲和只在同型物种中决定最终匹配；
+- 结果页默认不暴露完整 14 维或内部计分，只从真实题号和选择原文解释“为什么是它”；
 - 其余 50 种 `quizEligible: false`，仍在图鉴展示；
 - ID 哈希不再生成正式画像；哈希只用于无科学含义的旧昵称选择；
 - 画像先依据生态原型人工选择，再用固定题库样本簇校准数值分布；
@@ -148,6 +154,10 @@ node scripts/validate-media.js --release
 node scripts/validate-data.js
 node scripts/generate-summaries.js --check
 node scripts/validate-quiz.js
+node scripts/validate-creature-content.js
+node scripts/validate-quiz-content.js
+node scripts/validate-result-semantics.js
+node scripts/validate-story-content.js
 node scripts/audit-routes.js
 node scripts/report-package-size.js --check
 node scripts/validate-media.js
@@ -168,13 +178,14 @@ node scripts/validate-quiz.js --large
 1. 两个 Tab 可互相切换；
 2. 首页五个时代都能切换，29 个时期逐一可打开；
 3. 时期页上下时期和“全部时期”正常；
-4. 70 个时间轴事件、搜索事件与时期事件都直接进入详情页；
+4. 77 个时间轴事件、搜索事件与时期事件都直接进入详情页；
 5. 图鉴筛选后可打开古生物，110 个 ID 均通过静态审计；
 6. 最近阅读和分享路径可重新打开；
 7. 测试可开始、返回上一题、中断继续、完成、重测和分享；第一题进度不是 0%，重测会完整清空旧状态，分享链接不传播分数；
-8. 启动 `node scripts/serve-media.js` 后，时期、精选事件、测试页 AI 深时间三联画与生物图能加载；关闭本地服务后会自动回退到正式 HTTPS 媒体，断网时显示降级画面而非破图；
-9. Console 中没有页面注册、WXML、WXSS 或路由错误；
-10. “代码依赖分析 / 包体积”中没有把 `scripts`、`docs`、`reports` 和高清图片打入主包。
+8. 不启动任何本地服务时，时期、精选事件、测试页 AI 深时间三联画与生物图直接从正式 HTTPS 媒体加载；断网时显示降级画面而非破图；
+9. 故事模式12章能逐章展开，事件与时期链接可达；五次大灭绝可切换比较且证据强度可见；
+10. Console 中没有页面注册、WXML、WXSS 或路由错误；
+11. “代码依赖分析 / 包体积”中没有把 `scripts`、`docs`、`reports` 和高清图片打入主包。
 
 ## 常见错误
 

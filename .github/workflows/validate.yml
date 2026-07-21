@@ -34,12 +34,18 @@ jobs:
         run: node scripts/validate-creature-content.js
       - name: Validate identity and knowledge quiz content
         run: node scripts/validate-quiz-content.js
+      - name: Validate result semantics and PaleoCode balance
+        run: node scripts/validate-result-semantics.js
+      - name: Validate Earth story, new events, and extinction comparison
+        run: node scripts/validate-story-content.js
       - name: Audit routes and page handlers
         run: node scripts/audit-routes.js
       - name: Check mini program package estimate
         run: node scripts/report-package-size.js --check
       - name: Validate media rights metadata
         run: node scripts/validate-media.js
+      - name: Validate HTTPS media and Canvas 2D runtime
+        run: node scripts/validate-media-runtime.js
       - name: Validate release media gate
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.release }}
         run: node scripts/validate-media.js --release

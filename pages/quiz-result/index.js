@@ -1,10 +1,13 @@
 const { creatures, getCreatureById } = require('../../data/creatures')
 const { DIMENSIONS } = require('../../data/quiz-profiles')
+const { getPaleoType } = require('../../data/paleo-types')
 const { getPeriodById } = require('../../data/periods')
 const { getCreatureKnowledge } = require('../../data/creature-knowledge/index')
 const { getMediaById } = require('../../data/media-catalog')
+const { getMediaUrlCandidates, isHttpsUrl } = require('../../config/media')
 const { dimensionLabels, questions } = require('../../data/quiz')
 const { similarity } = require('../../utils/quiz-engine')
+const { calculatePaleoCode } = require('../../utils/paleo-type-engine')
 const { getQuizResult, requestQuizReset } = require('../../utils/storage')
 const { buildUrl, navigateToPage, reLaunchPage, switchTabPage } = require('../../utils/router')
 
@@ -13,41 +16,62 @@ function entertainmentScore(value) {
   return Number.isFinite(score) ? Math.max(0, Math.min(100, score)) : 0
 }
 
+function matchLevel(score) {
+  if (score >= 91) return { label: '核心匹配', note: '多组选择与这条生存路线接近' }
+  if (score >= 82) return { label: '高相似', note: '关键选择与这条生存路线接近' }
+  return { label: '中等相似', note: '部分选择与这条生存路线接近' }
+}
+
 function nearestCreatures(creature) {
-  return creatures.filter((item) => item.quizEligible && item.personalityProfile && item.id !== creature.id).map((item) => ({ item, score: similarity(creature.personalityProfile, item.personalityProfile) })).sort((left, right) => right.score - left.score).slice(0, 2).map((entry) => entry.item)
+  return creatures
+    .filter((item) => item.quizEligible && item.personalityProfile && item.id !== creature.id)
+    .map((item) => ({ item, score: similarity(creature.personalityProfile, item.personalityProfile) }))
+    .sort((left, right) => right.score - left.score || left.item.id.localeCompare(right.item.id))
+    .slice(0, 2)
+    .map((entry) => entry.item)
 }
 
 const DIMENSION_GROUPS = [
   { key: 'exploration', label: '探索方式', dimensions: ['curiosity', 'strategy', 'speed', 'independence'] },
   { key: 'risk', label: '风险策略', dimensions: ['boldness', 'patience', 'adaptability', 'defense'] },
-  { key: 'social', label: '社交模式', dimensions: ['sociability', 'sizePreference'] },
-  { key: 'environment', label: '环境偏好', dimensions: ['aquaticAffinity', 'terrestrialAffinity', 'aerialAffinity', 'coldAffinity'] }
+  { key: 'social', label: '协作方式', dimensions: ['sociability', 'independence'] },
+  { key: 'environment', label: '环境亲和', dimensions: ['aquaticAffinity', 'terrestrialAffinity', 'aerialAffinity', 'coldAffinity'] }
 ]
 
 function dimensionGroups(profile) {
   return DIMENSION_GROUPS.map((group) => {
     const value = Math.round(group.dimensions.reduce((sum, key) => sum + Number(profile[key] || 0), 0) / group.dimensions.length * 100)
     const strongest = group.dimensions.slice().sort((left, right) => Number(profile[right] || 0) - Number(profile[left] || 0))[0]
-    return { key: group.key, label: group.label, value, note: `${dimensionLabels[strongest]}更突出` }
+    return { key: group.key, label: group.label, value, note: dimensionLabels[strongest] }
   })
 }
 
-function comparisonNote(primary, candidate) {
-  const shared = DIMENSIONS.map((key) => ({ key, score: (primary.personalityProfile[key] + candidate.personalityProfile[key]) / 2 - Math.abs(primary.personalityProfile[key] - candidate.personalityProfile[key]) }))
-    .sort((left, right) => right.score - left.score).slice(0, 2).map((item) => dimensionLabels[item.key])
-  const difference = DIMENSIONS.map((key) => ({ key, delta: candidate.personalityProfile[key] - primary.personalityProfile[key] }))
+function strongestSharedDimensions(primary, candidate) {
+  return DIMENSIONS.map((key) => ({
+    key,
+    score: (primary.personalityProfile[key] + candidate.personalityProfile[key]) / 2 - Math.abs(primary.personalityProfile[key] - candidate.personalityProfile[key])
+  })).sort((left, right) => right.score - left.score).slice(0, 2)
+}
+
+function biggestDifference(primary, candidate) {
+  return DIMENSIONS.map((key) => ({ key, delta: candidate.personalityProfile[key] - primary.personalityProfile[key] }))
     .sort((left, right) => Math.abs(right.delta) - Math.abs(left.delta))[0]
-  return `共同点：${shared.join('、')}接近。区别：${candidate.nameCn}的${dimensionLabels[difference.key]}${difference.delta >= 0 ? '更突出' : '更克制'}。`
 }
 
 function decorateSimilar(primary, items) {
-  return items.map((item) => ({
-    id: item.id,
-    nameCn: item.nameCn,
-    scientificName: item.scientificName,
-    mediaId: item.mediaId,
-    comparisonNote: comparisonNote(primary, item)
-  }))
+  return items.map((item) => {
+    const shared = strongestSharedDimensions(primary, item).map((part) => dimensionLabels[part.key]).join('、')
+    const difference = biggestDifference(primary, item)
+    const typeCode = item.paleoTypeCode || calculatePaleoCode(item.personalityProfile)
+    return {
+      id: item.id,
+      nameCn: item.nameCn,
+      mediaId: item.mediaId,
+      typeCode,
+      shared: `共同：${shared}`,
+      difference: `区别：${item.nameCn}${dimensionLabels[difference.key]}${difference.delta >= 0 ? '更突出' : '更克制'}`
+    }
+  })
 }
 
 function decorateTopChoice(item, saved) {
@@ -56,9 +80,48 @@ function decorateTopChoice(item, saved) {
   const answerIndex = saved && Array.isArray(saved.answers) ? saved.answers[item.questionNumber - 1] : -1
   const selected = question && question.options[answerIndex]
   return Object.assign({}, item, {
-    selectedOptionText: selected ? selected.text : '这道题的选择记录来自旧版本，请重新测试后查看完整原文。',
+    selectedOptionText: selected ? selected.text : '旧版本未保存这道题的选择原文',
     insight: item.insight || (selected ? selected.insight : '')
   })
+}
+
+function userEvidence(topChoices, sharedMode) {
+  if (sharedMode) return '好友分享卡不会携带答题记录。完成测试后，这里会列出真正影响结果的题号和选择原文。'
+  if (!topChoices.length) return '当前记录来自旧版本。重新完成测试后，这里会显示真实题号和选择原文。'
+  return topChoices.slice(0, 3).map((item) => `第${item.questionNumber}题“${item.selectedOptionText}”`).join('；')
+}
+
+function legacyStrategy(primary) {
+  return primary.survivalStrategy || primary.ecosystemJob || '现有资料尚不足以概括这条生存策略。'
+}
+
+function resultExplanation(primary, topChoices, sharedMode) {
+  const curated = primary.matchExplanation || {}
+  return {
+    userEvidence: userEvidence(topChoices, sharedMode),
+    creatureStrategy: curated.creatureStrategy || primary.creatureStrategy || legacyStrategy(primary),
+    sharedMechanism: curated.sharedMechanism || primary.sharedMechanism || '这里比较的是可观察的做法，不是给古生物测量人的性格。',
+    evidenceBoundary: curated.evidenceBoundary || primary.evidenceBoundary || primary.discovery
+  }
+}
+
+function resultType(primary) {
+  const code = primary.paleoTypeCode || calculatePaleoCode(primary.personalityProfile)
+  return getPaleoType(code) || getPaleoType('OPSG')
+}
+
+function identityStyle(type) {
+  return `background:linear-gradient(145deg,${type.softColor} 0%,${type.color} 180%);color:${type.foreground};border-color:${type.color}`
+}
+
+function scientificPreview(primary, knowledge, explanation) {
+  const evidence = knowledge && knowledge.fossilEvidence && knowledge.fossilEvidence[0]
+  const debate = knowledge && knowledge.debates && knowledge.debates[0]
+  return {
+    ecology: primary.ecosystemRoleSummary || (knowledge && knowledge.ecosystemRole) || primary.survivalStrategy,
+    evidence: evidence ? `${evidence.evidenceType}：${evidence.whatItShows}` : '当前档案正在补充可直接核查的证据卡。',
+    uncertainty: debate ? `${debate.question} ${debate.confidence}` : explanation.evidenceBoundary
+  }
 }
 
 function wrapPosterText(context, value, maxWidth, maxLines) {
@@ -87,8 +150,45 @@ function drawPosterLines(context, value, x, y, maxWidth, lineHeight, maxLines) {
   return y + lines.length * lineHeight
 }
 
+function posterMediaCandidates(media) {
+  if (!media) return []
+  return [media.imageUrl, media.thumbnailUrl]
+    .reduce((items, value) => items.concat(getMediaUrlCandidates(value)), [])
+    .filter((url, index, list) => isHttpsUrl(url) && list.indexOf(url) === index)
+}
+
+function posterPixelRatio() {
+  try {
+    const info = wx.getWindowInfo()
+    return Math.min(3, Math.max(1, Number(info.pixelRatio) || 1))
+  } catch (error) {
+    return 2
+  }
+}
+
 Page({
-  data: { primary: null, period: null, match: 0, showMatch: false, traits: [], dimensionGroups: [], profileBars: [], showFullProfile: false, similar: [], topChoices: [], impactSentence: '', evidence: [], evidenceSources: [], sharedMode: false, posterGenerating: false },
+  data: {
+    primary: null,
+    paleoType: null,
+    identityStyle: '',
+    period: null,
+    match: 0,
+    matchLevel: null,
+    showMatch: false,
+    quadrants: [],
+    explanation: null,
+    sciencePreview: null,
+    dimensionGroups: [],
+    showCalculation: false,
+    similar: [],
+    topChoices: [],
+    evidenceSources: [],
+    sharedMode: false,
+    primaryMediaState: 'loading',
+    primaryMediaUrl: '',
+    posterTempFilePath: '',
+    posterGenerating: false
+  },
 
   onLoad(options) {
     const saved = getQuizResult()
@@ -99,33 +199,50 @@ Page({
       setTimeout(() => reLaunchPage('/pages/quiz/index', { throttle: false }), 700)
       return
     }
+
     const sharedMode = Boolean(sharedCreature)
-    const traits = (primary.resultStrengths || []).slice(0, 3).map((label, index) => ({ key: `strength-${index}`, label }))
-    const similarCreatures = sharedMode || !Array.isArray(saved.similarIds) ? nearestCreatures(primary) : saved.similarIds.map(getCreatureById).filter(Boolean)
+    const similarCreatures = sharedMode || !Array.isArray(saved.similarIds)
+      ? nearestCreatures(primary)
+      : saved.similarIds.map(getCreatureById).filter(Boolean)
     const profile = sharedMode || !saved.profile ? primary.personalityProfile : saved.profile
-    const profileBars = DIMENSIONS.map((key) => ({ key, label: dimensionLabels[key], value: Math.round(profile[key] * 100) })).sort((left, right) => right.value - left.value)
-    const topChoices = sharedMode || !Array.isArray(saved.topContributingQuestions) ? [] : saved.topContributingQuestions.map((item) => decorateTopChoice(item, saved))
-    const choiceNumbers = topChoices.map((item) => `第${item.questionNumber}题`)
+    const topChoices = sharedMode || !Array.isArray(saved.topContributingQuestions)
+      ? []
+      : saved.topContributingQuestions.map((item) => decorateTopChoice(item, saved))
     const knowledge = getCreatureKnowledge(primary.id)
+    const primaryMedia = getMediaById(primary.mediaId)
+    const type = resultType(primary)
+    const explanation = resultExplanation(primary, topChoices, sharedMode)
+    const score = sharedMode ? 0 : entertainmentScore(saved.match)
+    const strengths = primary.strengths || primary.resultStrengths || type.strengths
+
     this.setData({
       primary,
+      paleoType: type,
+      identityStyle: identityStyle(type),
       period: getPeriodById(primary.periodId),
-      match: sharedMode ? 0 : entertainmentScore(saved.match),
+      match: score,
+      matchLevel: sharedMode ? { label: '分享结果', note: '完成测试可获得自己的匹配等级' } : matchLevel(score),
       showMatch: !sharedMode,
-      traits,
+      quadrants: [
+        { key: 'you', title: '你通常怎么做', text: primary.userPattern || '先从真实选择判断自己的行动习惯。' },
+        { key: 'creature', title: '它真实怎么活', text: explanation.creatureStrategy },
+        { key: 'strength', title: '你的优势', text: strengths.slice(0, 2).join('，') },
+        { key: 'blind', title: '容易卡住的地方', text: primary.blindSpot || primary.resultCaution || type.blindSpot }
+      ],
+      explanation,
+      sciencePreview: scientificPreview(primary, knowledge, explanation),
       dimensionGroups: dimensionGroups(profile),
-      profileBars,
       similar: decorateSimilar(primary, similarCreatures),
       topChoices,
-      impactSentence: choiceNumbers.length ? `下面是系统真正使用的选择证据：${choiceNumbers.join('、')}最能说明你为什么匹配到${primary.nameCn}。` : '',
-      evidence: knowledge ? (knowledge.fossilEvidence || []).slice(0, 2) : [],
       evidenceSources: knowledge ? (knowledge.sources || []).slice(0, 3) : [],
+      primaryMediaState: primaryMedia && primaryMedia.imageUrl ? 'loading' : 'missing',
+      primaryMediaUrl: primaryMedia ? primaryMedia.imageUrl : '',
       sharedMode
     })
   },
 
-  toggleFullProfile() {
-    this.setData({ showFullProfile: !this.data.showFullProfile })
+  toggleCalculation() {
+    this.setData({ showCalculation: !this.data.showCalculation })
   },
 
   openCreature(event) {
@@ -133,113 +250,233 @@ Page({
     if (id) navigateToPage(buildUrl('/pages/creature-detail/index', { id }), { toastTitle: '暂时无法打开古生物档案' })
   },
 
-  openAtlas() { navigateToPage('/pages/creatures/index', { toastTitle: '暂时无法打开图鉴' }) },
+  openAtlas() {
+    navigateToPage('/pages/creatures/index', { toastTitle: '暂时无法打开图鉴' })
+  },
 
   copySource(event) {
     const url = event.currentTarget.dataset.url
     if (url) wx.setClipboardData({ data: url })
   },
 
-  generatePoster() {
+  handlePrimaryMediaReady(event) {
+    this.setData({
+      primaryMediaState: 'ready',
+      primaryMediaUrl: event.detail && event.detail.src ? event.detail.src : this.data.primaryMediaUrl
+    })
+  },
+
+  handlePrimaryMediaError(event) {
+    this.setData({
+      primaryMediaState: 'error',
+      primaryMediaUrl: event.detail && event.detail.finalAttemptUrl ? event.detail.finalAttemptUrl : this.data.primaryMediaUrl
+    })
+  },
+
+  async generatePoster() {
     if (this.data.posterGenerating || !this.data.primary) return
-    this.setData({ posterGenerating: true })
+    this.setData({ posterGenerating: true, posterTempFilePath: '' })
     wx.showLoading({ title: '正在生成海报', mask: true })
-    const media = getMediaById(this.data.primary.mediaId)
-    const urls = media ? [media.imageUrl, media.thumbnailUrl].filter((url, index, list) => url && list.indexOf(url) === index) : []
-    this.loadPosterImage(urls, 0, (imagePath) => this.drawResultPoster(imagePath))
-  },
-
-  loadPosterImage(urls, index, complete) {
-    if (index >= urls.length || !wx.getImageInfo) return complete('')
-    wx.getImageInfo({
-      src: urls[index],
-      success: (result) => complete(result.path || urls[index]),
-      fail: () => this.loadPosterImage(urls, index + 1, complete)
-    })
-  },
-
-  drawResultPoster(imagePath) {
-    const primary = this.data.primary
-    const context = wx.createCanvasContext('resultPoster', this)
-    const background = context.createLinearGradient(0, 0, 0, 1200)
-    background.addColorStop(0, '#123239')
-    background.addColorStop(0.48, '#07191f')
-    background.addColorStop(1, '#061218')
-    context.setFillStyle(background)
-    context.fillRect(0, 0, 750, 1200)
-    if (imagePath) {
-      context.drawImage(imagePath, 0, 0, 750, 500)
-      const veil = context.createLinearGradient(0, 180, 0, 520)
-      veil.addColorStop(0, 'rgba(6,18,24,0.05)')
-      veil.addColorStop(1, '#07191f')
-      context.setFillStyle(veil)
-      context.fillRect(0, 170, 750, 360)
-    } else {
-      context.setStrokeStyle('rgba(103,211,193,0.18)')
-      context.setLineWidth(3)
-      ;[110, 175, 240].forEach((radius) => {
-        context.beginPath()
-        context.arc(590, 180, radius, 0, Math.PI * 2)
-        context.stroke()
+    try {
+      const canvasState = await this.getPosterCanvas()
+      const media = getMediaById(this.data.primary.mediaId)
+      const urls = posterMediaCandidates(media)
+      const posterImage = await this.loadPosterImage(canvasState.canvas, urls)
+      this.drawResultPoster(canvasState, posterImage)
+      const tempFilePath = await this.exportResultPoster(canvasState.canvas)
+      this.setData({ posterTempFilePath: tempFilePath })
+      wx.previewImage({
+        current: tempFilePath,
+        urls: [tempFilePath],
+        fail: (error) => {
+          console.warn('[ResultPoster] preview unavailable', { error })
+          wx.showToast({ title: '海报已生成，但暂时无法预览', icon: 'none' })
+        }
       })
+    } catch (error) {
+      console.error('[ResultPoster] generation failed', { error })
+      wx.showToast({ title: '海报生成失败，请重试', icon: 'none' })
+    } finally {
+      wx.hideLoading()
+      this.setData({ posterGenerating: false })
     }
-    context.setFillStyle('#70d8c5')
-    context.setFontSize(22)
-    context.fillText('EARTH CHRONICLE · PALEO IDENTITY', 54, 64)
-    context.setFillStyle('rgba(255,255,255,0.74)')
-    context.setFontSize(24)
-    context.fillText('我的远古身份', 54, 420)
-    context.setFillStyle('#f3f6ef')
-    context.setFontSize(76)
-    context.fillText(primary.nameCn, 54, 505)
-    context.setFillStyle('#e2bd78')
-    context.setFontSize(30)
-    context.fillText(primary.resultTitle, 56, 557)
-    context.setFillStyle('#9db2b0')
-    context.setFontSize(25)
-    const nextY = drawPosterLines(context, primary.punchline, 56, 610, 638, 40, 3)
-    context.setFillStyle('rgba(103,211,193,0.16)')
-    context.fillRect(54, nextY + 24, 642, 2)
-    context.setFillStyle('#72d4c2')
-    context.setFontSize(20)
-    context.fillText('三个核心能力', 56, nextY + 76)
-    context.setFillStyle('#d9e4e1')
-    context.setFontSize(26)
-    let abilityY = nextY + 124
-    ;(primary.resultStrengths || []).slice(0, 3).forEach((strength, index) => {
-      context.setFillStyle('#d7b875')
-      context.fillText(`0${index + 1}`, 58, abilityY)
-      context.setFillStyle('#d9e4e1')
-      abilityY = drawPosterLines(context, strength, 112, abilityY, 570, 38, 2) + 24
+  },
+
+  getPosterCanvas() {
+    return new Promise((resolve, reject) => {
+      wx.createSelectorQuery().in(this).select('#resultPoster').fields({ node: true, size: true }).exec((result) => {
+        const target = result && result[0]
+        if (!target || !target.node || !target.width || !target.height) {
+          reject(new Error('Canvas 2D node is unavailable'))
+          return
+        }
+        const canvas = target.node
+        const dpr = posterPixelRatio()
+        canvas.width = Math.round(target.width * dpr)
+        canvas.height = Math.round(target.height * dpr)
+        const context = canvas.getContext('2d')
+        context.scale(dpr, dpr)
+        resolve({ canvas, context, width: target.width, height: target.height, dpr })
+      })
     })
-    context.setFillStyle('rgba(255,255,255,0.055)')
-    context.fillRect(54, 980, 642, 112)
-    context.setFillStyle('#8ca19f')
-    context.setFontSize(20)
-    drawPosterLines(context, '本结果用于科普娱乐，不代表对已灭绝生物性格的科学测量。', 78, 1024, 594, 32, 2)
-    context.setFillStyle('#6fd2c0')
-    context.setFontSize(22)
-    context.fillText('微信小程序 · 地球编年史', 54, 1150)
-    context.draw(false, () => {
+  },
+
+  getPosterImageInfo(url) {
+    return new Promise((resolve) => {
+      let settled = false
+      const finish = (value) => {
+        if (settled) return
+        settled = true
+        clearTimeout(timeout)
+        resolve(value)
+      }
+      const timeout = setTimeout(() => {
+        console.warn('[ResultPosterMedia] image info timed out', {
+          mediaId: this.data.primary.mediaId,
+          finalAttemptUrl: url
+        })
+        finish(null)
+      }, 12000)
+      wx.getImageInfo({
+        src: url,
+        success: (result) => finish(result),
+        fail: (error) => {
+          console.warn('[ResultPosterMedia] image info unavailable', {
+            mediaId: this.data.primary.mediaId,
+            finalAttemptUrl: url,
+            error
+          })
+          finish(null)
+        }
+      })
+    })
+  },
+
+  createPosterCanvasImage(canvas, imagePath, url) {
+    return new Promise((resolve) => {
+      const image = canvas.createImage()
+      let settled = false
+      const finish = (value) => {
+        if (settled) return
+        settled = true
+        clearTimeout(timeout)
+        image.onload = null
+        image.onerror = null
+        resolve(value)
+      }
+      const timeout = setTimeout(() => {
+        console.warn('[ResultPosterMedia] Canvas image timed out', {
+          mediaId: this.data.primary.mediaId,
+          finalAttemptUrl: url
+        })
+        finish(null)
+      }, 5000)
+      image.onload = () => finish(image)
+      image.onerror = (error) => {
+        console.warn('[ResultPosterMedia] Canvas image unavailable', {
+          mediaId: this.data.primary.mediaId,
+          finalAttemptUrl: url,
+          error
+        })
+        finish(null)
+      }
+      image.src = imagePath
+    })
+  },
+
+  async loadPosterImage(canvas, urls) {
+    if (!wx.getImageInfo || !canvas || !canvas.createImage) return null
+    for (let index = 0; index < urls.length; index += 1) {
+      const url = urls[index]
+      try {
+        const imageInfo = await this.getPosterImageInfo(url)
+        if (!imageInfo) continue
+        const image = await this.createPosterCanvasImage(canvas, imageInfo.path || url, url)
+        if (image) return image
+      } catch (error) {
+        console.warn('[ResultPosterMedia] candidate processing failed', {
+          mediaId: this.data.primary.mediaId,
+          finalAttemptUrl: url,
+          error
+        })
+      }
+    }
+    return null
+  },
+
+  drawResultPoster(canvasState, posterImage) {
+    const primary = this.data.primary
+    const type = this.data.paleoType
+    const context = canvasState.context
+    context.clearRect(0, 0, canvasState.width, canvasState.height)
+    context.fillStyle = type.softColor
+    context.fillRect(0, 0, canvasState.width, canvasState.height)
+    context.fillStyle = type.color
+    context.fillRect(0, 0, canvasState.width, 26)
+    context.fillStyle = type.foreground
+    context.font = '700 22px sans-serif'
+    context.fillText('地球编年史 · 我的远古身份', 54, 74)
+    context.font = '900 90px sans-serif'
+    context.fillText(type.code, 52, 178)
+    context.font = '800 38px sans-serif'
+    context.fillText(type.nameCn, 56, 232)
+
+    context.save()
+    context.beginPath()
+    context.arc(375, 480, 206, 0, Math.PI * 2)
+    context.clip()
+    if (posterImage) context.drawImage(posterImage, 130, 274, 490, 412)
+    else {
+      context.fillStyle = type.color
+      context.fillRect(130, 274, 490, 412)
+      context.fillStyle = type.foreground
+      context.textAlign = 'center'
+      context.font = '900 76px sans-serif'
+      context.fillText(type.code, 375, 505)
+    }
+    context.restore()
+    context.strokeStyle = type.color
+    context.lineWidth = 10
+    context.beginPath()
+    context.arc(375, 480, 211, 0, Math.PI * 2)
+    context.stroke()
+
+    context.fillStyle = type.foreground
+    context.textAlign = 'center'
+    context.font = '900 54px sans-serif'
+    context.fillText(primary.nameCn, 375, 744)
+    context.font = '600 26px sans-serif'
+    const lineEnd = drawPosterLines(context, primary.oneLineIdentity || primary.punchline, 375, 792, 600, 38, 2)
+
+    context.textAlign = 'left'
+    const labels = type.axisLabels.slice(0, 4)
+    labels.forEach((label, index) => {
+      const column = index % 2
+      const row = Math.floor(index / 2)
+      const x = 54 + column * 328
+      const y = lineEnd + 42 + row * 78
+      context.fillStyle = 'rgba(255,255,255,0.62)'
+      context.fillRect(x, y, 300, 56)
+      context.fillStyle = type.foreground
+      context.font = '700 23px sans-serif'
+      context.fillText(`${index + 1}  ${label}`, x + 18, y + 36)
+    })
+
+    context.fillStyle = type.foreground
+    context.font = '500 19px sans-serif'
+    drawPosterLines(context, '科普娱乐分类，不代表对已灭绝生物心理的科学测量。', 56, 1110, 638, 30, 2)
+    context.font = '600 21px sans-serif'
+    context.fillText('微信小程序 · 地球编年史', 56, 1170)
+  },
+
+  exportResultPoster(canvas) {
+    return new Promise((resolve, reject) => {
       wx.canvasToTempFilePath({
-        canvasId: 'resultPoster',
-        width: 750,
-        height: 1200,
-        destWidth: 1500,
-        destHeight: 2400,
+        canvas,
         fileType: 'jpg',
         quality: 0.92,
-        success: (result) => {
-          wx.hideLoading()
-          this.setData({ posterGenerating: false })
-          wx.previewImage({ current: result.tempFilePath, urls: [result.tempFilePath] })
-        },
-        fail: (error) => {
-          console.error('[ResultPoster]', error)
-          wx.hideLoading()
-          this.setData({ posterGenerating: false })
-          wx.showToast({ title: '海报生成失败，请重试', icon: 'none' })
-        }
+        success: (result) => resolve(result.tempFilePath),
+        fail: reject
       }, this)
     })
   },
@@ -248,8 +485,13 @@ Page({
     requestQuizReset()
     switchTabPage('/pages/quiz/index', { throttle: false, toastTitle: '暂时无法重新测试' })
   },
+
   onShareAppMessage() {
     const primary = this.data.primary
-    return { title: primary ? `我的远古身份是${primary.nameCn}｜你是哪一种？` : '测测你的远古身份', path: primary ? buildUrl('/pages/quiz-result/index', { id: primary.id }) : '/pages/quiz/index' }
+    const type = this.data.paleoType
+    return {
+      title: primary ? `我的远古身份是${type.code}·${type.nameCn}｜${primary.nameCn}` : '测测你的远古身份',
+      path: primary ? buildUrl('/pages/quiz-result/index', { id: primary.id }) : '/pages/quiz/index'
+    }
   }
 })

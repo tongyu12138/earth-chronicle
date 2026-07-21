@@ -1,0 +1,54 @@
+{
+  "projectPath": "/Users/tongyu/Desktop/历史",
+  "systemInfo": {
+    "SDKVersion": "3.16.2",
+    "platform": "devtools",
+    "pixelRatio": 3,
+    "model": "iPhone 12/13 (Pro)"
+  },
+  "results": [
+    {
+      "route": "pages/quiz-result/index",
+      "id": "megalodon",
+      "name": "巨齿鲨",
+      "mediaId": "creature-megalodon",
+      "mediaState": "ready",
+      "activeSrc": "https://tongyu12138.github.io/earth-chronicle/media/public/creature/megalodon/megalodon-ai-image.jpg",
+      "posterTempFilePath": "",
+      "posterGenerating": false,
+      "usesHttps": true
+    },
+    {
+      "route": "pages/quiz-result/index",
+      "id": "methanogen",
+      "name": "产甲烷古菌",
+      "mediaId": "creature-methanogen",
+      "mediaState": "ready",
+      "activeSrc": "https://tongyu12138.github.io/earth-chronicle/media/public/creature/methanogen/methanogen-ai-image.jpg",
+      "posterTempFilePath": "",
+      "posterGenerating": false,
+      "usesHttps": true
+    },
+    {
+      "route": "pages/quiz-result/index",
+      "id": "archaeopteryx",
+      "name": "始祖鸟",
+      "mediaId": "creature-archaeopteryx",
+      "mediaState": "ready",
+      "activeSrc": "https://tongyu12138.github.io/earth-chronicle/media/public/creature/archaeopteryx/archaeopteryx-ai-image.jpg",
+      "posterTempFilePath": "",
+      "posterGenerating": false,
+      "usesHttps": true
+    }
+  ],
+  "poster": {
+    "finished": true,
+    "loadingCleared": true,
+    "tempFileCreated": true,
+    "tempFilePath": "http://tmp/vF6Gbf6K-hIr39e0a7d56c7e103e6484834a74a36b98.jpg",
+    "newConsoleLogs": [],
+    "newExceptions": []
+  },
+  "consoleLogs": [],
+  "exceptions": []
+}

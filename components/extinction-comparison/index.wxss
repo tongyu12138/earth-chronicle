@@ -1,0 +1,29 @@
+.comparison-museum { margin-top: 30rpx; }
+.comparison-tabs { width: 100%; }
+.comparison-tabs-inner { display: flex; gap: 14rpx; min-width: max-content; padding: 2rpx 0 20rpx; }
+.comparison-tab { width: 210rpx; min-height: 148rpx; padding: 20rpx; border-radius: 20rpx; border: 1rpx solid rgba(255,255,255,.1); background: rgba(255,255,255,.035); color: #8ba09f; text-align: left; display: flex; flex-direction: column; gap: 8rpx; }
+.comparison-tab::after { border: 0; }
+.tab-number { color: #d88b69; font-size: 20rpx; font-weight: 900; letter-spacing: 2rpx; }
+.tab-title { color: #e9f2ef; font-size: 26rpx; font-weight: 850; }
+.tab-time { font-size: 20rpx; }
+.comparison-tab.is-active { border-color: rgba(222,133,94,.7); background: rgba(137,61,37,.22); box-shadow: 0 16rpx 38rpx rgba(0,0,0,.16); }
+.comparison-sheet { overflow: hidden; border-radius: 28rpx; border: 1rpx solid rgba(222,133,94,.28); background: #0c2026; }
+.comparison-hero { position: relative; min-height: 260rpx; }
+.comparison-media { display: block; opacity: .78; }
+.comparison-hero-copy { position: absolute; inset: 0; padding: 28rpx; background: linear-gradient(90deg, rgba(5,16,20,.9), rgba(5,16,20,.18)); display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; gap: 8rpx; }
+.hero-meta { color: #e2a17d; font-size: 21rpx; font-weight: 750; }
+.hero-title { color: #f4f7f3; font-size: 39rpx; font-weight: 900; }
+.confidence { padding: 7rpx 13rpx; border-radius: 999rpx; background: rgba(255,255,255,.12); color: #dbe8e3; font-size: 20rpx; }
+.confidence.consensus { background: rgba(93,207,180,.2); color: #82dfc9; }
+.confidence.supported { background: rgba(106,167,222,.2); color: #9bc9ed; }
+.confidence.debated { background: rgba(226,165,86,.2); color: #eac17e; }
+.comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rpx; background: rgba(255,255,255,.08); }
+.comparison-cell { min-height: 190rpx; padding: 25rpx; background: #0c2026; display: flex; flex-direction: column; gap: 12rpx; }
+.cell-label { color: #65d4c1; font-size: 21rpx; font-weight: 850; }
+.cell-copy { color: #a9bab7; font-size: 23rpx; line-height: 1.65; }
+.comparison-grid .primary-mechanism { background: #122b31; }
+.comparison-grid .mechanism-confidence { color: #718c8c; font-size: 20rpx; line-height: 1.55; }
+.archive-link { margin: 24rpx; min-height: 88rpx; border-radius: 999rpx; border: 1rpx solid rgba(101,212,193,.42); background: transparent; color: #71d9c6; font-size: 24rpx; font-weight: 800; }
+.archive-link::after { border: 0; }
+.comparison-note { display: block; margin-top: 17rpx; color: #6f8889; font-size: 20rpx; line-height: 1.6; }
+@media (max-width: 360px) { .comparison-grid { grid-template-columns: 1fr; } }

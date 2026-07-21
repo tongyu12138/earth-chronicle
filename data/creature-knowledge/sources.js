@@ -103,6 +103,24 @@ const sources = [
     year: '2014', type: '原始研究', doi: '10.1038/nature13467', url: 'https://www.nature.com/articles/nature13467'
   },
   {
+    id: 'ankylosaur-tail-impact-2009',
+    title: 'Estimating impact forces of tail club strikes by ankylosaurid dinosaurs',
+    organization: 'PLOS ONE / PubMed Central', year: '2009', type: '原始研究', doi: '10.1371/journal.pone.0006738',
+    url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC2726940/'
+  },
+  {
+    id: 'ankylosaur-tail-evolution-2015',
+    title: 'Ankylosaurid dinosaur tail clubs evolved through stepwise acquisition of key features',
+    organization: 'Journal of Anatomy / PubMed Central', year: '2015', type: '原始研究', doi: '10.1111/joa.12363',
+    url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC4580109/'
+  },
+  {
+    id: 'ankylosaur-feeding-2023',
+    title: 'Divergent strategies in cranial biomechanics and feeding ecology of the ankylosaurian dinosaurs',
+    organization: 'Scientific Reports / PubMed Central', year: '2023', type: '原始研究', doi: '10.1038/s41598-023-45444-1',
+    url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC10600113/'
+  },
+  {
     id: 'tyrannosaurus-smithsonian',
     title: 'Tyrannosaurus rex factsheet', organization: 'Smithsonian Institution',
     year: '更新中', type: '博物馆物种档案', url: 'https://www.si.edu/newsdesk/factsheets/tyrannosaurus-rex'
@@ -150,6 +168,24 @@ const sources = [
     id: 'mammoth-science-advances-2024',
     title: 'A female woolly mammoth’s lifetime movements', organization: 'Science Advances',
     year: '2024', type: '原始研究', doi: '10.1126/sciadv.adk0818', url: 'https://doi.org/10.1126/sciadv.adk0818'
+  },
+  {
+    id: 'megalodon-endothermy-2023',
+    title: 'Endothermic physiology of extinct megatooth sharks',
+    organization: 'Proceedings of the National Academy of Sciences / PubMed Central', year: '2023', type: '原始研究', doi: '10.1073/pnas.2218153120',
+    url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC10318976/'
+  },
+  {
+    id: 'megalodon-trophic-zinc-2022',
+    title: 'Trophic position of Otodus megalodon and great white sharks through time revealed by zinc isotopes',
+    organization: 'Nature Communications', year: '2022', type: '原始研究', doi: '10.1038/s41467-022-30528-9',
+    url: 'https://www.nature.com/articles/s41467-022-30528-9'
+  },
+  {
+    id: 'megalodon-nursery-2010',
+    title: 'Ancient nursery area for the extinct giant shark megalodon from the Miocene of Panama',
+    organization: 'PLOS ONE', year: '2010', type: '原始研究', doi: '10.1371/journal.pone.0010552',
+    url: 'https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0010552'
   },
   {
     id: 'afarensis-smithsonian',
@@ -235,7 +271,7 @@ const sources = [
   }
 ]
 
-const sampleIds = new Set(['methanogen', 'dickinsonia', 'anomalocaris', 'dunkleosteus', 'lystrosaurus', 'archaeopteryx', 'tyrannosaurus', 'basilosaurus', 'woolly-mammoth', 'australopithecus'])
+const sampleIds = new Set(['methanogen', 'dickinsonia', 'anomalocaris', 'dunkleosteus', 'lystrosaurus', 'archaeopteryx', 'ankylosaurus', 'tyrannosaurus', 'basilosaurus', 'megalodon', 'woolly-mammoth', 'australopithecus'])
 const catalogSourceIds = {}
 const { creatures } = require('../creatures')
 
