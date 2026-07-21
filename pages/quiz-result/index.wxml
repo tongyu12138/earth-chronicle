@@ -11,7 +11,22 @@
       <text class="type-tagline">{{paleoType.tagline}}</text>
     </view>
     <view class="identity-art" style="border-color:{{paleoType.color}}">
-      <media-image id="primaryMedia" class="primary-media" media-id="{{primary.mediaId}}" variant="hero" ratio="1:1" alt="{{primary.imageAlt}}" placeholder-theme="rock" lazy-load="false" show-caption="{{false}}" show-meta="{{false}}" show-source="{{false}}" bindready="handlePrimaryMediaReady" binderror="handlePrimaryMediaError" />
+      <media-image
+        id="primaryMedia"
+        class="primary-media"
+        media-id="{{primary.mediaId}}"
+        variant="hero"
+        ratio="4:3"
+        mode="aspectFit"
+        alt="{{primary.imageAlt}}"
+        placeholder-theme="rock"
+        lazy-load="false"
+        show-caption="{{false}}"
+        show-meta="{{false}}"
+        show-source="{{false}}"
+        bindready="handlePrimaryMediaReady"
+        binderror="handlePrimaryMediaError"
+      />
     </view>
     <text class="identity-species">{{primary.nameCn}}</text>
     <text class="identity-title">{{primary.resultTitle}}</text>
