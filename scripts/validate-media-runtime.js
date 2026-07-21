@@ -91,6 +91,16 @@ if (/canvas-id=/.test(posterTemplate)) problems.push('quiz-result template still
 
 const project = JSON.parse(read('project.config.json'))
 if (project.libVersion !== '3.16.2') problems.push(`project.config.json libVersion must remain 3.16.2, received ${project.libVersion}`)
+if (project.setting && project.setting.ignoreDevUnusedFiles === true) {
+  problems.push('project.config.json must not enable ignoreDevUnusedFiles because it can exclude referenced custom components')
+}
+const privateProjectPath = path.join(repoRoot, 'project.private.config.json')
+if (fs.existsSync(privateProjectPath)) {
+  const privateProject = JSON.parse(fs.readFileSync(privateProjectPath, 'utf8'))
+  if (privateProject.setting && privateProject.setting.ignoreDevUnusedFiles === true) {
+    problems.push('project.private.config.json must not enable ignoreDevUnusedFiles because it can break local compilation')
+  }
+}
 
 const mediaServer = read('scripts/serve-media.js')
 if (!/require\(['"]https['"]\)/.test(mediaServer)) problems.push('optional media server does not use HTTPS')
