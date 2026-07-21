@@ -12,6 +12,7 @@
     "postcss": true,
     "minified": true,
     "urlCheck": true,
+    "ignoreDevUnusedFiles": false,
     "coverView": true,
     "showShadowRootInWxmlPanel": true,
     "packNpmManually": false,
