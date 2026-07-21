@@ -3,7 +3,7 @@
 > 本报告按 `project.config.json` 的 `packOptions.ignore` 计算静态文件；最终上传大小以微信开发者工具“代码依赖分析 / 包体积”为准。
 
 - 估算打包文件：92 个
-- 估算未压缩总大小：1.75 MiB（1836996 bytes）
+- 估算未压缩总大小：1.76 MiB（1842813 bytes）
 - 高清媒体目录是否进入主包：否
 
 ## 按目录统计
@@ -11,11 +11,11 @@
 | 目录 | 大小 |
 | --- | ---: |
 | data/ | 1.50 MiB |
-| pages/ | 207.9 KiB |
+| pages/ | 212.7 KiB |
 | utils/ | 19.9 KiB |
-| components/ | 17.4 KiB |
+| components/ | 17.7 KiB |
 | 根目录 | 7.4 KiB |
-| config/ | 2.2 KiB |
+| config/ | 2.8 KiB |
 
 ## 最大文件
 
@@ -40,4 +40,4 @@
 | `data/knowledge-quiz.js` | 22.4 KiB |
 | `data/creature-knowledge/paleozoic.js` | 21.8 KiB |
 | `data/quiz-profiles.js` | 20.2 KiB |
-| `data/creature-knowledge/sources.js` | 17.7 KiB |
+| `pages/quiz-result/index.js` | 19.0 KiB |

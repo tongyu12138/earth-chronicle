@@ -21,8 +21,11 @@ const PROJECT_AI_LICENSE = 'Project-owned AI-generated artwork'
 const PROJECT_AI_SOURCE = '项目自有 AI 艺术复原'
 
 const routingProbe = getMediaUrlCandidates('media/public/__routing-probe__.jpg')
-if (!routingProbe.some((url) => /^http:\/\/(?:127\.0\.0\.1|localhost):4173\//.test(url))) problems.push('develop media routing is missing the local preview origin')
-if (!routingProbe.some((url) => /^https:\/\//.test(url))) problems.push('develop media routing is missing the release HTTPS fallback')
+const legacyLocalProbe = getMediaUrlCandidates('http://127.0.0.1:4173/media/public/__routing-probe__.jpg')
+const insecureProbe = getMediaUrlCandidates('http://example.com/__routing-probe__.jpg')
+if (!routingProbe.length || routingProbe.some((url) => !/^https:\/\//.test(url))) problems.push('develop media routing must contain HTTPS candidates only')
+if (!legacyLocalProbe.length || legacyLocalProbe.some((url) => !/^https:\/\//.test(url))) problems.push('legacy local media paths must be rewritten to HTTPS candidates')
+if (insecureProbe.length) problems.push('ordinary HTTP media must be filtered from image candidates')
 
 function isHttps(value) { return /^https:\/\//i.test(String(value || '')) }
 function isRelative(value) { return Boolean(value) && !/^[a-z]+:\/\//i.test(value) && !String(value).startsWith('/') }

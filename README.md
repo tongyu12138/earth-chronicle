@@ -24,13 +24,13 @@
 4. 使用项目已有 AppID，点击“编译”。
 5. 默认打开“地球史”；底部 Tab 可切换到“测测你是谁”。
 
-需要查看本地已审批高清图片时，在编译前保持下列命令运行：
+开发、体验和正式环境默认都从以下 HTTPS 地址读取媒体，不依赖本机服务：
 
-```bash
-node scripts/serve-media.js
+```text
+https://tongyu12138.github.io/earth-chronicle
 ```
 
-该服务只监听 `127.0.0.1:4173`，而且只允许读取 `media/public/`。真机不能访问开发电脑的 `127.0.0.1`，真机预览必须先完成 HTTPS 媒体部署和微信合法域名配置。
+`scripts/serve-media.js` 只保留为显式可选的 HTTPS 调试服务：它必须提供受信任证书、HTTPS 域名和私钥环境变量，否则会拒绝启动；普通 HTTP 与 `127.0.0.1` 不会进入小程序图片候选。若确实需要启用，可在开发者工具控制台用 `wx.setStorageSync('earthChronicle.developMediaHttpsBaseUrl', 'https://受信任域名')` 指定临时地址，清除该键即可恢复 GitHub Pages 默认值。
 
 不要替换或提交 `project.private.config.json`。不要把 AppSecret、私钥、访问令牌或对象存储密钥写入前端仓库。
 
@@ -88,7 +88,7 @@ scripts/build-media-proposals.js 生成四选一短名单，仍不会批准
 scripts/approve-media.js        只执行media/decisions.json中的显式批准
 scripts/sync-media.js           MIME、尺寸、哈希、路径和权利字段检查
 scripts/validate-media.js       普通校验与全量AI发布门禁
-scripts/serve-media.js          仅供微信开发者工具使用的本地媒体服务
+scripts/serve-media.js          显式可选、要求受信任证书的HTTPS媒体服务
 scripts/stage-media-site.js     只发布运行时实际引用的AI媒体
 scripts/verify-deployed-media.js 逐一探测正式HTTPS媒体地址
 docs/IMAGE_SOURCES.md           授权记录、同步格式与待补说明
@@ -96,11 +96,13 @@ docs/IMAGE_SOURCES.md           授权记录、同步格式与待补说明
 
 图片组件区分 thumbnail / card / hero / full 四种模式，支持骨架屏、加载失败降级、手动重试、焦点裁切、大图预览、作者/许可/图注、原始来源复制和“艺术复原”类型标记。详情图加载失败时会先降级到缩略图，再降级到可读占位，不显示系统破图。
 
-开发版优先使用 `http://127.0.0.1:4173`，本地服务不可用时会自动回退到正式 HTTPS 媒体；体验版与正式版只使用 `https://tongyu12138.github.io/earth-chronicle`，不会访问用户设备上的 `127.0.0.1`。GitHub Pages 工作流只上传运行时目录实际引用并通过审核的 610 个 AI 大小图文件，并在部署后逐一探测，不使用 GitHub Raw 热链。微信公众平台需配置：
+开发版、体验版与正式版默认均使用 `https://tongyu12138.github.io/earth-chronicle`，不会先访问 HTTP 或等待本机服务超时。大图失败后仍会按顺序回退到 HTTPS 缩略图；全部媒体不可用时显示可读占位，结果海报也会生成无图片降级版。GitHub Pages 工作流只上传运行时目录实际引用并通过审核的 610 个 AI 大小图文件，并在部署后逐一探测，不使用 GitHub Raw 热链。正式上线前，必须在微信公众平台把下列域名加入图片/下载所需的合法域名配置，并保持 TLS 证书有效：
 
 ```text
 https://tongyu12138.github.io
 ```
+
+尤其要把该域名加入 `downloadFile` 合法域名，因为结果海报会通过 `wx.getImageInfo` 下载同源 HTTPS 图片后绘制到 Canvas 2D。`project.config.json` 中开发者工具的 `urlCheck: false` 只用于本地调试，不能替代正式版域名白名单；未配置时结果页 `<image>` 可能仍可显示，但海报会自动降级为无图片版本。
 
 不要使用 GitHub Raw 作为生产图片服务。列表缩略图建议 40—100KB，普通内容图 100—250KB，头图在清晰度允许时控制在 300—500KB。
 
@@ -180,7 +182,7 @@ node scripts/validate-quiz.js --large
 5. 图鉴筛选后可打开古生物，110 个 ID 均通过静态审计；
 6. 最近阅读和分享路径可重新打开；
 7. 测试可开始、返回上一题、中断继续、完成、重测和分享；第一题进度不是 0%，重测会完整清空旧状态，分享链接不传播分数；
-8. 启动 `node scripts/serve-media.js` 后，时期、精选事件、测试页 AI 深时间三联画与生物图能加载；关闭本地服务后会自动回退到正式 HTTPS 媒体，断网时显示降级画面而非破图；
+8. 不启动任何本地服务时，时期、精选事件、测试页 AI 深时间三联画与生物图直接从正式 HTTPS 媒体加载；断网时显示降级画面而非破图；
 9. 故事模式12章能逐章展开，事件与时期链接可达；五次大灭绝可切换比较且证据强度可见；
 10. Console 中没有页面注册、WXML、WXSS 或路由错误；
 11. “代码依赖分析 / 包体积”中没有把 `scripts`、`docs`、`reports` 和高清图片打入主包。

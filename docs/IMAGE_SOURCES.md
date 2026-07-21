@@ -95,7 +95,7 @@ node scripts/sync-media.js --input ./media/media.json --write
 
 ## 部署与合法域名
 
-开发环境优先使用只监听本机的 `http://127.0.0.1:4173`，运行 `node scripts/serve-media.js` 可预览尚未部署的新图片。服务不可用时组件会自动回退到正式 HTTPS 媒体；该服务不会暴露候选文件、审核记录或仓库代码，只允许 `media/public/` 中的图片路径。
+开发、体验和正式环境默认都使用 `https://tongyu12138.github.io/earth-chronicle`，普通 HTTP 不会进入图片候选。`scripts/serve-media.js` 仅保留为显式可选的 HTTPS 调试服务，要求受信任证书与非回环 HTTPS 域名；该服务不会暴露候选文件、审核记录或仓库代码，只允许 `media/public/` 中的图片路径。
 
 体验版和正式版使用 `https://tongyu12138.github.io/earth-chronicle`。`.github/workflows/deploy-media.yml` 先执行严格 release 校验，再由 `scripts/stage-media-site.js` 只复制运行时目录实际引用的 610 个大小图文件，部署完成后由 `scripts/verify-deployed-media.js` 逐一验证 HTTP 状态与图片 MIME；未引用的早期素材不会进入 Pages 产物。这是项目自有媒体的自托管路径，不是 GitHub Raw 热链。
 

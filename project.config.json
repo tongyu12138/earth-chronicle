@@ -1,7 +1,7 @@
 {
   "description": "从地球形成到现代人工智能的交互式时间轴",
   "compileType": "miniprogram",
-  "libVersion": "3.15.2",
+  "libVersion": "3.16.2",
   "miniprogramRoot": "./",
   "projectname": "earth-timeline",
   "appid": "wx76bb5dd2153eccfa",

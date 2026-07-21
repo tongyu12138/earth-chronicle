@@ -4,6 +4,7 @@ const { getPaleoType } = require('../../data/paleo-types')
 const { getPeriodById } = require('../../data/periods')
 const { getCreatureKnowledge } = require('../../data/creature-knowledge/index')
 const { getMediaById } = require('../../data/media-catalog')
+const { getMediaUrlCandidates, isHttpsUrl } = require('../../config/media')
 const { dimensionLabels, questions } = require('../../data/quiz')
 const { similarity } = require('../../utils/quiz-engine')
 const { calculatePaleoCode } = require('../../utils/paleo-type-engine')
@@ -149,6 +150,22 @@ function drawPosterLines(context, value, x, y, maxWidth, lineHeight, maxLines) {
   return y + lines.length * lineHeight
 }
 
+function posterMediaCandidates(media) {
+  if (!media) return []
+  return [media.imageUrl, media.thumbnailUrl]
+    .reduce((items, value) => items.concat(getMediaUrlCandidates(value)), [])
+    .filter((url, index, list) => isHttpsUrl(url) && list.indexOf(url) === index)
+}
+
+function posterPixelRatio() {
+  try {
+    const info = wx.getWindowInfo()
+    return Math.min(3, Math.max(1, Number(info.pixelRatio) || 1))
+  } catch (error) {
+    return 2
+  }
+}
+
 Page({
   data: {
     primary: null,
@@ -167,6 +184,9 @@ Page({
     topChoices: [],
     evidenceSources: [],
     sharedMode: false,
+    primaryMediaState: 'loading',
+    primaryMediaUrl: '',
+    posterTempFilePath: '',
     posterGenerating: false
   },
 
@@ -189,6 +209,7 @@ Page({
       ? []
       : saved.topContributingQuestions.map((item) => decorateTopChoice(item, saved))
     const knowledge = getCreatureKnowledge(primary.id)
+    const primaryMedia = getMediaById(primary.mediaId)
     const type = resultType(primary)
     const explanation = resultExplanation(primary, topChoices, sharedMode)
     const score = sharedMode ? 0 : entertainmentScore(saved.match)
@@ -214,6 +235,8 @@ Page({
       similar: decorateSimilar(primary, similarCreatures),
       topChoices,
       evidenceSources: knowledge ? (knowledge.sources || []).slice(0, 3) : [],
+      primaryMediaState: primaryMedia && primaryMedia.imageUrl ? 'loading' : 'missing',
+      primaryMediaUrl: primaryMedia ? primaryMedia.imageUrl : '',
       sharedMode
     })
   },
@@ -236,102 +259,224 @@ Page({
     if (url) wx.setClipboardData({ data: url })
   },
 
-  generatePoster() {
-    if (this.data.posterGenerating || !this.data.primary) return
-    this.setData({ posterGenerating: true })
-    wx.showLoading({ title: '正在生成海报', mask: true })
-    const media = getMediaById(this.data.primary.mediaId)
-    const urls = media ? [media.imageUrl, media.thumbnailUrl].filter((url, index, list) => url && list.indexOf(url) === index) : []
-    this.loadPosterImage(urls, 0, (imagePath) => this.drawResultPoster(imagePath))
-  },
-
-  loadPosterImage(urls, index, complete) {
-    if (index >= urls.length || !wx.getImageInfo) return complete('')
-    wx.getImageInfo({
-      src: urls[index],
-      success: (result) => complete(result.path || urls[index]),
-      fail: () => this.loadPosterImage(urls, index + 1, complete)
+  handlePrimaryMediaReady(event) {
+    this.setData({
+      primaryMediaState: 'ready',
+      primaryMediaUrl: event.detail && event.detail.src ? event.detail.src : this.data.primaryMediaUrl
     })
   },
 
-  drawResultPoster(imagePath) {
+  handlePrimaryMediaError(event) {
+    this.setData({
+      primaryMediaState: 'error',
+      primaryMediaUrl: event.detail && event.detail.finalAttemptUrl ? event.detail.finalAttemptUrl : this.data.primaryMediaUrl
+    })
+  },
+
+  async generatePoster() {
+    if (this.data.posterGenerating || !this.data.primary) return
+    this.setData({ posterGenerating: true, posterTempFilePath: '' })
+    wx.showLoading({ title: '正在生成海报', mask: true })
+    try {
+      const canvasState = await this.getPosterCanvas()
+      const media = getMediaById(this.data.primary.mediaId)
+      const urls = posterMediaCandidates(media)
+      const posterImage = await this.loadPosterImage(canvasState.canvas, urls)
+      this.drawResultPoster(canvasState, posterImage)
+      const tempFilePath = await this.exportResultPoster(canvasState.canvas)
+      this.setData({ posterTempFilePath: tempFilePath })
+      wx.previewImage({
+        current: tempFilePath,
+        urls: [tempFilePath],
+        fail: (error) => {
+          console.warn('[ResultPoster] preview unavailable', { error })
+          wx.showToast({ title: '海报已生成，但暂时无法预览', icon: 'none' })
+        }
+      })
+    } catch (error) {
+      console.error('[ResultPoster] generation failed', { error })
+      wx.showToast({ title: '海报生成失败，请重试', icon: 'none' })
+    } finally {
+      wx.hideLoading()
+      this.setData({ posterGenerating: false })
+    }
+  },
+
+  getPosterCanvas() {
+    return new Promise((resolve, reject) => {
+      wx.createSelectorQuery().in(this).select('#resultPoster').fields({ node: true, size: true }).exec((result) => {
+        const target = result && result[0]
+        if (!target || !target.node || !target.width || !target.height) {
+          reject(new Error('Canvas 2D node is unavailable'))
+          return
+        }
+        const canvas = target.node
+        const dpr = posterPixelRatio()
+        canvas.width = Math.round(target.width * dpr)
+        canvas.height = Math.round(target.height * dpr)
+        const context = canvas.getContext('2d')
+        context.scale(dpr, dpr)
+        resolve({ canvas, context, width: target.width, height: target.height, dpr })
+      })
+    })
+  },
+
+  getPosterImageInfo(url) {
+    return new Promise((resolve) => {
+      let settled = false
+      const finish = (value) => {
+        if (settled) return
+        settled = true
+        clearTimeout(timeout)
+        resolve(value)
+      }
+      const timeout = setTimeout(() => {
+        console.warn('[ResultPosterMedia] image info timed out', {
+          mediaId: this.data.primary.mediaId,
+          finalAttemptUrl: url
+        })
+        finish(null)
+      }, 12000)
+      wx.getImageInfo({
+        src: url,
+        success: (result) => finish(result),
+        fail: (error) => {
+          console.warn('[ResultPosterMedia] image info unavailable', {
+            mediaId: this.data.primary.mediaId,
+            finalAttemptUrl: url,
+            error
+          })
+          finish(null)
+        }
+      })
+    })
+  },
+
+  createPosterCanvasImage(canvas, imagePath, url) {
+    return new Promise((resolve) => {
+      const image = canvas.createImage()
+      let settled = false
+      const finish = (value) => {
+        if (settled) return
+        settled = true
+        clearTimeout(timeout)
+        image.onload = null
+        image.onerror = null
+        resolve(value)
+      }
+      const timeout = setTimeout(() => {
+        console.warn('[ResultPosterMedia] Canvas image timed out', {
+          mediaId: this.data.primary.mediaId,
+          finalAttemptUrl: url
+        })
+        finish(null)
+      }, 5000)
+      image.onload = () => finish(image)
+      image.onerror = (error) => {
+        console.warn('[ResultPosterMedia] Canvas image unavailable', {
+          mediaId: this.data.primary.mediaId,
+          finalAttemptUrl: url,
+          error
+        })
+        finish(null)
+      }
+      image.src = imagePath
+    })
+  },
+
+  async loadPosterImage(canvas, urls) {
+    if (!wx.getImageInfo || !canvas || !canvas.createImage) return null
+    for (let index = 0; index < urls.length; index += 1) {
+      const url = urls[index]
+      try {
+        const imageInfo = await this.getPosterImageInfo(url)
+        if (!imageInfo) continue
+        const image = await this.createPosterCanvasImage(canvas, imageInfo.path || url, url)
+        if (image) return image
+      } catch (error) {
+        console.warn('[ResultPosterMedia] candidate processing failed', {
+          mediaId: this.data.primary.mediaId,
+          finalAttemptUrl: url,
+          error
+        })
+      }
+    }
+    return null
+  },
+
+  drawResultPoster(canvasState, posterImage) {
     const primary = this.data.primary
     const type = this.data.paleoType
-    const context = wx.createCanvasContext('resultPoster', this)
-    context.setFillStyle(type.softColor)
-    context.fillRect(0, 0, 750, 1200)
-    context.setFillStyle(type.color)
-    context.fillRect(0, 0, 750, 26)
-    context.setFillStyle(type.foreground)
-    context.setFontSize(22)
+    const context = canvasState.context
+    context.clearRect(0, 0, canvasState.width, canvasState.height)
+    context.fillStyle = type.softColor
+    context.fillRect(0, 0, canvasState.width, canvasState.height)
+    context.fillStyle = type.color
+    context.fillRect(0, 0, canvasState.width, 26)
+    context.fillStyle = type.foreground
+    context.font = '700 22px sans-serif'
     context.fillText('地球编年史 · 我的远古身份', 54, 74)
-    context.setFontSize(90)
+    context.font = '900 90px sans-serif'
     context.fillText(type.code, 52, 178)
-    context.setFontSize(38)
+    context.font = '800 38px sans-serif'
     context.fillText(type.nameCn, 56, 232)
 
     context.save()
     context.beginPath()
     context.arc(375, 480, 206, 0, Math.PI * 2)
     context.clip()
-    if (imagePath) context.drawImage(imagePath, 130, 274, 490, 412)
+    if (posterImage) context.drawImage(posterImage, 130, 274, 490, 412)
     else {
-      context.setFillStyle(type.color)
+      context.fillStyle = type.color
       context.fillRect(130, 274, 490, 412)
+      context.fillStyle = type.foreground
+      context.textAlign = 'center'
+      context.font = '900 76px sans-serif'
+      context.fillText(type.code, 375, 505)
     }
     context.restore()
-    context.setStrokeStyle(type.color)
-    context.setLineWidth(10)
+    context.strokeStyle = type.color
+    context.lineWidth = 10
     context.beginPath()
     context.arc(375, 480, 211, 0, Math.PI * 2)
     context.stroke()
 
-    context.setFillStyle(type.foreground)
-    context.setTextAlign('center')
-    context.setFontSize(54)
+    context.fillStyle = type.foreground
+    context.textAlign = 'center'
+    context.font = '900 54px sans-serif'
     context.fillText(primary.nameCn, 375, 744)
-    context.setFontSize(26)
+    context.font = '600 26px sans-serif'
     const lineEnd = drawPosterLines(context, primary.oneLineIdentity || primary.punchline, 375, 792, 600, 38, 2)
 
-    context.setTextAlign('left')
+    context.textAlign = 'left'
     const labels = type.axisLabels.slice(0, 4)
     labels.forEach((label, index) => {
       const column = index % 2
       const row = Math.floor(index / 2)
       const x = 54 + column * 328
       const y = lineEnd + 42 + row * 78
-      context.setFillStyle('rgba(255,255,255,0.62)')
+      context.fillStyle = 'rgba(255,255,255,0.62)'
       context.fillRect(x, y, 300, 56)
-      context.setFillStyle(type.foreground)
-      context.setFontSize(23)
+      context.fillStyle = type.foreground
+      context.font = '700 23px sans-serif'
       context.fillText(`${index + 1}  ${label}`, x + 18, y + 36)
     })
 
-    context.setFillStyle(type.foreground)
-    context.setFontSize(19)
+    context.fillStyle = type.foreground
+    context.font = '500 19px sans-serif'
     drawPosterLines(context, '科普娱乐分类，不代表对已灭绝生物心理的科学测量。', 56, 1110, 638, 30, 2)
-    context.setFontSize(21)
+    context.font = '600 21px sans-serif'
     context.fillText('微信小程序 · 地球编年史', 56, 1170)
-    context.draw(false, () => {
+  },
+
+  exportResultPoster(canvas) {
+    return new Promise((resolve, reject) => {
       wx.canvasToTempFilePath({
-        canvasId: 'resultPoster',
-        width: 750,
-        height: 1200,
-        destWidth: 1500,
-        destHeight: 2400,
+        canvas,
         fileType: 'jpg',
         quality: 0.92,
-        success: (result) => {
-          wx.hideLoading()
-          this.setData({ posterGenerating: false })
-          wx.previewImage({ current: result.tempFilePath, urls: [result.tempFilePath] })
-        },
-        fail: (error) => {
-          console.error('[ResultPoster]', error)
-          wx.hideLoading()
-          this.setData({ posterGenerating: false })
-          wx.showToast({ title: '海报生成失败，请重试', icon: 'none' })
-        }
+        success: (result) => resolve(result.tempFilePath),
+        fail: reject
       }, this)
     })
   },
