@@ -46,7 +46,7 @@ const periods = [
     misconceptions: ['冥古宙并非四十多亿年都覆盖着同一个全球岩浆海；它经历了长期而复杂的冷却。', '早期地球也不是始终没有液态水，古老锆石为很早的水—岩作用提供了线索。'],
     evidenceMethods: ['陨石和月球样本放射性定年', '古老锆石中的铀—铅年龄与氧同位素', '行星形成数值模型', '月球撞击记录'],
     sources: [ICS_SOURCE, { name: 'Hadean zircon mining', publisher: 'Australian National University', url: 'https://earthsciences.anu.edu.au/research/research-projects/hadean-zircon-mining' }],
-    eventIds: ['earth-formation', 'moon-formation', 'first-oceans']
+    eventIds: ['solar-system-formation', 'earth-formation', 'moon-formation', 'first-oceans']
   }),
   makePeriod({
     id: 'archean', name: '太古宙', englishName: 'Archean', range: '约40亿—25亿年前', parent: '前寒武纪 · 宙', eraId: 'precambrian', color: '#2d8c88', accent: '#76d3bb', icon: '≈',
@@ -67,7 +67,7 @@ const periods = [
     livingHere: '你可能先经历漫长而安静的微生物世界，再突然来到冰封纬度，最后在埃迪卡拉浅海遇见像叶片、被子和软垫一样的生物。请不要问它们是不是水母，分类没那么简单。',
     misconceptions: ['埃迪卡拉生物并不都能直接归入现代动物门类。', '“雪球地球”并不意味着所有研究者都认同海洋每一处都被同样厚的冰覆盖。'],
     sources: [ICS_SOURCE, { name: 'Fat from 558 million years ago reveals earliest known animal', publisher: 'Australian National University', url: 'https://science.anu.edu.au/news-events/news/fat-558-million-years-ago-reveals-earliest-known-animal' }],
-    eventIds: ['great-oxidation', 'first-eukaryotes', 'snowball-earth', 'ediacaran-animals'],
+    eventIds: ['great-oxidation', 'huronian-glaciations', 'first-eukaryotes', 'boring-billion', 'rodinia-cycle', 'snowball-earth', 'ediacaran-animals'],
     creatureIds: ['grypania', 'charnia', 'dickinsonia', 'kimberella', 'spriggina', 'cyanobacteria']
   }),
   makePeriod({
@@ -89,7 +89,7 @@ const periods = [
     livingHere: '海中很热闹，陆地却像一大片没有树林的石质空场。若你待到纪末，海平面下降和海水含氧变化会让旅程迅速从观光变成生存挑战。',
     misconceptions: ['奥陶纪末大灭绝不是一次瞬间事件，而包含多个环境压力阶段。'],
     sources: [ICS_SOURCE, { name: 'Isotelus: Ohio State\'s Fossil', publisher: 'Cincinnati Museum Center', url: 'https://www.cincymuseum.org/2019/03/08/isotelus-ohio-states-fossil/' }],
-    eventIds: ['land-plants', 'ordovician-extinction'],
+    eventIds: ['land-plants', 'great-ordovician-biodiversification', 'ordovician-extinction'],
     creatureIds: ['aegirocassis', 'isotelus', 'endoceras', 'sacabambaspis', 'arandaspis', 'cameroceras']
   }),
   makePeriod({
@@ -111,7 +111,7 @@ const periods = [
     livingHere: '河口可能有装甲鱼和早期四足形动物，陆上则是没有花朵和草坪的森林。别把提塔利克当作某条鱼突然决定“上岸进化”，它代表的是漫长支系变化中的一组过渡特征。',
     misconceptions: ['提塔利克不是所有四足动物的已确认直接祖先。', '“鱼类时代”不代表当时只有鱼类值得关注。'],
     sources: [ICS_SOURCE, { name: 'Eusthenopteron foordi', publisher: 'University of Texas Digital Morphology', url: 'https://digimorph.geo.utexas.edu/specimens/Eusthenopteron_foordi/' }],
-    eventIds: ['first-tetrapods', 'late-devonian-extinction'],
+    eventIds: ['first-forests', 'first-tetrapods', 'late-devonian-extinction'],
     creatureIds: ['dunkleosteus', 'tiktaalik', 'bothriolepis', 'cladoselache', 'ichthyostega', 'eusthenopteron', 'pterygotus', 'cephalaspis', 'brontoscorpio']
   }),
   makePeriod({
@@ -261,7 +261,7 @@ const periods = [
     environment: { continents: '低海平面时期陆桥连接部分地区。', climate: '晚更新世气候快速波动。', oxygen: '接近现代水平。', ocean: '海岸、河流与岛屿成为迁徙和食物网络的一部分。', tectonics: '影响较长期，短期生活更受气候与生态控制。', ice: '末次冰期塑造北半球景观。', modernDifference: '人口密度低，没有大规模农业国家，但社会与知识网络已相当复杂。' },
     livingHere: '你的手机会失去信号，但社会生活不会消失：食物分享、长距离交换和精细知识网络，都是抵御环境风险的关键基础设施。', misconceptions: ['狩猎采集者不等于“生活简单”或缺少文化。'],
     sources: [HUMAN_SOURCE, { name: 'Blombos Ocher Plaque', publisher: 'Smithsonian Human Origins Program', url: 'https://humanorigins.si.edu/evidence/behavior/recording-information/blombos-ocher-plaque' }],
-    eventIds: ['homo-sapiens', 'symbolic-culture']
+    eventIds: ['homo-sapiens', 'humanity-in-deep-time', 'symbolic-culture']
   }),
   makePeriod({
     id: 'agricultural-revolution', name: '农业革命', englishName: 'Agricultural Transitions', range: '约1.2万年前起', parent: '人类历史 · 社会篇', eraId: 'human-history', color: '#9c824d', accent: '#c9b36d', icon: '✤',

@@ -5,7 +5,7 @@
 - 知识挑战题：60
 - 唯一结果标题：60
 - 唯一一句话结果：60
-- 结果摘要最高三字组相似度：42.5%（nothosaurus / basilosaurus）
+- 结果摘要最高三字组相似度：5.3%（aegirocassis / diplodocus）
 - 内容错误：0
 
 ## 身份测试章节

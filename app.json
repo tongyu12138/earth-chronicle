@@ -9,7 +9,8 @@
     "pages/quiz-result/index",
     "pages/knowledge-quiz/index",
     "pages/timeline/index",
-    "pages/detail/index"
+    "pages/detail/index",
+    "pages/story/index"
   ],
   "window": {
     "navigationBarBackgroundColor": "#071319",

@@ -1,0 +1,48 @@
+{
+  "mode": "before",
+  "projectPath": "/private/tmp/earth-chronicle-before",
+  "results": [
+    {
+      "id": "megalodon",
+      "name": "巨齿鲨",
+      "code": "",
+      "family": "",
+      "match": 90,
+      "mediaState": "unavailable"
+    }
+  ],
+  "errorLogs": [
+    {
+      "type": "error",
+      "args": [
+        {}
+      ]
+    },
+    {
+      "type": "error",
+      "args": [
+        {}
+      ]
+    },
+    {
+      "type": "error",
+      "args": [
+        {}
+      ]
+    },
+    {
+      "type": "error",
+      "args": [
+        {}
+      ]
+    },
+    {
+      "type": "error",
+      "args": [
+        {}
+      ]
+    }
+  ],
+  "exceptions": [],
+  "consoleCount": 5
+}

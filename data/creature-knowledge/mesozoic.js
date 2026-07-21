@@ -116,6 +116,66 @@ const entries = [
       { question: '猎手与食腐者关系是什么？', options: ['必须二选一', '大型肉食者通常会兼用', '食腐者不能咬骨', '化石无法研究取食'], correctIndex: 1, explanation: '机会性利用尸体并不否定主动捕猎能力。' }
     ],
     sourceIds: ['tyrannosaurus-smithsonian', 'tyrannosaurus-growth-2004', 'tyrannosaurus-age-2004']
+  },
+  {
+    id: 'ankylosaurus', entryType: 'species', contentOrigin: 'manual', reviewStatus: 'publish-ready',
+    hook: '它不是一辆只会挨打的装甲车：骨甲负责覆盖身体，尾端则形成一套能主动摆动的防御系统。',
+    quickSummary: '甲龙生活在晚白垩世北美西部，是低矮、四足的大型植食恐龙。皮内成骨覆盖颈、背和体侧，尾端骨块与加固尾椎组成尾锤。它主要在近地面取食植物；尾锤能否、何时以及对谁挥击，需要把骨骼、肌肉复原和力学模型分开阅读。',
+    whyItMatters: '甲龙把“防御”拆成了多套结构：骨甲保护身体，低矮宽阔的躯干提高稳定性，尾部则保留主动反击的可能。不同甲龙类的颌与牙齿还显示，装甲恐龙并非都用同一种方式吃同一类植物。它是理解身体结构如何同时服务取食、防护和运动约束的好案例。',
+    taxonomy: { displayPath: ['动物界', '恐龙总目', '鸟臀目', '甲龙亚目', '甲龙科', '甲龙属'], classificationNote: 'Ankylosaurus magniventris 是晚白垩世北美甲龙科成员；许多尾锤功能研究使用保存更完整的近亲，外推时需标明。', confidence: 'high' },
+    time: { displayRange: '约6800万—6600万年前，晚白垩世', earliestMa: 68, latestMa: 66, precisionNote: '主要来自北美最晚白垩世地层；不同标本的层位和完整度并不相同。' },
+    distribution: { regions: ['美国西部', '加拿大西部'], formations: ['Hell Creek', 'Lance', 'Scollard 等'], mapNote: '化石点位于当时北美西部沿海平原与河流系统，不能直接套用现代州界和气候。' },
+    scale: { length: '大型个体约6—8米', height: '背部较低，臀高约成人身高上下', mass: '常见估算约数吨，随体积模型变化', comparison: '体长接近一辆大型巴士，身体明显比多数大型恐龙更低矮宽阔', uncertainty: '完整骨架少，躯干宽度、软组织与尾部比例会改变估重。' },
+    paleoenvironment: '温暖的河流、洪泛平原、林地与湿地交错环境，与霸王龙、三角龙和鸭嘴龙类共享最晚白垩世生态系统。',
+    ecosystemRole: '大型低位取食植食者，利用蕨类、灌木和其他近地植物资源；装甲与尾锤降低大型捕食者接近的收益。',
+    lifeFunctions: {
+      feeding: '宽吻部适合收集近地植被，小型叶状牙负责切割；近亲的磨耗与颌部研究显示部分甲龙类还具有前后向处理动作。',
+      locomotion: '四条粗壮肢体支撑低矮宽阔躯干，日常移动更适合稳定步行，不支持高速长距离奔跑。',
+      respirationOrMetabolism: '鼻腔曲折结构可能参与空气调节与共鸣，但具体体温和代谢率仍需骨组织及近亲比较。',
+      senses: '头骨内腔可约束嗅觉、听觉和平衡范围，不能直接给出警觉程度或情绪。',
+      defense: '背部与体侧骨甲覆盖暴露区域，加固尾椎让尾端骨块作为整体摆动；大型尾锤在模型中可产生显著冲击。',
+      growth: '皮内成骨与骨组织会随生长改变，幼体尾锤可能尚未达到成体尺寸和力学能力。',
+      reproduction: '作为恐龙应当产卵，但目前缺少可无争议归给甲龙属的巢、蛋和育幼序列。',
+      socialBehavior: '化石分布不足以证明固定群居；尾锤用于捕食者防御、同类竞争或两者兼有，仍需更多损伤证据。'
+    },
+    anatomyHighlights: [
+      { title: '皮内成骨装甲', explanation: '皮肤内部形成的骨板和小骨块覆盖颈、背与体侧，并非金属外壳。', evidenceLevel: 'direct', mediaId: '' },
+      { title: '加固尾柄', explanation: '尾部后段椎骨与肌腱排列限制弯曲，使力量能传向尾端。', evidenceLevel: 'direct', mediaId: '' },
+      { title: '尾端骨块', explanation: '成对大型皮内成骨构成尾锤主体；冲击能力取决于尺寸、摆幅与软组织输入。', evidenceLevel: 'inferred', mediaId: '' }
+    ],
+    ecologicalRelations: { preyOrResources: ['蕨类', '低矮灌木', '近地被子植物候选'], predators: ['霸王龙等大型兽脚类'], competitors: ['其他低位取食甲龙类', '小型与中型植食恐龙'], partners: [] },
+    dayInTheLife: [
+      { title: '贴近地面取食', text: '宽吻部扫过低矮植被，小牙切下植物，宽阔躯干维持稳定步行。', certainty: 'supported' },
+      { title: '风险从侧后方靠近', text: '装甲先保护身体，尾部保持在可摆动范围；具体警戒姿态没有被化石直接记录。', certainty: 'plausible' },
+      { title: '尾锤改变接近成本', text: '大型尾锤可能以侧向摆动产生足以伤害骨骼的冲击，但是否真正命中捕食者仍需病理证据。', certainty: 'plausible' }
+    ],
+    fossilEvidence: [
+      { evidenceType: '骨甲、尾椎与尾锤', material: '皮内成骨、加固尾柄和尾端大型骨块', whatItShows: '防护覆盖范围与尾部作为整体摆动的结构基础。', limitation: '骨骼不记录每次挥击对象、速度或行为频率。', strength: '强' },
+      { evidenceType: '生物力学模型', material: '尾部尺寸、肌肉截面、关节范围和摆动速度模拟', whatItShows: '不同大小尾锤可能产生的冲击力范围。', limitation: '肌肉与速度是假设输入，近亲结果不能不加说明地等同甲龙属。', strength: '中等' },
+      { evidenceType: '颌部与牙齿比较', material: '甲龙类头骨、牙齿磨耗和有限元模型', whatItShows: '低位植食与类群间取食力学差异。', limitation: '研究常来自近亲，不能确定甲龙属的完整植物菜单。', strength: '中等' }
+    ],
+    discoveryHistory: [
+      { year: '1908', place: '美国蒙大拿州', event: 'Barnum Brown 依据部分骨架正式命名甲龙。' },
+      { year: '20世纪', place: '北美多家博物馆', event: '分散头骨、骨甲与尾部材料逐步拼合出更可靠身体方案。' },
+      { year: '2009年至今', place: '数字模型与比较解剖研究', event: '尾锤冲击、形成过程与甲龙类取食方式被分开检验。' }
+    ],
+    debates: [{ question: '尾锤主要用来对付捕食者还是同类？', currentView: '骨骼与力学支持它能产生有效冲击，防御和同类竞争都可能。', alternatives: '展示、威慑或多功能使用也可与挥击并存。', confidence: '功能能力较可靠，具体使用对象与频率仍有争议。' }],
+    misconceptions: [
+      { myth: '所有甲龙类都有同样巨大的尾锤。', correction: '尾锤在甲龙科内部逐步演化，许多结节龙科成员没有这种结构。' },
+      { myth: '有尾锤就能证明它经常主动攻击。', correction: '结构支持冲击能力，不等于化石保存了行为频率或攻击动机。' }
+    ],
+    funFacts: ['甲龙属的完整骨架并不多，经典复原来自多件标本拼合。', '尾锤主体是皮内成骨，不是尾椎末端直接膨大。', '装甲恐龙的牙小，但近亲磨耗显示取食处理并不都很简单。'],
+    glossary: [
+      { term: '皮内成骨', definition: '在皮肤内部形成、可成为装甲或骨块的骨组织。' },
+      { term: '尾柄', definition: '尾锤前方被加固、负责传力的尾部区段。' },
+      { term: '有限元分析', definition: '把结构分成许多小单元，计算特定受力条件下应力分布的工程方法。' }
+    ],
+    knowledgeCheck: [
+      { question: '甲龙尾锤的骨块主要属于哪类结构？', options: ['皮内成骨', '牙齿', '角质羽毛', '胃石'], correctIndex: 0, explanation: '尾端骨块和身体装甲都与皮肤内形成的骨组织有关。' },
+      { question: '力学模型最适合回答什么？', options: ['尾锤可能产生的冲击范围', '每周挥击次数', '甲龙的情绪', '皮肤颜色'], correctIndex: 0, explanation: '模型能测试结构在设定参数下的能力，不能直接复原行为频率。' },
+      { question: '甲龙更可能在哪一高度取食？', options: ['近地面植被', '高树冠顶端', '深海浮游生物', '空中昆虫'], correctIndex: 0, explanation: '低矮身体、吻部和牙齿共同支持低位植食。' }
+    ],
+    sourceIds: ['ankylosaur-tail-impact-2009', 'ankylosaur-tail-evolution-2015', 'ankylosaur-feeding-2023']
   }
 ]
 

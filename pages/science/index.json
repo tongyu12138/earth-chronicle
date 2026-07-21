@@ -1,5 +1,8 @@
 {
   "navigationBarTitleText": "地球编年史",
   "enablePullDownRefresh": false,
-  "backgroundColor": "#071319"
+  "backgroundColor": "#071319",
+  "usingComponents": {
+    "extinction-comparison": "/components/extinction-comparison/index"
+  }
 }

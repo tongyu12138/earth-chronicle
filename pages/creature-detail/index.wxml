@@ -21,7 +21,7 @@
       <view id="section-overview" class="detail-section first-section">
         <text class="section-kicker-global">30-SECOND GUIDE</text><text class="section-heading-global">30秒认识它</text>
         <text class="lead-copy">{{knowledge.quickSummary}}</text>
-        <view class="status-pill"><text>资料状态：已核验</text><text>本页由 {{knowledge.sources.length}} 项研究或专业机构资料交叉检查</text></view>
+        <view class="status-pill"><text>资料状态：{{knowledge.contentStatusLabel}}</text><text>{{knowledge.contentStatusNote}} 当前列出 {{knowledge.sources.length}} 项研究或专业机构资料。</text></view>
       </view>
 
       <view class="quick-grid">
@@ -34,6 +34,7 @@
       <view class="detail-section">
         <text class="section-kicker-global">WHY IT MATTERS</text><text class="section-heading-global">为什么值得认识</text>
         <text class="detail-copy">{{knowledge.whyItMatters}}</text>
+        <text wx:if="{{knowledge.periodConnection}}" class="period-connection">放回地球史：{{knowledge.periodConnection}}</text>
       </view>
 
       <view class="detail-section">

@@ -193,7 +193,7 @@ codeFiles.forEach((file) => {
 })
 
 if (periods.length !== 29) problems.push(`Expected 29 periods, received ${periods.length}`)
-if (events.length !== 70) problems.push(`Expected 70 events after phase-three data additions, received ${events.length}`)
+if (events.length !== 77) problems.push(`Expected 77 events after earth-story additions, received ${events.length}`)
 if (creatures.length !== 110) problems.push(`Expected 110 creatures, received ${creatures.length}`)
 periods.forEach((period) => {
   if (getPeriodById(period.id) !== period) problems.push(`getPeriodById failed for ${period.id}`)
@@ -203,7 +203,7 @@ periods.forEach((period) => {
 events.forEach((event) => { if (getEventById(event.id) !== event) problems.push(`getEventById failed for ${event.id}`) })
 creatures.forEach((creature) => { if (getCreatureById(creature.id) !== creature) problems.push(`getCreatureById failed for ${creature.id}`) })
 
-const expectedShareRoutes = ['/pages/science/index', '/pages/quiz/index', '/pages/period/index', '/pages/detail/index', '/pages/creatures/index', '/pages/creature-detail/index', '/pages/quiz-result/index', '/pages/timeline/index']
+const expectedShareRoutes = ['/pages/science/index', '/pages/quiz/index', '/pages/period/index', '/pages/detail/index', '/pages/creatures/index', '/pages/creature-detail/index', '/pages/quiz-result/index', '/pages/timeline/index', '/pages/story/index']
 expectedShareRoutes.forEach((route) => {
   if (!pageSet.has(route.slice(1))) problems.push(`Share/recent route is not registered: ${route}`)
 })

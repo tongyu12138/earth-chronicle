@@ -1,5 +1,6 @@
 const { DIMENSIONS } = require('../data/quiz-profiles')
 const { questions, dimensionLabels } = require('../data/quiz')
+const { calculatePaleoCode } = require('./paleo-type-engine')
 
 const weights = {
   curiosity: 1.1, boldness: 1, sociability: 1, patience: 1, adaptability: 1.15, strategy: 1.15,
@@ -88,7 +89,10 @@ function similarity(userProfile, creatureProfile) {
 function rankCreatures(answers, creatures) {
   if (!validateAnswers(answers)) throw new Error('Quiz answers are incomplete or invalid')
   const scored = scoreAnswers(answers)
-  const eligible = creatures.filter((creature) => creature.quizEligible && creature.personalityProfile)
+  const allEligible = creatures.filter((creature) => creature.quizEligible && creature.personalityProfile)
+  const paleoTypeCode = calculatePaleoCode(scored.normalized)
+  const matchingType = allEligible.filter((creature) => creature.paleoTypeCode === paleoTypeCode)
+  const eligible = matchingType.length ? matchingType : allEligible
   if (!eligible.length) throw new Error('No quiz-eligible profiles are available')
   const ranked = eligible.map((creature) => ({
     creature,
@@ -97,7 +101,7 @@ function rankCreatures(answers, creatures) {
     if (right.similarity !== left.similarity) return right.similarity - left.similarity
     return left.creature.id.localeCompare(right.creature.id)
   })
-  return { profile: scored.normalized, raw: scored.raw, ranked }
+  return { profile: scored.normalized, raw: scored.raw, paleoTypeCode, ranked }
 }
 
 function topTraits(profile, creatureProfile) {
@@ -151,6 +155,7 @@ function buildResult(answers, creatures) {
   return {
     answers: answers.slice(),
     profile: result.profile,
+    paleoTypeCode: result.paleoTypeCode,
     primaryId: primary.creature.id,
     similarIds: top.slice(1).map((item) => item.creature.id),
     match: Math.min(98, Math.round(55 + primary.similarity * 43)),

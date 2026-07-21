@@ -5,7 +5,7 @@ const { imageManifest } = require('../data/image-manifest')
 const repoRoot = path.resolve(__dirname, '..')
 const generationsPath = path.resolve(repoRoot, 'media/ai-generations.json')
 const outputPath = path.resolve(repoRoot, 'data/ai-media-catalog.js')
-const sourceUrl = 'https://github.com/tongyu12138/earth-chronicle/blob/fix/navigation-media-experience/docs/IMAGE_SOURCES.md#项目自有-ai-艺术复原'
+const sourceUrl = 'https://github.com/tongyu12138/earth-chronicle/blob/main/docs/IMAGE_SOURCES.md#项目自有-ai-艺术复原'
 
 if (!fs.existsSync(generationsPath)) {
   throw new Error(`Missing AI generation registry: ${generationsPath}`)
@@ -68,9 +68,32 @@ const records = (payload.items || []).map((generated) => {
   }
 }).sort((left, right) => left.id.localeCompare(right.id))
 
+const rowFields = [
+  'id', 'ownerType', 'ownerId', 'thumbnailUrl', 'imageUrl', 'alt', 'caption', 'scientificAccuracyNote',
+  'priority', 'requiredForRelease', 'imageWidth', 'imageHeight', 'imageBytes', 'imageSha256',
+  'thumbnailWidth', 'thumbnailHeight', 'thumbnailBytes', 'thumbnailSha256', 'originalBytes', 'originalSha256'
+]
+const rows = records.map((record) => rowFields.map((field) => record[field]))
+const common = {
+  galleryUrls: [],
+  credit: '地球编年史项目 · OpenAI 图像生成',
+  author: '地球编年史项目',
+  license: 'Project-owned AI-generated artwork',
+  sourceUrl,
+  isReconstruction: true,
+  mediaType: 'reconstruction',
+  focalPoint: '50% 50%',
+  sourceInstitution: '项目自有 AI 艺术复原',
+  hotlinkDomain: '',
+  status: 'ready'
+}
+const rowLines = rows.map((row) => JSON.stringify(row)).join(',\n')
 const output = `// 由 scripts/build-ai-media-catalog.js 根据 media/ai-generations.json 生成。\n` +
-  `// 请勿手工编辑；每条记录必须先通过独立的视觉与时代一致性审核。\n` +
-  `const aiMediaCatalog = ${JSON.stringify(records, null, 2)}\n\n` +
+  `// 为控制微信主包体积，共享字段与逐图字段分开存储；运行时只做无损结构还原，不生成任何科学文案。\n` +
+  `const fields=${JSON.stringify(rowFields)}\n` +
+  `const common=${JSON.stringify(common)}\n` +
+  `const rows=[\n${rowLines}\n]\n` +
+  `const aiMediaCatalog=rows.map((row)=>Object.assign({},common,row.reduce((record,value,index)=>{record[fields[index]]=value;return record},{})))\n\n` +
   `module.exports = { aiMediaCatalog }\n`
 
 fs.writeFileSync(outputPath, output)

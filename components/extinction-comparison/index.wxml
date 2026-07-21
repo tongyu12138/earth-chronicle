@@ -1,0 +1,26 @@
+<view class="comparison-museum">
+  <scroll-view class="comparison-tabs" scroll-x="true" enhanced="true" show-scrollbar="false">
+    <view class="comparison-tabs-inner">
+      <button wx:for="{{comparisons}}" wx:key="id" class="comparison-tab {{selectedId === item.id ? 'is-active' : ''}}" data-id="{{item.id}}" bindtap="selectEvent">
+        <text class="tab-number">{{item.number}}</text><text class="tab-title">{{item.title}}</text><text class="tab-time">{{item.time}}</text>
+      </button>
+    </view>
+  </scroll-view>
+
+  <view class="comparison-sheet">
+    <view class="comparison-hero">
+      <media-image class="comparison-media" media-id="{{selected.mediaId}}" variant="card" ratio="16:9" alt="{{selected.title}}生态危机艺术复原" placeholder-theme="volcanic" show-caption="{{false}}" />
+      <view class="comparison-hero-copy"><text class="hero-meta">{{selected.number}} · {{selected.time}}</text><text class="hero-title">{{selected.title}}</text><text class="confidence {{selected.claimStatus}}">科学把握：{{selected.confidence}}</text></view>
+    </view>
+    <view class="comparison-grid">
+      <view class="comparison-cell"><text class="cell-label">主要影响生态</text><text class="cell-copy">{{selected.affectedEcosystems}}</text></view>
+      <view class="comparison-cell"><text class="cell-label">关键证据</text><text class="cell-copy">{{selected.keyEvidence}}</text></view>
+      <view class="comparison-cell primary-mechanism"><text class="cell-label">当前主流机制</text><text class="cell-copy">{{selected.mainstreamMechanism}}</text><text class="mechanism-confidence">{{selected.confidenceLabel}}</text></view>
+      <view class="comparison-cell"><text class="cell-label">其他候选机制</text><text class="cell-copy">{{selected.alternativeMechanisms}}</text></view>
+      <view class="comparison-cell"><text class="cell-label">恢复时间</text><text class="cell-copy">{{selected.recoveryTime}}</text></view>
+      <view class="comparison-cell"><text class="cell-label">幸存或扩张类群</text><text class="cell-copy">{{selected.survivors}}</text></view>
+    </view>
+    <button class="archive-link" bindtap="openEvent">打开{{selected.title}}完整事件档案 →</button>
+  </view>
+  <text class="comparison-note">横向切换同一组问题，比较的是证据与机制，不是给灾难排“惨烈榜”。</text>
+</view>

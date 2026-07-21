@@ -177,6 +177,66 @@ const entries = [
       { question: '为什么不能把它画成线性进化阶梯的一格？', options: ['演化会分支', '它没有化石', '它生活在现代', '它是恐龙'], correctIndex: 0, explanation: '早期人族存在多支并行，祖先—后代关系并非简单排队。' }
     ],
     sourceIds: ['afarensis-smithsonian', 'afarensis-walking-model-2007', 'afarensis-foot-2011']
+  },
+  {
+    id: 'megalodon', entryType: 'species', contentOrigin: 'manual', reviewStatus: 'publish-ready',
+    hook: '巨齿鲨真正惊人的不只是一排大牙，而是维持远洋巡游与高营养级捕食所需的整套能量预算。',
+    quickSummary: '巨齿鲨是中新世至上新世的巨型鲨类，分布于全球多处温暖和温带海域。牙齿、少量椎体、被咬鲸骨与同位素共同支持它位于高营养级，并可能通过区域性体温调节扩大巡游和捕食范围。完整体形、最大体长与具体速度仍需模型约束。',
+    whyItMatters: '它把海洋顶级捕食者的机会与成本同时放大。高体温、大体型和远洋活动可能提高遇到大型猎物的能力，也带来更高能量需求。牙齿中的锌、氧和团簇同位素让研究者不只比较外形，还能检验营养级和体温；同一批证据也显示不同地区、时期和年龄个体并非共享一张固定菜单。',
+    taxonomy: { displayPath: ['动物界', '软骨鱼纲', '鲭鲨目', '耳齿鲨科', '耳齿鲨属', '巨齿鲨'], classificationNote: '本项目采用 Otodus megalodon；它与现代大白鲨并非同一属，具体亲缘与属级组合仍随系统研究修订。', confidence: 'high' },
+    time: { displayRange: '约2300万—360万年前，中新世至上新世', earliestMa: 23, latestMa: 3.6, precisionNote: '不同海盆的最早与最晚记录受采样、牙齿再搬运和地层定年影响。' },
+    distribution: { regions: ['全球多处中低纬海域'], formations: ['海相中新世与上新世地层'], mapNote: '牙齿分布广不等于每个年龄阶段全年都在同一水域；幼体与成体可能使用不同栖息地。' },
+    scale: { length: '大型个体常估约15米上下，极值依模型而变', height: '鲨类不使用站立高度', mass: '可达数十吨的模型范围', comparison: '体长可超过一辆城市公交车，但不能把现代大白鲨简单等比例放大', uncertainty: '软骨骨架很少保存，牙齿到全身比例、体形和最大标本选择都会改变估算。' },
+    paleoenvironment: '中新世至上新世的大陆架、沿岸育幼区与开放海洋；洋流、海温和鲸类群落在其生存期间持续变化。',
+    ecosystemRole: '高营养级大型捕食者，成年个体能够利用海洋哺乳动物等大型猎物；幼体可能更多使用生产力高、较浅的沿岸区域。',
+    lifeFunctions: {
+      feeding: '宽大三角牙具有锯齿边缘，适合切入厚组织；鲸骨咬痕与牙齿同位素支持食用海洋哺乳动物，但不同地点和年龄的菜单有差异。',
+      locomotion: '流线体形与强尾柄来自近亲和力学重建，可能支持持续巡游；最高速度与转弯方式没有完整身体可直接测量。',
+      respirationOrMetabolism: '团簇和氧同位素支持体温高于周围海水的区域性内温能力，这会提高活动范围，也抬高能量需求。',
+      senses: '鲨类近亲提示嗅觉、视觉、侧线与电感受共同参与觅食；巨齿鲨各感官的具体灵敏度未直接保存。',
+      defense: '大型成体可能很少面对稳定捕食者，幼体在浅海育幼区可减少与大型捕食者相遇；这不等于育幼行为已被直接观察。',
+      growth: '牙齿尺寸分布与椎体生长线可讨论年龄和体长，不同换牙位置与回归公式会改变个体估值。',
+      reproduction: '作为鲨类应当体内受精并产生幼体；巴拿马等地大量幼年牙齿支持育幼区解释，具体妊娠和产仔数未知。',
+      socialBehavior: '同一层位多枚牙齿可能来自长期栖息地累积，不能证明巨齿鲨像群体猎手一样协同行动。'
+    },
+    anatomyHighlights: [
+      { title: '锯齿三角牙', explanation: '宽大的牙冠和锯齿刃适合切割大型猎物组织，并能在猎物骨上留下可比较痕迹。', evidenceLevel: 'direct', mediaId: '' },
+      { title: '持续换牙系统', explanation: '鲨类一生更换多排牙齿，因此牙齿丰富，但一地多牙不自动等于多个同时生活的个体。', evidenceLevel: 'inferred', mediaId: '' },
+      { title: '区域性体温调节', explanation: '牙齿同位素支持身体部分区域高于海水温度，具体热交换结构由近亲比较。', evidenceLevel: 'inferred', mediaId: '' }
+    ],
+    ecologicalRelations: { preyOrResources: ['鲸类与其他海洋哺乳动物', '大型鱼类和海龟候选'], predators: ['大型成体缺少明确稳定天敌', '幼体可能面对其他大型鲨类'], competitors: ['大白鲨及其他大型鲨类', '大型齿鲸类候选'], partners: [] },
+    dayInTheLife: [
+      { title: '跨越海温边界', text: '区域性内温能力可能让大型个体在不同水温中保持巡游表现，代价是持续寻找高能量猎物。', certainty: 'supported' },
+      { title: '接近大型猎物', text: '牙齿形状、营养级和鲸骨咬痕与攻击大型海洋脊椎动物相容；具体追逐动作仍是模型场景。', certainty: 'plausible' },
+      { title: '牙齿进入海底记录', text: '脱落牙齿沉入海底并被埋藏，远比软骨骨架更常保存，也让全身复原长期依赖比例模型。', certainty: 'supported' }
+    ],
+    fossilEvidence: [
+      { evidenceType: '牙齿与猎物咬痕', material: '全球海相地层中的牙齿，以及部分鲸骨上的大型锯齿状痕迹', whatItShows: '牙齿尺寸、切割能力、分布和取食大型海洋脊椎动物的直接线索。', limitation: '单枚牙不能给出完整体长，咬痕也未必记录完整捕猎过程。', strength: '强' },
+      { evidenceType: '锌同位素', material: '牙釉质样组织中的 δ66Zn 记录', whatItShows: '不同地点和时期的相对营养级及与大白鲨可能存在的食物重叠。', limitation: '同位素给出营养位置范围，不能列出每一类猎物或捕猎方式。', strength: '中等到强' },
+      { evidenceType: '团簇与氧同位素', material: '牙齿磷酸盐和碳酸盐的温度代理', whatItShows: '体温高于周围海水，支持区域性内温。', limitation: '保存改变、海水同位素与生理模型会影响绝对温度。', strength: '中等到强' }
+    ],
+    discoveryHistory: [
+      { year: '17世纪', place: '欧洲', event: '大型三角化石曾被称作“舌石”，后来被识别为鲨齿。' },
+      { year: '19—20世纪', place: '全球海相地层', event: '分类从与大白鲨直接相连的旧方案逐步转向耳齿鲨支系。' },
+      { year: '21世纪', place: '实验室与数字模型', event: '同位素、三维重建和生物力学持续修订营养级、体温和体长。' }
+    ],
+    debates: [{ question: '巨齿鲨究竟能长到多大、拥有怎样的身体比例？', currentView: '多数模型支持超过现代大白鲨的大型流线鲨体，但不同牙齿比例与近亲模型给出不同上限。', alternatives: '身体可能比简单放大的大白鲨更修长或更粗壮，最大个体也可能被极端牙齿放大。', confidence: '大型体型共识高，精确上限和完整轮廓为中等把握。' }],
+    misconceptions: [
+      { myth: '巨齿鲨就是仍躲在深海里的超大白鲨。', correction: '它属于已经灭绝的耳齿鲨支系，可靠记录在约360万年前结束；深海并不提供其庞大能量需求所需的隐藏种群证据。' },
+      { myth: '发现一颗巨大牙齿，就能精确算出整条鲨鱼长度。', correction: '牙位、个体差异、近亲选择与回归公式都会改变体长结果。' }
+    ],
+    funFacts: ['牙齿比软骨骨架更容易保存，因此博物馆里的完整身体几乎都是模型。', '锌同位素能在没有骨胶原的鲨齿上提供营养级线索。', '幼年牙齿集中区支持部分浅海曾作为育幼区。'],
+    glossary: [
+      { term: '营养级', definition: '一个生物在食物网中获得能量的位置，不等于固定菜单。' },
+      { term: '区域性内温', definition: '身体部分区域通过代谢和热交换维持高于环境的温度。' },
+      { term: '团簇同位素', definition: '利用重同位素在分子中的组合频率估算形成温度的方法。' }
+    ],
+    knowledgeCheck: [
+      { question: '哪项最能直接支持巨齿鲨取食大型海洋动物？', options: ['猎物骨上的匹配咬痕', '电影镜头', '现代网络传闻', '艺术海报'], correctIndex: 0, explanation: '与大型锯齿相符的骨面痕迹能提供真实取食接触线索。' },
+      { question: '锌同位素主要帮助研究什么？', options: ['相对营养级', '皮肤颜色', '每日速度', '叫声'], correctIndex: 0, explanation: '牙齿中的锌同位素可比较食物网位置，但不能给出完整菜单。' },
+      { question: '为什么体长估计仍会更新？', options: ['软骨骨架少且比例模型不同', '牙齿都是假的', '它没有学名', '海洋没有地层'], correctIndex: 0, explanation: '多数材料是牙齿，牙位、近亲和体形假设都会改变全长换算。' }
+    ],
+    sourceIds: ['megalodon-endothermy-2023', 'megalodon-trophic-zinc-2022', 'megalodon-nursery-2010']
   }
 ]
 

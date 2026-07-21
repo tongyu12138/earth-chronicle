@@ -55,25 +55,26 @@ identityQuestions.forEach((question, index) => {
 })
 
 if (quizProfiles.length !== 60) fail(`正式结果应为60种，当前${quizProfiles.length}种`)
-const resultFields = ['resultTitle', 'punchline', 'resultSummary', 'matchReasons', 'modernRole', 'hiddenStrength', 'stressResponse', 'resultCaution', 'survivalLesson', 'ecosystemJob', 'comparisonNotes']
+const resultFields = ['paleoTypeCode', 'resultTitle', 'oneLineIdentity', 'userPattern', 'creatureStrategy', 'sharedMechanism', 'strengths', 'blindSpot', 'stressResponse', 'modernAnalogy', 'survivalLesson', 'ecosystemRoleSummary', 'evidenceBoundary', 'comparisonNotes', 'curationStatus']
 quizProfiles.forEach((profile) => {
   resultFields.forEach((field) => { if (!profile[field] || (Array.isArray(profile[field]) && !profile[field].length)) fail(`${profile.id} 缺少 ${field}`) })
-  if (textLength(profile.resultSummary) < 120) fail(`${profile.id} 结果摘要不足120字`)
-  if (!Array.isArray(profile.matchReasons) || profile.matchReasons.length < 3) fail(`${profile.id} 匹配原因少于3条`)
-  if (!Array.isArray(profile.resultStrengths) || profile.resultStrengths.length !== 3) fail(`${profile.id} 核心能力不是3条`)
+  if (profile.curationStatus !== 'manual') fail(`${profile.id} 不是人工策展结果`)
+  if (!Array.isArray(profile.strengths) || profile.strengths.length !== 3) fail(`${profile.id} 核心能力不是3条`)
   if (!profile.comparisonNotes || !profile.comparisonNotes.shared || !profile.comparisonNotes.difference) fail(`${profile.id} 相近结果说明不完整`)
-  const visibleResultCopy = [profile.resultTitle, profile.punchline, profile.resultSummary, ...(profile.matchReasons || []), profile.modernRole, profile.hiddenStrength, profile.stressResponse, profile.resultCaution].join(' ')
+  const visibleResultCopy = [profile.resultTitle, profile.oneLineIdentity, profile.userPattern, profile.creatureStrategy, profile.sharedMechanism, ...profile.strengths, profile.blindSpot, profile.stressResponse, profile.modernAnalogy, profile.survivalLesson, profile.ecosystemRoleSummary, profile.evidenceBoundary].join(' ')
   if (/第二层调节|建立起点|需要转向时调用|决策空间|行动说明书|压力窗口|生态镜子|投入方式|三步节奏|这一侧的资源|最可迁移/.test(visibleResultCopy)) fail(`${profile.id} 仍包含内部模型或抽象模板语言`)
-  if (!profile.matchReasons[0].startsWith('你这边：') || !profile.matchReasons[1].startsWith('它那边：') || !profile.matchReasons[2].startsWith('相似点：')) fail(`${profile.id} 匹配原因没有按“你—物种—相似点”组织`)
+  if (!profile.matchExplanation || !Object.prototype.hasOwnProperty.call(profile.matchExplanation, 'userEvidence') || !profile.matchExplanation.creatureStrategy || !profile.matchExplanation.sharedMechanism || !profile.matchExplanation.evidenceBoundary) fail(`${profile.id} 匹配解释没有按新语义结构组织`)
 })
 if (uniqueCount(quizProfiles.map((item) => item.resultTitle)) !== 60) fail('60种 resultTitle 不是100%唯一')
-if (uniqueCount(quizProfiles.map((item) => item.punchline)) !== 60) fail('60种 punchline 不是100%唯一')
-if (uniqueCount(quizProfiles.map((item) => item.resultSummary)) !== 60) fail('60种 resultSummary 不是100%唯一')
+if (uniqueCount(quizProfiles.map((item) => item.oneLineIdentity)) !== 60) fail('60种 oneLineIdentity 不是100%唯一')
+if (uniqueCount(quizProfiles.map((item) => item.creatureStrategy)) !== 60) fail('60种 creatureStrategy 不是100%唯一')
 
 let maxSummarySimilarity = { score: 0, left: '', right: '' }
 for (let left = 0; left < quizProfiles.length; left += 1) {
   for (let right = left + 1; right < quizProfiles.length; right += 1) {
-    const score = similarity(quizProfiles[left].resultSummary, quizProfiles[right].resultSummary)
+    const leftCopy = [quizProfiles[left].resultTitle, quizProfiles[left].oneLineIdentity, quizProfiles[left].userPattern, quizProfiles[left].creatureStrategy, quizProfiles[left].sharedMechanism].join('')
+    const rightCopy = [quizProfiles[right].resultTitle, quizProfiles[right].oneLineIdentity, quizProfiles[right].userPattern, quizProfiles[right].creatureStrategy, quizProfiles[right].sharedMechanism].join('')
+    const score = similarity(leftCopy, rightCopy)
     if (score > maxSummarySimilarity.score) maxSummarySimilarity = { score, left: quizProfiles[left].id, right: quizProfiles[right].id }
   }
 }
@@ -104,10 +105,10 @@ const resultWxml = fs.readFileSync(path.join(root, 'pages/quiz-result/index.wxml
 const resultJs = fs.readFileSync(path.join(root, 'pages/quiz-result/index.js'), 'utf8')
 const quizWxml = fs.readFileSync(path.join(root, 'pages/quiz/index.wxml'), 'utf8')
 const quizJs = fs.readFileSync(path.join(root, 'pages/quiz/index.js'), 'utf8')
-if (!resultWxml.includes('SCIENTIFIC EVIDENCE') || !resultWxml.includes('evidenceSources')) fail('结果页缺少科学证据与来源区')
+if (!resultWxml.includes('SCIENCE PREVIEW') || !resultWxml.includes('evidenceSources')) fail('结果页缺少科学预览与来源区')
 if (!resultWxml.includes('bindtap="generatePoster"') || !resultJs.includes('canvasToTempFilePath')) fail('结果页缺少可生成的分享海报')
 if (!resultJs.includes('topContributingQuestions') || !resultJs.includes('dimensionGroups')) fail('结果页缺少关键选择或四组倾向解释')
-if (!resultWxml.includes('selectedOptionText') || !resultWxml.includes('你怎么选') || !resultWxml.includes('它怎么活') || !resultWxml.includes('为什么相像')) fail('结果页没有直接展示选择原文与三步匹配逻辑')
+if (!resultWxml.includes('selectedOptionText') || !resultWxml.includes('你的真实选择') || !resultWxml.includes('古生物真实策略') || !resultWxml.includes('可类比共同机制')) fail('结果页没有直接展示选择原文与方向匹配链')
 if (!quizWxml.includes('plainScience') || !quizWxml.includes('showScienceDetail')) fail('身份题没有把通俗解释与专业说明分层')
 if (!quizWxml.includes('continueAfterAnswer') || !quizJs.includes('continueAfterAnswer')) fail('答题解释仍缺少用户主动继续按钮')
 const interactiveQuizJs = [
@@ -122,7 +123,7 @@ const categoryLines = categories.map((category) => `- ${category}：${knowledgeQ
 const report = [
   '# 测试内容质量报告', '',
   `- 身份题：${identityQuestions.length}`, `- 正式结果：${quizProfiles.length}`, `- 知识挑战题：${knowledgeQuestions.length}`,
-  `- 唯一结果标题：${uniqueCount(quizProfiles.map((item) => item.resultTitle))}`, `- 唯一一句话结果：${uniqueCount(quizProfiles.map((item) => item.punchline))}`,
+  `- 唯一结果标题：${uniqueCount(quizProfiles.map((item) => item.resultTitle))}`, `- 唯一一句话结果：${uniqueCount(quizProfiles.map((item) => item.oneLineIdentity))}`,
   `- 结果摘要最高三字组相似度：${(maxSummarySimilarity.score * 100).toFixed(1)}%（${maxSummarySimilarity.left} / ${maxSummarySimilarity.right}）`,
   `- 内容错误：${errors.length}`, '', '## 身份测试章节', '', ...chapterLines,
   '', '## 知识挑战分布', '', ...categoryLines,

@@ -1,8 +1,9 @@
 const { creatures } = require('../creatures')
 const { getPeriodById } = require('../periods')
 const { catalogSourceIds } = require('./sources')
+const { resultContentMap } = require('../quiz-result-content')
 
-const sampleIds = new Set(['methanogen', 'dickinsonia', 'anomalocaris', 'dunkleosteus', 'lystrosaurus', 'archaeopteryx', 'tyrannosaurus', 'basilosaurus', 'woolly-mammoth', 'australopithecus'])
+const sampleIds = new Set(['methanogen', 'dickinsonia', 'anomalocaris', 'dunkleosteus', 'lystrosaurus', 'archaeopteryx', 'ankylosaurus', 'tyrannosaurus', 'basilosaurus', 'megalodon', 'woolly-mammoth', 'australopithecus'])
 const microbialIds = new Set(['stromatolite-builders', 'cyanobacteria', 'anoxygenic-phototrophs', 'sulfate-reducers', 'thermophilic-microbes'])
 const functionalIds = new Set(['anoxygenic-phototrophs', 'sulfate-reducers', 'thermophilic-microbes'])
 const enigmaticIds = new Set(['grypania', 'charnia', 'spriggina'])
@@ -267,7 +268,7 @@ function buildEntry(creature) {
   const summary = quickSummary(creature, period, microbe, plant)
   const importance = whyItMatters(creature, period, microbe, plant)
   return {
-    id: creature.id, contentTier: tierA ? 'A' : 'B', entryType,
+    id: creature.id, contentTier: tierA ? 'A' : 'B', entryType, contentOrigin: 'generated', reviewStatus: 'unreviewed',
     hook: `${creature.nameCn}把“${creature.survivalStrategy}”变成了${period.name}的一种可检验生存方案。`,
     quickSummary: tierA ? compactSummary(summary, 140) : summary,
     whyItMatters: ensureMinimum(importance, 80, creature),
@@ -316,7 +317,7 @@ function buildEntry(creature) {
   }
 }
 
-const catalogEntries = creatures.filter((creature) => !sampleIds.has(creature.id)).map(buildEntry)
+const catalogEntries = creatures.filter((creature) => !sampleIds.has(creature.id) && !resultContentMap[creature.id]).map(buildEntry)
 const groups = Object.keys(eraPeriods).reduce((result, era) => {
   result[era] = catalogEntries.filter((entry) => {
     const creature = creatures.find((item) => item.id === entry.id)
